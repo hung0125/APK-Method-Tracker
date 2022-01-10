@@ -37,3 +37,4 @@ Method filter = V<br>
 
 ## Prequisites
 Make sure the app has the right to write the external storage.
+Suggested to add permission before using this script.
