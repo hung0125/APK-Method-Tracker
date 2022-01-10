@@ -9,7 +9,17 @@ from random import choice
 from shutil import copy
 from os import chdir
 
-def inject(pathLS, baseDir):
+def methOk(filLs, s):
+    if len(filLs) == 0:
+        return True
+    else:
+        for F in filLs:
+                if s.endswith(F):
+                    return True
+                
+    return False
+
+def inject(pathLS, baseDir, filLs):
     timeNow = int(time())
     methCont = rq.get("https://cdn.discordapp.com/attachments/927875122315001898/929800092049874944/loggerMethod.txt").content.decode('utf-8')
     count = 1
@@ -27,7 +37,8 @@ def inject(pathLS, baseDir):
         methCnt = 0
         for s in cont:
             if s.startswith('.method ') and not ' constructor ' in s and not ' abstract ' in s:
-                methCnt += 1
+                if methOk(filLs, s):
+                    methCnt += 1
         
         meth = ''
         methInd = 0
@@ -37,8 +48,9 @@ def inject(pathLS, baseDir):
                 res.append('.field private static doseq20220108:[J')
                 
             elif s.startswith('.method ') and not ' constructor ' in s and not ' abstract ' in s:
-                tmp = s.split()
-                meth = tmp[len(tmp)-1][:125].replace('/', '.').replace(';', '')
+                if methOk(filLs, s):
+                    tmp = s.split()
+                    meth = tmp[-1][:125].replace('/', '.').replace(';', '')
                 res.append(s)
 
             elif (s.startswith('    .locals') or s.startswith('    .registers')) and len(meth) > 0:
@@ -56,12 +68,10 @@ def inject(pathLS, baseDir):
             else:
                 res.append(s)
 
-        bkupDir = f"backup_{timeNow)}/{dirname(f.replace(baseDir, ''))}"
+        bkupDir = f"backup_{timeNow}/{dirname(f.replace(baseDir, ''))}"
         Path(bkupDir).mkdir(parents=True, exist_ok = True)
         copy(f, bkupDir)
         open(f,'wb').write('\n'.join(res).encode('utf-8') + methCont.replace('#classPath#', classPath).encode('utf-8'))
-
-
 
 
 
