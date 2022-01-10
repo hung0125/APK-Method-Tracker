@@ -1,5 +1,5 @@
 #caller, put inside the method onCreate() located in the entry point
-invoke-static {v5}, Lxxx/xxx/xxx;->getPer(Landroid/app/Activity;)V
+invoke-static {v0}, Lxxx/xxx/xxx;->getPer(Landroid/app/Activity;)V
 
 #method
 .method private static getPer(Landroid/app/Activity;)V
