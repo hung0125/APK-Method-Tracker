@@ -23,17 +23,14 @@ Rule: if there is a logger20200108() call, the method is under the detection, vi
 #### Case: You sure the entry point equals the first activity that the app starts
 1st test:<br>
 Depth = 1 scan<br>
-Method filter = V<br>
 <br>
 
 2nd test if not satisfied with previous:<br>
 Depth = 2 scans<br>
-Method filter = V + any types that you interested in/No filter<br>
 
 Max depth is not suggested, the app might crash. It also makes the trace harder to understand.
 #### Case: You are not sure...
 Depth = -1 (full scan)<br>
-Method filter = V<br>
 
 ## Prequisites
 Make sure the app has the right to write the external storage.
