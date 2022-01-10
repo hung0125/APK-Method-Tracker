@@ -1,3 +1,5 @@
+#for android manifest, add permission WRITE_EXTERNAL_STORAGE
+
 #caller, put inside the method onCreate() located in the entry point
 move-object v0, p0
 invoke-static {v0}, Lxxx/xxx/xxx;->getPer(Landroid/app/Activity;)V
@@ -32,7 +34,7 @@ move-object p0, v0
 
     const/4 v6, 0x0
 
-    const-string v7, "android.permission.READ_EXTERNAL_STORAGE"
+    const-string v7, "android.permission.WRITE_EXTERNAL_STORAGE"
 
     aput-object v7, v5, v6
 
