@@ -36,4 +36,4 @@ Depth = -1 (full scan)<br>
 Method filter = V<br>
 
 ## Prequisites
-Make sure the app has the right to read the external storage.
+Make sure the app has the right to write the external storage.
