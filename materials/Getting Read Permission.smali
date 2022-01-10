@@ -1,5 +1,5 @@
 #caller, put inside the method onCreate() located in the entry point
-invoke-static {v0}, L[Insert current class here];->iq500Alert()V
+invoke-static {v0}, L[Insert current class here];->getPer()V
 
 #method
 .method private static getPer()V
