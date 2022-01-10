@@ -27,6 +27,6 @@ Method filter = V<br>
 
 Test 2 if test 1 is not satisfying:<br>
 Depth = 2 scans<br>
-Method filter = V + any types that you interested in<br>
+Method filter = V + any types that you interested in/No filter<br>
 
 Max depth is not suggested, the app might crash. It also makes the trace harder to understand.
