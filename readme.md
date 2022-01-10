@@ -31,6 +31,6 @@ Depth = 2 scans<br>
 Method filter = V + any types that you interested in/No filter<br>
 
 Max depth is not suggested, the app might crash. It also makes the trace harder to understand.
-#### Case: You not sure...
+#### Case: You are not sure...
 Depth = -1 (full scan)<br>
 Method filter = V<br>
