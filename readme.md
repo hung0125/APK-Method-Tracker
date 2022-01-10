@@ -25,7 +25,7 @@ Depth = 1 scan<br>
 Method filter = V<br>
 <br>
 
-Test 2 if test 1 is not satisfying:<br>
+Test 2 if not satisfied with test 1:<br>
 Depth = 2 scans<br>
 Method filter = V + any types that you interested in/No filter<br>
 
