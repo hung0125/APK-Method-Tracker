@@ -9,28 +9,29 @@ trace = input("traceTmp folder (full path): ")
 javaDoc = [os.path.join(dp, f) for dp, dn, filenames in os.walk(jadx) for f in filenames if os.path.splitext(f)[1] == '.java']
 
 traceTmp = list(filter(os.path.isfile, glob.glob(trace + "/*")))
-traceTmp.sort(key=lambda x: os.path.getmtime(x))
+traceTmp.sort(key=lambda x: os.path.getmtime(x), reverse=True)
 
-#sum of java files
-javaCont = []
-
-for J in javaDoc:
-    javaCont.extend(open(J, "rb").read().decode("utf-8").splitlines())
-    
 
 snippets = []
 
 for T in traceTmp:
-    for i in range(len(javaCont)):
-        if basename(T[:-2]) in javaCont[i]:
-            snipTmp = []
-            for j in range(i-1, len(javaCont)):
-                if javaCont[j] == "}" or len(javaCont[j]) == 0:
-                    break
-                snipTmp.append(javaCont[j])
-            
-            snippets.append(snipTmp)
+    found = False
+    for J in javaDoc:
+        if found:
             break
+            
+        cont = open(J, "rb").read().decode("utf-8").splitlines()
+        for i in range(len(cont)):
+            if basename(T[:-2]) in cont[i]:
+                snipTmp = []
+                for j in range(i-1, len(cont)):
+                    if cont[j] == "}" or len(cont[j]) == 0:
+                        break
+                    snipTmp.append(cont[j])
+                
+                snippets.append(snipTmp)
+                found = True
+                break
             
 for S in snippets:
     print("Method:")
