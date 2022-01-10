@@ -1,6 +1,7 @@
 #caller, put inside the method onCreate() located in the entry point
-move v0, p0
+move-object v0, p0
 invoke-static {v0}, Lxxx/xxx/xxx;->getPer(Landroid/app/Activity;)V
+move-object p0, v0
 
 #method
 .method private static getPer(Landroid/app/Activity;)V
