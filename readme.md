@@ -21,7 +21,7 @@ Rule: if there is a logger20200108() call, the method is under the detection, vi
 ## Guidelines & Tips
 ### Suggested test plan
 Test 1:<br>
-Depth = 1 scans<br>
+Depth = 1 scan<br>
 Method filter = V<br>
 <br>
 
