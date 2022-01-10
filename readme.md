@@ -20,6 +20,7 @@ Rule: if there is a logger20200108() call, the method is under the detection, vi
 
 ## Guidelines & Tips
 ### Suggested test plan
+#### Case: You sure the entry point equals the first activity that the app starts
 1st test:<br>
 Depth = 1 scan<br>
 Method filter = V<br>
@@ -30,3 +31,6 @@ Depth = 2 scans<br>
 Method filter = V + any types that you interested in/No filter<br>
 
 Max depth is not suggested, the app might crash. It also makes the trace harder to understand.
+#### Case: You not sure...
+Depth = -1 (full scan)<br>
+Method filter = V<br>
