@@ -89,6 +89,16 @@ allFiles = open('paths.txt', 'rb').read().decode('utf-8').splitlines()
 
 #search lib
 depth = int(input("Number of scans (Enter -1 = scan as much as possible, 0 = no scanning): "))
+filters = input("*Define targets to catch (no input = all)*\noptions: (b)yte, (c)har, (d)ouble, (f)loat, (i)nt, (s)hort, s(t)ring (v)oid, (j)long, (z)boolean\nE.g., 'itv' targets only int, String, void methods\n=>")
+filLs = []
+checkF = "bcdfistvjz"
+for i in range(len(filters)):
+    if not filters[i] in checkF:
+        sys.exit("Wrong filter")
+    elif filters[i] == "t":
+        filLs.append("Ljava/lang/String;")
+    else:
+        filLs.append(filters[i].upper())
 
 target = [allLibs.index(entry)]
 scanCnt = 0
@@ -131,7 +141,7 @@ for T in target:
     res.append(allFiles[T])
 
 chdir(prvWD)
-inject(res, wkd)
+inject(res, wkd, filLs)
 
 print("Done. \nSee logs in /sdcard/traceTmp folder while running the app.\nThe backup is finished.")
 
