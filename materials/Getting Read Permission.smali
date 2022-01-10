@@ -1,4 +1,4 @@
-#for android manifest, add permission WRITE_EXTERNAL_STORAGE
+#for the manifest file, add permission WRITE_EXTERNAL_STORAGE
 
 #caller, put inside the method onCreate() located in the entry point
 move-object v0, p0
