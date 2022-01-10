@@ -34,3 +34,6 @@ Max depth is not suggested, the app might crash. It also makes the trace harder 
 #### Case: You are not sure...
 Depth = -1 (full scan)<br>
 Method filter = V<br>
+
+## Prequisites
+Make sure the app has the right to read the external storage.
