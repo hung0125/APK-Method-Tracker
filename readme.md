@@ -19,3 +19,14 @@ Rule: if there is a logger20200108() call, the method is under the detection, vi
 ## Installation
 
 ## Guidelines & Tips
+### Suggested test plan
+Test 1:<br>
+Depth = 1 scans<br>
+Method filter = V<br>
+<br>
+
+Test 2 if test 1 is not satisfying:<br>
+Depth = 2 scans<br>
+Method filter = V + any types that you interested in<br>
+
+Max depth is not suggested, the app might crash. It also makes the trace harder to understand.
