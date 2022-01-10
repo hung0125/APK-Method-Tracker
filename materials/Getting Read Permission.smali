@@ -1,4 +1,5 @@
 #caller, put inside the method onCreate() located in the entry point
+move v0, p0
 invoke-static {v0}, Lxxx/xxx/xxx;->getPer(Landroid/app/Activity;)V
 
 #method
