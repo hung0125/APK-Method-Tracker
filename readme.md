@@ -24,11 +24,13 @@ ALTERNATIVELY, analyzer.py is provided for easier code investigation
 ### Suggested test plan
 #### Case: You sure the entry point equals the first activity that the app starts
 1st test:<br>
-Depth = 1 scan<br>
+Depth = 1 scan <== apps with simple features<br>
+Depth = 2 scan <== apps with complex features<br>
 <br>
 
 2nd test if not satisfied with previous:<br>
-Depth = 2 scans<br>
+Depth = 2 scan <== apps with simple features<br>
+Depth = 3 scan <== apps with complex features<br>
 
 Max depth is not suggested, the app might crash. It also makes the trace harder to understand.
 #### Case: You are not sure...
