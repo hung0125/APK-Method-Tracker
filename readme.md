@@ -16,6 +16,7 @@ Investigate the decompiled and translated code<br>
 ![image](https://user-images.githubusercontent.com/65654501/148731679-8d4261f8-9552-457c-b0f5-ae8969ae8d9e.png)<br>
 Make use of "search in content"<br>
 Rule: if there is a logger20200108() call, the method is under the detection, vice versa.
+Alternatively, analyzer.py is provided for easier code investigation
 ## Installation
 
 ## Guidelines & Tips
