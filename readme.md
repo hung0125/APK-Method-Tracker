@@ -1,4 +1,8 @@
 # APK-Method-Tracker
+## Installation
+TBC
+## Guidelines & Tips
+TBC
 ## How It Works
 ![op1](https://user-images.githubusercontent.com/65654501/148697278-7d705787-68ef-4b2c-88c6-fe6021858552.png)
 ![op2](https://user-images.githubusercontent.com/65654501/148697716-522caf7b-540a-4d4f-82c6-ba66ed485de3.png)
@@ -17,9 +21,6 @@ Investigate the decompiled and translated code<br>
 Make use of "search in content"<br>
 Rule: if there is a logger20200108() call, the method is under the detection, vice versa.<br>
 ALTERNATIVELY, analyzer.py is provided for easier code investigation
-## Installation
-
-## Guidelines & Tips
 ### Suggested test plan
 #### Case: You sure the entry point equals the first activity that the app starts
 1st test:<br>
