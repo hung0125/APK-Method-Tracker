@@ -27,9 +27,10 @@ for T in traceTmp:
             if basename(T[:-2]) in cont[i]:
                 snipTmp = []
                 for j in range(i-1, len(cont)):
-                    if cont[j] == "}" or len(cont[j]) == 0:
+                    if cont[j] == "}" or (len(cont[j]) == 0 and cont[j-1] == "    }"):
                         break
-                    snipTmp.append(cont[j])
+                    if not j == i:
+                        snipTmp.append(cont[j])
                 
                 snippets.append(snipTmp)
                 found = True
@@ -40,10 +41,26 @@ ts = int(time())
 os.mkdir(f"TraceDetail_{ts}")
 os.mkdir(f"TraceDetail_{ts}/trace")
 
-html = "<html><body>"
+html = "<html><body><h1>Analyzer.py for apkMethodTracker</h1><button id = 'tops' onclick='topSwitch()' style='background: cyan;'>Show all</button><br><br>"
 for i in range(len(snippets)):
-    open(f"TraceDetail_{ts}/trace/{basename(traceTmp[i])}", "wb").write("\n".join(snippets[i]).encode("utf-8"))
-    html += f"<a href='{f'trace/{basename(traceTmp[i])}'}'>{i+1} | {basename(traceTmp[i][:-2])}</a><br>"
+    snipCont = "\n".join(snippets[i])
+    open(f"TraceDetail_{ts}/trace/{basename(traceTmp[i])}", "wb").write(snipCont.encode("utf-8"))
 
-html += "</body></html>"
+    CurMethCmpnts = basename(traceTmp[i][:-2]).split("--")
+    curClassName = CurMethCmpnts[0]
+    curMethName = f"<a style = 'color:blue'>{CurMethCmpnts[1].split('(')[0]}</a>"
+    curMethTail = CurMethCmpnts[1].split("(")[1]
+    butName = f'{curClassName}--{curMethName}({curMethTail}'
+    
+    htCode = snipCont.replace('\n', '<br>').replace(' ', '&nbsp;')
+    for T in traceTmp:
+        methName = basename(T).split("--")[1].split("(")[0]
+        htCode = htCode.replace(methName, f"<a style = 'color:blue'>{methName}</a>")
+        
+    para = f'"c{i}"'
+    html += f"<button onclick='showSwitch({para})'>{i+1} | {butName}</button><div id = {para} style = 'display: none;'>{htCode}</div><br>"
+
+func1 = "function showSwitch(y) {var x = document.getElementById(y);x.style.display = x.style.display === 'none'?'block':'none';}"
+func2 = "function topSwitch() {var b = document.getElementById('tops'); var x = document.getElementsByTagName('div');    if(b.innerText == 'Show all') { for (let i = 0; i < x.length; i++)  {  x[i].style.display = 'block';  } b.innerText = 'Hide all'; }else { for (let i = 0; i < x.length; i++)  {  x[i].style.display = 'none';  } b.innerText = 'Show all'; }}"
+html += f"<script>{func1}\n{func2}</script></body></html>"
 open(f"TraceDetail_{ts}/results.html", "w").write(html)
