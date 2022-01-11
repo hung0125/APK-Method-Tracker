@@ -44,7 +44,7 @@ ts = int(time())
 os.mkdir(f"TraceDetail_{ts}")
 os.mkdir(f"TraceDetail_{ts}/trace")
 
-html = "<html><body><h1>Analyzer.py for apkMethodTracker</h1><h3>Note: Sorted by file modification time (from oldest to newest). The order can be affected by some factors such as threading.</h3><button id = 'tops' onclick='topSwitch()' style='background: cyan;'>Show all</button><br><br>"
+html = "<html><body><h1>Analyzer.py for apkMethodTracker</h1><h3>Note: Sorted by file modification time (from oldest to newest). The order can be affected by some factors like threading.</h3><button id = 'tops' onclick='topSwitch()' style='background: cyan;'>Show all</button><br><br>"
 for i in range(len(snippets)):
     snipCont = "\n".join(snippets[i])
     open(f"TraceDetail_{ts}/trace/{basename(traceTmp[i])}", "wb").write(snipCont.encode("utf-8"))
