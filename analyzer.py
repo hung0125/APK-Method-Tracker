@@ -41,7 +41,7 @@ ts = int(time())
 os.mkdir(f"TraceDetail_{ts}")
 os.mkdir(f"TraceDetail_{ts}/trace")
 
-html = "<html><body><h1>Analyzer.py for apkMethodTracker</h1><button id = 'tops' onclick='topSwitch()' style='background: cyan;'>Show all</button><br><br>"
+html = "<html><body><h1>Analyzer.py for apkMethodTracker</h1><h3>Note: Sorted by file modification time (from oldest to newest).</h3><button id = 'tops' onclick='topSwitch()' style='background: cyan;'>Show all</button><br><br>"
 for i in range(len(snippets)):
     snipCont = "\n".join(snippets[i])
     open(f"TraceDetail_{ts}/trace/{basename(traceTmp[i])}", "wb").write(snipCont.encode("utf-8"))
@@ -65,4 +65,4 @@ func2 = "function topSwitch() {var b = document.getElementById('tops'); var x = 
 html += f"<script>{func1}\n{func2}</script></body></html>"
 open(f"TraceDetail_{ts}/results.html", "w").write(html)
 
-print(f"\nOK. Head to the folder 'TraceDetail_{ts}' for more info")
+print(f"\nOK. Head to the folder 'TraceDetail_{ts}' for more info.")
