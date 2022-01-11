@@ -27,7 +27,7 @@ for T in traceTmp:
             if basename(T[:-2]) in cont[i]:
                 snipTmp = []
                 for j in range(i-1, len(cont)):
-                    if cont[j] == "}" or (len(cont[j]) == 0 and cont[j-1] == "    }"):
+                    if cont[j] == "}" or (len(cont[j]) == 0 and cont[j-1].endswith("}")):
                         break
                     if not j == i:
                         snipTmp.append(cont[j])
@@ -36,6 +36,9 @@ for T in traceTmp:
                 found = True
                 print(f"Found: {basename(T[:-2])}")
                 break
+    if not found:
+        print(f"Not found: {basename(T[:-2])}")
+        snippets.append(["Jadx's error, the method could not be decompiled."])
 
 ts = int(time())
 os.mkdir(f"TraceDetail_{ts}")
