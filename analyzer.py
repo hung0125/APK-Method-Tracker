@@ -5,8 +5,14 @@ from time import time
 from os.path import basename
 from pathlib import Path
 
-jadx = input("Jadx decompiled dir, the INJECTED version (full path): ")
-trace = input("traceTmp folder (full path): ")
+jadx = input("Jadx decompiled dir, the INJECTED version (full path): ").replace("\\", "/")
+trace = input("traceTmp folder (full path): ").replace("\\", "/")
+
+if not jadx.endswith("/"):
+    jadx += "/"
+
+while jadx.endswith("//"):
+    jadx = jadx[:-1]
 
 javaDoc = [os.path.join(dp, f) for dp, dn, filenames in os.walk(jadx) for f in filenames if os.path.splitext(f)[1] == '.java']
 
@@ -21,8 +27,18 @@ for T in traceTmp:
     for J in javaDoc:
         if found:
             break
+       
+        pCheck = "/".join(J[len(jadx):].split("/")[:-1])
+        classPth = "/".join(basename(T).split("]")[0][2:].split(".")[:-1])
+        
+        if pCheck == "defpackage":
+            pCheck = ""
             
+        if pCheck != classPth:
+            continue
+        
         cont = open(J, "rb").read().decode("utf-8").splitlines()
+            
         for i in range(len(cont)):
             if basename(T[:-2]) in cont[i]:
                 snipTmp = []
