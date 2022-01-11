@@ -29,8 +29,8 @@ for T in traceTmp:
                 for j in range(i-1, len(cont)):
                     if cont[j] == "}" or (len(cont[j]) == 0 and cont[j-1].endswith("}")):
                         break
-                    if not j == i:
-                        snipTmp.append(cont[j])
+                    
+                    snipTmp.append(cont[j])
                 
                 snippets.append(snipTmp)
                 found = True
