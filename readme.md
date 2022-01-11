@@ -36,4 +36,4 @@ Depth = -1 (full scan)<br>
 
 ## Prequisites
 Make sure the app has the right to write the external storage.
-Suggested to add permission before using this script.
+Suggested to add permission then compile once before using this script.
