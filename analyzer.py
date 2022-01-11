@@ -49,10 +49,10 @@ for i in range(len(snippets)):
     snipCont = "\n".join(snippets[i])
     open(f"TraceDetail_{ts}/trace/{basename(traceTmp[i])}", "wb").write(snipCont.encode("utf-8"))
 
-    CurMethCmpnts = basename(traceTmp[i][:-2]).split("--")
-    curClassName = CurMethCmpnts[0]
-    curMethName = f"<a style = 'color:blue'>{CurMethCmpnts[1].split('(')[0]}</a>"
-    curMethTail = CurMethCmpnts[1].split("(")[1]
+    curMethCmpnts = basename(traceTmp[i][:-2]).split("--")
+    curClassName = curMethCmpnts[0]
+    curMethName = f"<a style = 'color:blue'>{curMethCmpnts[1].split('(')[0]}</a>"
+    curMethTail = curMethCmpnts[1].split("(")[1]
     butName = f'{curClassName}--{curMethName}({curMethTail}'
     
     htCode = snipCont.replace('\n', '<br>').replace(' ', '&nbsp;')
