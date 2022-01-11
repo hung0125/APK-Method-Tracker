@@ -54,7 +54,7 @@ for i in range(len(snippets)):
     
     htCode = snipCont.replace('\n', '<br>').replace(' ', '&nbsp;')
     for T in traceTmp:
-        methName = basename(T).split("--")[1].split("(")[0]
+        methName = basename(T).split("--")[1].split("(")[0] + "("
         htCode = htCode.replace(methName, f"<a style = 'color:blue'>{methName}</a>")
         
     para = f'"c{i}"'
@@ -64,3 +64,5 @@ func1 = "function showSwitch(y) {var x = document.getElementById(y);x.style.disp
 func2 = "function topSwitch() {var b = document.getElementById('tops'); var x = document.getElementsByTagName('div');    if(b.innerText == 'Show all') { for (let i = 0; i < x.length; i++)  {  x[i].style.display = 'block';  } b.innerText = 'Hide all'; }else { for (let i = 0; i < x.length; i++)  {  x[i].style.display = 'none';  } b.innerText = 'Show all'; }}"
 html += f"<script>{func1}\n{func2}</script></body></html>"
 open(f"TraceDetail_{ts}/results.html", "w").write(html)
+
+print(f"\nOK. Head to the folder 'TraceDetail_{ts}' for more info")
