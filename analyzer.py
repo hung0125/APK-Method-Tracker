@@ -78,7 +78,7 @@ for i in range(len(snippets)):
                      " " + basename(T).split("--")[1].split("(")[0] + "(",
                      "(" + basename(T).split("--")[1].split("(")[0] + "("]
         for M in methNames:
-            htCode = htCode.replace(M, f"<a style = 'color:lightseagreen'>{methName}</a>")
+            htCode = htCode.replace(M, f"<a style = 'color:lightseagreen'>{M}</a>")
         
     para = f'"c{i}"'
     html += f"<button onclick='showSwitch({para})'>{i+1} | {butName}</button><div id = {para} style = 'display: none;'>{htCode}</div><br>"
