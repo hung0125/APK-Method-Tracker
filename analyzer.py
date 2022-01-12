@@ -1,4 +1,3 @@
-#just the draft, algo is not optimized and I'm quite busy recently :(
 import os
 import glob
 import sys
@@ -75,8 +74,11 @@ for i in range(len(snippets)):
     
     htCode = snipCont.replace('\n', '<br>').replace(' ', '&nbsp;')
     for T in traceTmp:
-        methName = basename(T).split("--")[1].split("(")[0] + "("
-        htCode = htCode.replace(methName, f"<a style = 'color:blue'>{methName}</a>")
+        methNames = ["." + basename(T).split("--")[1].split("(")[0] + "(",
+                     " " + basename(T).split("--")[1].split("(")[0] + "(",
+                     "(" + basename(T).split("--")[1].split("(")[0] + "("]
+        for M in methNames:
+            htCode = htCode.replace(M, f"<a style = 'color:lightseagreen'>{methName}</a>")
         
     para = f'"c{i}"'
     html += f"<button onclick='showSwitch({para})'>{i+1} | {butName}</button><div id = {para} style = 'display: none;'>{htCode}</div><br>"
