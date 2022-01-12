@@ -1,6 +1,7 @@
 #just the draft, algo is not optimized and I'm quite busy recently :(
 import os
 import glob
+import sys
 from time import time
 from os.path import basename
 from pathlib import Path
@@ -25,12 +26,13 @@ snippets = []
 for T in traceTmp:
     found = False
     for J in javaDoc:
+        J = J.replace("\\", "/")
         if found:
             break
        
         pCheck = "/".join(J[len(jadx):].split("/")[:-1])
         classPth = "/".join(basename(T).split("]")[0][2:].split(".")[:-1])
-        
+
         if pCheck == "defpackage":
             pCheck = ""
             
