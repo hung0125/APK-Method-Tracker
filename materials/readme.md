@@ -1,5 +1,5 @@
 1. Create a new smali classes folder under the root decompiled directory
-2. Move original android library to the new smali classes folder
+2. Move the original android library (if any) to the new smali classes folder
 3. Download the required library.zip and put the additional android library inside the new smali classes folder
 4. Replace if duplicate files exist
 5. Inject permission command
