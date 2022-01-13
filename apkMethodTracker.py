@@ -143,7 +143,7 @@ while True:
         break
 
     
-print("Preview of the first max 10 scans is as follows: ")
+print("Preview of the scans is as follows: ")
 print(f"Initial class: {basename(allFiles[target[0][0]])} || Method count: {methCnt[0]}")
 if len(target) == 1:
     print("No new targets found")
