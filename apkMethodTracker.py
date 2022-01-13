@@ -1,4 +1,4 @@
-from os.path import isfile, isdir
+from os.path import isfile, isdir, basename
 from time import time
 from injector import inject
 from platform import platform
@@ -88,7 +88,6 @@ allLibs = open('libs.txt', 'rb').read().decode('utf-8').splitlines()
 allFiles = open('paths.txt', 'rb').read().decode('utf-8').splitlines()
 
 #search lib
-depth = int(input("Number of scans (Enter -1 = scan as much as possible, 0 = no scanning): "))
 filters = input("*Define targets to catch (no input = all)*\noptions: (b)yte, (c)har, (d)ouble, (f)loat, (i)nt, (s)hort, s(t)ring (v)oid, (j)long, (z)boolean\nE.g., 'itv' targets only int, String, void methods\n=>")
 filLs = []
 checkF = "bcdfistvjz"
@@ -100,45 +99,74 @@ for i in range(len(filters)):
     else:
         filLs.append(filters[i].upper())
 
-target = [allLibs.index(entry)]
-scanCnt = 0
-iscan = 0
-newFind = True
-
+print("Please wait...\n")
+target = [[allLibs.index(entry)]] #[[],[],[]] = scan 1, 2, 3
+methCnt = []
 while True:
-    if depth == -1 and not newFind:
-        break
-    elif depth > -1 and scanCnt == depth:
-        break
-    
-    scanCnt += 1
-    findCnt = 0
-    newFind = False
-    tmp = len(target)
-    for x in range(iscan, len(target)):
-        cont = open(allFiles[target[x]], "rb").read().decode("utf-8")
+    newTar = []
+    methSubCnt = 0
+    for x in range(len(target[-1])):
+        cont = open(allFiles[target[-1][x]], "rb").read().decode("utf-8").splitlines()
         contC = "" #de-strings
-        inStr = False
-        for c in cont:
-            if c == '"':
-                inStr = True if not inStr else False
-            elif not inStr:
-                contC += c
-        
-        for i in range(len(allLibs)):
-            if allLibs[i] in contC and not i in target:
-                target.append(i)
-                newFind = True
-                findCnt += 1
 
-    print(f'Scan {scanCnt} found {findCnt} smali')
-    iscan = tmp
+        for C in cont:
+            if C.startswith('.method ') and not ' constructor ' in C and not ' abstract ' in C:
+                methSubCnt += 1
+            inStr = False
+            for S in C:
+                if S == '"':
+                    inStr = True if not inStr else False
+                elif not inStr:
+                    contC += S
+
+        for i in range(len(allLibs)):
+            if allLibs[i] in contC:
+                val = True
+                for T in target:
+                    if i in T or i in newTar:
+                        val = False
+                        break
+                if val:
+                    newTar.append(i)
+
+    if len(newTar) > 0:
+        target.append(newTar)
+        methCnt.append(methSubCnt)
+    else:
+        lastMethSubCnt = 0
+        for y in range(len(target[-1])):
+            cont = open(allFiles[target[-1][y]], "rb").read().decode("utf-8").splitlines()
+            for C in cont:
+                if C.startswith('.method ') and not ' constructor ' in C and not ' abstract ' in C:
+                    lastMethSubCnt += 1
+        methCnt.append(lastMethSubCnt)
+        break
+
     
-print(f'{len(target)} smali files need to be injected. Now begin...')
+print("Preview of the first max 10 scans is as follows: ")
+print(f"Initial class: {basename(allFiles[target[0][0]])} || Method count: {methCnt[0]}")
+if len(target) == 1:
+    print("No new targets found")
+else:
+    prevAccuTar = 1
+    prevMethCnt = methCnt[0]
+    for i in range(len(target)):
+        if i > 0:
+            accuTar = prevAccuTar + len(target[i])
+            prevAccuTar = accuTar
+
+            accuMethCnt = prevMethCnt + methCnt[i]
+            prevMethCnt = accuMethCnt
+            print(f"Scan {i}: {len(target[i])} required class(es), accumulation = {accuTar} || method count = {methCnt[i]}, accumulation = {accuMethCnt}")
+
+depth = int(input("\nDefine number of injections (1 inject = 1 scan) actually needed\nEnter -1 = inject EVERYTHING, 0 = only inject the INITIAL CLASS\n: ")) + 1
+if depth == 0:
+    depth = len(target)
 
 res = []
-for T in target:
-    res.append(allFiles[T])
+for i in range(min(depth, len(target))):
+    for T in target[i]:
+        res.append(allFiles[T])
 
 chdir(prvWD)
 inject(res, wkd, filLs)
