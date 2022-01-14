@@ -9,7 +9,7 @@
     .end annotation
 
     .prologue
-    .line 30
+    .line 39
     move-object/from16 v0, p0
 
     move-object v10, v0
@@ -22,7 +22,7 @@
 
     move-object v2, v10
 
-    .line 31
+    .line 40
     move-object v10, v2
 
     const/4 v11, 0x1
@@ -41,7 +41,7 @@
 
     move v3, v10
 
-    .line 32
+    .line 41
     move-object v10, v2
 
     const/4 v11, 0x2
@@ -60,7 +60,7 @@
 
     move v4, v10
 
-    .line 33
+    .line 42
     invoke-static {}, Ljava/lang/System;->currentTimeMillis()J
 
     move-result-wide v10
@@ -71,19 +71,19 @@
 
     move-wide v5, v10
 
-    .line 35
+    .line 44
     sget-object v10, #classPath#;->doseq20220108:[J
 
     if-nez v10, :cond_0
 
-    .line 36
+    .line 45
     move v10, v4
 
     new-array v10, v10, [J
 
     sput-object v10, #classPath#;->doseq20220108:[J
 
-    .line 38
+    .line 47
     :cond_0
     sget-object v10, #classPath#;->doseq20220108:[J
 
@@ -117,7 +117,7 @@
 
     if-ltz v10, :cond_2
 
-    .line 39
+    .line 48
     :cond_1
     sget-object v10, #classPath#;->doseq20220108:[J
 
@@ -127,7 +127,7 @@
 
     aput-wide v12, v10, v11
 
-    .line 43
+    .line 52
     const/4 v10, 0x3
 
     new-array v10, v10, [Ljava/lang/String;
@@ -164,7 +164,7 @@
 
     const/4 v12, 0x2
 
-    const-string v13, "mkdir /sdcard/traceTmp & touch \'/sdcard/traceTmp/%d#%s._\'"
+    const-string v13, "mkdir /sdcard/traceTmp & echo \'%d\' > \'/sdcard/traceTmp/%s._\'"
 
     const/4 v14, 0x2
 
@@ -232,7 +232,7 @@
 
     move-object v7, v10
 
-    .line 46
+    .line 55
     :try_start_0
     invoke-static {}, Ljava/lang/Runtime;->getRuntime()Ljava/lang/Runtime;
 
@@ -249,11 +249,11 @@
     :goto_0
     return-void
 
-    .line 41
+    .line 50
     :cond_2
     goto :goto_0
 
-    .line 46
+    .line 55
     :catch_0
     move-exception v10
 
