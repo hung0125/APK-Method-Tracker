@@ -61,7 +61,7 @@ def inject(pathLS, baseDir, filLs):
                 else:
                     res.append(s)
 
-                res.append(f"const-string v0, \"[{classPath[:125].replace('/', '.')}]--{meth}#{methInd}#{methCnt}\"")
+                res.append(f"const-string v0, \"[{classPath[:110].replace('/', '.')}]--{meth[:110]}#{methInd}#{methCnt}\"")
                 res.append(f'invoke-static {{v0}}, {classPath};->logger20220108(Ljava/lang/String;)V')
                 meth = ''
                 methInd += 1
