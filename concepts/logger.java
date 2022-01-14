@@ -1,4 +1,4 @@
-private static void logger20220108(String s)
+        private static void logger20220108(String s)
 	{
 		String[] detail = s.split("#");
 		int pos = Integer.valueOf(detail[1]);
