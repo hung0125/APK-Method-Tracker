@@ -17,7 +17,7 @@ while jadx.endswith("//"):
 javaDoc = [os.path.join(dp, f) for dp, dn, filenames in os.walk(jadx) for f in filenames if os.path.splitext(f)[1] == '.java']
 
 traceTmp = list(filter(os.path.isfile, glob.glob(trace + "/*")))
-traceTmp.sort(key=lambda x: os.path.getmtime(x))
+traceTmp.sort(key=lambda x: int(x.split("#")[0]))
 
 
 snippets = []
