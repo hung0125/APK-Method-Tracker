@@ -15,6 +15,7 @@ Check the log folder<br>
 ![image](https://user-images.githubusercontent.com/65654501/148726267-cbffcc9b-fec4-4d6a-acdd-3a843a2c9192.png)<br>
 Each file's name has the following meaning:
 [{The class name}]--{method name}({parameter}){method type (e.g., Z = boolean, V = void}
+In the newer version, a nanotime is added in front of the name above to identify the execution sequence.
 #### Step 3
 Investigate the decompiled and translated code<br>
 ![image](https://user-images.githubusercontent.com/65654501/148731679-8d4261f8-9552-457c-b0f5-ae8969ae8d9e.png)<br>
