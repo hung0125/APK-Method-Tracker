@@ -21,7 +21,7 @@ def methOk(filLs, s):
 
 def inject(pathLS, baseDir, filLs):
     timeNow = int(time())
-    methCont = rq.get("https://cdn.discordapp.com/attachments/927875122315001898/929800092049874944/loggerMethod.txt").content.decode('utf-8')
+    methCont = rq.get("https://raw.githubusercontent.com/hung0125/APK-Method-Tracker/main/concepts/logger.smali").content.decode('utf-8')
     count = 1
     for f in pathLS:
         cont = open(f, 'rb').read().decode('utf-8').splitlines()
