@@ -1,5 +1,5 @@
 .method private static logger20220108(Ljava/lang/String;)V
-    .locals 20
+    .locals 25
     .annotation system Ldalvik/annotation/Signature;
         value = {
             "(",
@@ -9,7 +9,7 @@
     .end annotation
 
     .prologue
-    .line 45
+    .line 30
     move-object/from16 v0, p0
 
     move-object v10, v0
@@ -22,7 +22,7 @@
 
     move-object v2, v10
 
-    .line 46
+    .line 31
     move-object v10, v2
 
     const/4 v11, 0x1
@@ -41,7 +41,7 @@
 
     move v3, v10
 
-    .line 47
+    .line 32
     move-object v10, v2
 
     const/4 v11, 0x2
@@ -60,7 +60,7 @@
 
     move v4, v10
 
-    .line 48
+    .line 33
     invoke-static {}, Ljava/lang/System;->currentTimeMillis()J
 
     move-result-wide v10
@@ -71,19 +71,19 @@
 
     move-wide v5, v10
 
-    .line 50
+    .line 35
     sget-object v10, #classPath#;->doseq20220108:[J
 
     if-nez v10, :cond_0
 
-    .line 51
+    .line 36
     move v10, v4
 
     new-array v10, v10, [J
 
     sput-object v10, #classPath#;->doseq20220108:[J
 
-    .line 53
+    .line 38
     :cond_0
     sget-object v10, #classPath#;->doseq20220108:[J
 
@@ -117,7 +117,7 @@
 
     if-ltz v10, :cond_2
 
-    .line 54
+    .line 39
     :cond_1
     sget-object v10, #classPath#;->doseq20220108:[J
 
@@ -127,16 +127,16 @@
 
     aput-wide v12, v10, v11
 
-    .line 58
+    .line 43
     const/4 v10, 0x3
 
     new-array v10, v10, [Ljava/lang/String;
 
-    move-object/from16 v19, v10
+    move-object/from16 v22, v10
 
-    move-object/from16 v10, v19
+    move-object/from16 v10, v22
 
-    move-object/from16 v11, v19
+    move-object/from16 v11, v22
 
     const/4 v12, 0x0
 
@@ -144,11 +144,11 @@
 
     aput-object v13, v11, v12
 
-    move-object/from16 v19, v10
+    move-object/from16 v22, v10
 
-    move-object/from16 v10, v19
+    move-object/from16 v10, v22
 
-    move-object/from16 v11, v19
+    move-object/from16 v11, v22
 
     const/4 v12, 0x1
 
@@ -156,27 +156,65 @@
 
     aput-object v13, v11, v12
 
-    move-object/from16 v19, v10
+    move-object/from16 v22, v10
 
-    move-object/from16 v10, v19
+    move-object/from16 v10, v22
 
-    move-object/from16 v11, v19
+    move-object/from16 v11, v22
 
     const/4 v12, 0x2
 
-    const-string v13, "mkdir /sdcard/traceTmp & touch \'/sdcard/traceTmp/%s._\'"
+    const-string v13, "mkdir /sdcard/traceTmp & touch \'/sdcard/traceTmp/%d#%s._\'"
 
-    const/4 v14, 0x1
+    const/4 v14, 0x2
 
     new-array v14, v14, [Ljava/lang/Object;
 
-    move-object/from16 v19, v14
+    move-object/from16 v22, v14
 
-    move-object/from16 v14, v19
+    move-object/from16 v14, v22
 
-    move-object/from16 v15, v19
+    move-object/from16 v15, v22
 
     const/16 v16, 0x0
+
+    invoke-static {}, Ljava/lang/System;->nanoTime()J
+
+    move-result-wide v17
+
+    new-instance v19, Ljava/lang/Long;
+
+    move-wide/from16 v22, v17
+
+    move-object/from16 v24, v19
+
+    move-object/from16 v17, v24
+
+    move-wide/from16 v18, v22
+
+    move-object/from16 v20, v24
+
+    move-wide/from16 v22, v18
+
+    move-object/from16 v24, v20
+
+    move-object/from16 v18, v24
+
+    move-wide/from16 v19, v22
+
+    move-object/from16 v21, v24
+
+    invoke-direct/range {v18 .. v20}, Ljava/lang/Long;-><init>(J)V
+
+    aput-object v17, v15, v16
+
+    move-object/from16 v22, v14
+
+    move-object/from16 v14, v22
+
+    move-object/from16 v15, v22
+
+    const/16 v16, 0x1
 
     move-object/from16 v17, v2
 
@@ -194,7 +232,7 @@
 
     move-object v7, v10
 
-    .line 61
+    .line 46
     :try_start_0
     invoke-static {}, Ljava/lang/Runtime;->getRuntime()Ljava/lang/Runtime;
 
@@ -211,11 +249,11 @@
     :goto_0
     return-void
 
-    .line 56
+    .line 41
     :cond_2
     goto :goto_0
 
-    .line 61
+    .line 46
     :catch_0
     move-exception v10
 
