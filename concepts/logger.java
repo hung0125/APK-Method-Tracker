@@ -13,10 +13,9 @@ private static void logger20220108(String s)
     else
         return;
 
-    String[] cmd = {"sh", "-c", String.format("mkdir /sdcard/traceTmp & touch '/sdcard/traceTmp/%s._'", detail[0])};
+    String[] cmd = {"sh", "-c", String.format("mkdir /sdcard/traceTmp & touch '/sdcard/traceTmp/%d#%s._'", System.nanoTime(), detail[0])};
 
     try{
        Runtime.getRuntime().exec(cmd);
-        //Toast.makeText(this, String.valueOf(doseq20220108.charAt(1002)), 2000).show();
     }catch(Exception e){}
 }
