@@ -41,14 +41,14 @@ def inject(pth):
             read_local = True
             if ' 0' in L:
                 mod_cont[-1] = mod_cont[-1].replace('0', '1')
-
-        elif read_method and read_local:
+            
             meth_name = read_method.split(' ')[-1]            
             
             # https://groups.google.com/g/apktool/c/Elvhn32HvJQ
             mod_cont.append(f'const-string v0, "{cur_class}->{meth_name}"')
             mod_cont.append('invoke-static {v0}, Ltrace/MethodTrace;->writeTrace(Ljava/lang/String;)V')
 
+        elif read_method and read_local:
             read_method = ''
             read_local = False
     
