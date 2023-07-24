@@ -14,7 +14,7 @@ public class MethodTrace {
         try {
             fileLock.writeLock().lock();
 
-            String[] props = methodMap.containsKey(methodName) ? methodMap.get(methodName).split(" ") : new String[]{"0", "0"};
+            String[] props = methodMap.containsKey(methodName) ? methodMap.get(methodName).split("::") : new String[]{"0", "0"};
             long time = Long.parseLong(props[0]);
             long occurence = Long.parseLong(props[1]);
             // System.out.println(methodName + " " + time + " " + occurence);
@@ -27,7 +27,7 @@ public class MethodTrace {
                 if (!methodMap.containsKey(methodName)) 
                     methods.add(methodName);
 
-                methodMap.put(methodName, String.valueOf(System.nanoTime()) + " " + String.valueOf(occurence + 1));
+                methodMap.put(methodName, String.valueOf(System.nanoTime()) + "::" + String.valueOf(occurence + 1));
 
                 try {
                     // write
@@ -36,7 +36,7 @@ public class MethodTrace {
 
                     // Write contents to file
                     for (String method : methods) {
-                        bufferedWriter.write(method + " " + String.valueOf(methodMap.get(method)));
+                        bufferedWriter.write(method + "::" + String.valueOf(methodMap.get(method)));
                         bufferedWriter.newLine();
                     }
 
@@ -48,7 +48,7 @@ public class MethodTrace {
                 }
 
             }else {
-                methodMap.put(methodName, String.valueOf(System.nanoTime()) + " " + String.valueOf(occurence + 1));
+                methodMap.put(methodName, String.valueOf(System.nanoTime()) + "::" + String.valueOf(occurence + 1));
             }
         } catch (Exception e) {
             e.printStackTrace();
