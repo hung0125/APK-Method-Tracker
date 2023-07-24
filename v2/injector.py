@@ -68,3 +68,5 @@ for F in smali_list:
     copy(F, bkupDir)
     print(F)
     inject(F)
+
+#TODO: path handling
