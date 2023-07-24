@@ -60,9 +60,9 @@ def inject(pth):
 base_dir = "C:\\Users\\peter\\Desktop\\New folder\\RevEng Workspace\\Java\\app\\com.dotgears.flappybird-1.3-4-minAPI8\\"
 smali_path = "smali\\com\\dotgears"
 smali_list = get_smali_files(base_dir + smali_path)
+timeNow = int(time())
 
 for F in smali_list:
-    timeNow = int(time())
     bkupDir = f"backup_{timeNow}/{dirname(F.replace(base_dir, ''))}"
     Path(bkupDir).mkdir(parents=True, exist_ok = True)
     copy(F, bkupDir)
