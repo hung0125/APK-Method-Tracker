@@ -46,7 +46,7 @@ def inject(pth):
             meth_name = read_method.split(' ')[-1]            
             
             # https://groups.google.com/g/apktool/c/Elvhn32HvJQ
-            mod_cont.append(f'const-string v0, "{cur_class} -> {meth_name}"')
+            mod_cont.append(f'const-string v0, "{cur_class}->{meth_name}"')
             mod_cont.append('invoke-static {v0}, Ltrace/MethodTrace;->writeTrace(Ljava/lang/String;)V')
 
             read_method = ''

@@ -131,7 +131,7 @@
 
     check-cast v20, Ljava/lang/String;
 
-    const-string v21, " "
+    const-string v21, "::"
 
     invoke-virtual/range {v20 .. v21}, Ljava/lang/String;->split(Ljava/lang/String;)[Ljava/lang/String;
 
@@ -265,7 +265,7 @@
 
     move-result-object v23
 
-    const-string v24, " "
+    const-string v24, "::"
 
     invoke-virtual/range {v23 .. v24}, Ljava/lang/StringBuffer;->append(Ljava/lang/String;)Ljava/lang/StringBuffer;
 
@@ -486,7 +486,7 @@
 
     move-result-object v22
 
-    const-string v23, " "
+    const-string v23, "::"
 
     invoke-virtual/range {v22 .. v23}, Ljava/lang/StringBuffer;->append(Ljava/lang/String;)Ljava/lang/StringBuffer;
 
@@ -587,7 +587,7 @@
 
     move-result-object v23
 
-    const-string v24, " "
+    const-string v24, "::"
 
     invoke-virtual/range {v23 .. v24}, Ljava/lang/StringBuffer;->append(Ljava/lang/String;)Ljava/lang/StringBuffer;
 
