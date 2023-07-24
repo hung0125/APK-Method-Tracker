@@ -34,7 +34,7 @@ def inject(pth):
     for L in cont:
         mod_cont.append(L)
 
-        if L.startswith('.method ') and not ' constructor ' in L and not ' abstract ' in L:
+        if L.startswith('.method ') and not ' abstract ' in L:
             read_method = L
 
         elif L.strip().startswith('.locals') or L.strip().startswith('.registers'):
@@ -43,7 +43,7 @@ def inject(pth):
                 mod_cont[-1] = mod_cont[-1].replace('0', '1')
             
             meth_name = read_method.split(' ')[-1]            
-            
+
             # https://groups.google.com/g/apktool/c/Elvhn32HvJQ
             mod_cont.append(f'const-string v0, "{cur_class}->{meth_name}"')
             mod_cont.append('invoke-static {v0}, Ltrace/MethodTrace;->writeTrace(Ljava/lang/String;)V')
@@ -54,12 +54,12 @@ def inject(pth):
     
     open(pth,'wb').write('\n'.join(mod_cont).encode('utf-8'))
 
-# base_dir: the base directory of the decompiled folder (must ends with '\\')
-# smali_path: the target path for logger injection (must begin without '\\')
+# base_dir: the base directory of the decompiled folder
+# smali_path: the target path for logger injection
 # what to do: configure the paths > insert MethodTrace.smali to 'smali\trace\' (create the path manually) > run this script 
 base_dir = "C:\\Users\\peter\\Desktop\\New folder\\RevEng Workspace\\Java\\app\\com.dotgears.flappybird-1.3-4-minAPI8\\"
 smali_path = "smali\\com\\dotgears"
-smali_list = get_smali_files(base_dir + smali_path)
+smali_list = get_smali_files(base_dir + "/" + smali_path)
 timeNow = int(time())
 
 for F in smali_list:
