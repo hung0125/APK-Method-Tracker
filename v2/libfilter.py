@@ -20,7 +20,7 @@ for F in all_smali:
 if os.path.isfile('libkeep.txt'):
     os.remove('libkeep.txt')
 
-open('libkeep.txt', 'ab').write('# Injector.py will only inject to the smali files that are contained in any of the following paths'.encode('utf-8'))
+open('libkeep.txt', 'ab').write('# Injector.py will only inject to the smali files that are contained in any of the following paths\n'.encode('utf-8'))
 
 for R in roots:
     print(R)
