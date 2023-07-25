@@ -9,10 +9,17 @@ public class MethodTrace {
     private static final ReadWriteLock fileLock = new ReentrantReadWriteLock();
     private static HashMap<String, Long[]> methodMap = new HashMap<>();
     private static ArrayList<String> methods = new ArrayList<>();
+	private static File filePath = new File("/sdcard/trace/trace.txt");
 
     public static void writeTrace(String methodName) {
         try {
             fileLock.writeLock().lock();
+			
+			// on reset
+			if (filePath.length() == 0) {
+				methodMap = new HashMap<>();
+				methods = new ArrayList<>();
+			}
 			
             Long[] props = methodMap.containsKey(methodName) ? methodMap.get(methodName) : new Long[]{0L, 0L};
             long time = props[0];
@@ -20,9 +27,6 @@ public class MethodTrace {
             // System.out.println(methodName + " " + time + " " + occurence);
 
             if (!methodMap.containsKey(methodName) || System.nanoTime() - time > 500_000_000L) {
-                // get
-                File filePath = new File("/sdcard/trace/trace.txt");
-
                 // update
                 if (!methodMap.containsKey(methodName)) 
                     methods.add(methodName);
