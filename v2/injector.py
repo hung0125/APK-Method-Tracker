@@ -20,6 +20,7 @@ def static_analysis(lineIdx, code):
     cnt_array = 0
     cnt_setText = 0
     cnt_url = 0
+    cnt_mathops = 0
 
     for i in range(lineIdx, len(code)):
         if code[i] == '.end method':
@@ -35,10 +36,12 @@ def static_analysis(lineIdx, code):
             cnt_boolean += 1
         elif len(components) > 2 and components[0] == 'new-array' or components[0] == 'new-instance' and components[2] == 'Ljava/util/ArrayList;':
             cnt_array += 1
-        elif len(components) == 3 and '->setText(' in code[i]:
-            cnt_setText += 1 
+        elif len(components) > 2 and '->setText(' in code[i]:
+            cnt_setText += 1
+        elif len(components) > 2 and ('add-' in components[0] or 'sub-' in components[0] or 'rsub-' in components[0] or 'mul-' in components[0] or 'div-' in components[0] or 'rem-' in components[0]):
+            cnt_mathops += 1
     
-    return f'{cnt_hardcode},{cnt_boolean},{cnt_array},{cnt_setText},{cnt_url}'
+    return f'{cnt_hardcode},{cnt_boolean},{cnt_array},{cnt_setText},{cnt_url},{cnt_mathops}'
 
 def inject(pth):
     cont = open(pth, 'rb').read().decode('utf-8').splitlines()
