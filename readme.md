@@ -1,4 +1,5 @@
 # APK-Method-Tracker
+## 時間用黎上鑽石好定搞呢舊野好?
 ## Installation
 TBC
 ## Guidelines & Tips
