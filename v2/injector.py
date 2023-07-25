@@ -55,19 +55,20 @@ def inject(pth):
     open(pth,'wb').write('\n'.join(mod_cont).encode('utf-8'))
 
 # base_dir: the base directory of the decompiled folder
-# smali_path: the target path for logger injection
-# what to do: configure the paths > insert MethodTrace.smali to 'smali\trace\' (create the path manually) > run this script 
-base_dir = "C:\\Users\\peter\\Desktop\\New folder\\RevEng Workspace\\Java\\app\\com.dotgears.flappybird-1.3-4-minAPI8\\"
-smali_path = "smali\\com\\dotgears"
-smali_list = get_smali_files(base_dir + "/" + smali_path)
+# base_dir: do not include ending slashes
+# what to do: configure the base directory > insert MethodTrace.smali to 'smali\trace\' (create the path manually) > run this script 
+base_dir = input('Specify decompiled base path: ')
+smali_list = get_smali_files(base_dir)
+keep_list = open('libkeep.txt', 'rb').read().decode('utf-8').splitlines()[1:]
+keep_list = dict(zip(keep_list, [True] * len(keep_list)))
 timeNow = int(time())
 
 for F in smali_list:
     bkupDir = f"backup_{timeNow}/{dirname(F.replace(base_dir, ''))}"
     Path(bkupDir).mkdir(parents=True, exist_ok = True)
-    copy(F, bkupDir)
     print(F)
-    if not F.endswith('MethodTrace.smali'):
+    if not F.endswith('MethodTrace.smali') and F[len(base_dir)+1:] in keep_list:
+        copy(F, bkupDir)
         inject(F)
 
 #TODO: path handling
