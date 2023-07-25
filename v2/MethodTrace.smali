@@ -6,6 +6,8 @@
 # static fields
 .field private static final fileLock:Ljava/util/concurrent/locks/ReadWriteLock;
 
+.field private static filePath:Ljava/io/File;
+
 .field private static methodMap:Ljava/util/HashMap;
     .annotation system Ldalvik/annotation/Signature;
         value = {
@@ -33,15 +35,15 @@
 
 # direct methods
 .method static final constructor <clinit>()V
-    .locals 5
+    .locals 6
 
     new-instance v2, Ljava/util/concurrent/locks/ReentrantReadWriteLock;
 
-    move-object v4, v2
+    move-object v5, v2
 
-    move-object v2, v4
+    move-object v2, v5
 
-    move-object v3, v4
+    move-object v3, v5
 
     invoke-direct {v3}, Ljava/util/concurrent/locks/ReentrantReadWriteLock;-><init>()V
 
@@ -49,11 +51,11 @@
 
     new-instance v2, Ljava/util/HashMap;
 
-    move-object v4, v2
+    move-object v5, v2
 
-    move-object v2, v4
+    move-object v2, v5
 
-    move-object v3, v4
+    move-object v3, v5
 
     invoke-direct {v3}, Ljava/util/HashMap;-><init>()V
 
@@ -61,15 +63,29 @@
 
     new-instance v2, Ljava/util/ArrayList;
 
-    move-object v4, v2
+    move-object v5, v2
 
-    move-object v2, v4
+    move-object v2, v5
 
-    move-object v3, v4
+    move-object v3, v5
 
     invoke-direct {v3}, Ljava/util/ArrayList;-><init>()V
 
     sput-object v2, Ltrace/MethodTrace;->methods:Ljava/util/ArrayList;
+
+    new-instance v2, Ljava/io/File;
+
+    move-object v5, v2
+
+    move-object v2, v5
+
+    move-object v3, v5
+
+    const-string v4, "/sdcard/trace/trace.txt"
+
+    invoke-direct {v3, v4}, Ljava/io/File;-><init>(Ljava/lang/String;)V
+
+    sput-object v2, Ltrace/MethodTrace;->filePath:Ljava/io/File;
 
     return-void
 .end method
@@ -78,7 +94,7 @@
     .locals 3
 
     .prologue
-    .line 58
+    .line 62
     move-object v0, p0
 
     move-object v2, v0
@@ -99,8 +115,8 @@
     .end annotation
 
     .prologue
-    .line 15
-    move-object/from16 v1, p0
+    .line 16
+    move-object/from16 v2, p0
 
     :try_start_0
     sget-object v19, Ltrace/MethodTrace;->fileLock:Ljava/util/concurrent/locks/ReadWriteLock;
@@ -111,20 +127,66 @@
 
     invoke-interface/range {v19 .. v19}, Ljava/util/concurrent/locks/Lock;->lock()V
 
-    .line 17
+    .line 19
+    sget-object v19, Ltrace/MethodTrace;->filePath:Ljava/io/File;
+
+    invoke-virtual/range {v19 .. v19}, Ljava/io/File;->length()J
+
+    move-result-wide v19
+
+    const/16 v21, 0x0
+
+    move/from16 v0, v21
+
+    int-to-long v0, v0
+
+    move-wide/from16 v21, v0
+
+    cmp-long v19, v19, v21
+
+    if-nez v19, :cond_0
+
+    .line 20
+    new-instance v19, Ljava/util/HashMap;
+
+    move-object/from16 v30, v19
+
+    move-object/from16 v19, v30
+
+    move-object/from16 v20, v30
+
+    invoke-direct/range {v20 .. v20}, Ljava/util/HashMap;-><init>()V
+
+    sput-object v19, Ltrace/MethodTrace;->methodMap:Ljava/util/HashMap;
+
+    .line 21
+    new-instance v19, Ljava/util/ArrayList;
+
+    move-object/from16 v30, v19
+
+    move-object/from16 v19, v30
+
+    move-object/from16 v20, v30
+
+    invoke-direct/range {v20 .. v20}, Ljava/util/ArrayList;-><init>()V
+
+    sput-object v19, Ltrace/MethodTrace;->methods:Ljava/util/ArrayList;
+
+    .line 24
+    :cond_0
     sget-object v19, Ltrace/MethodTrace;->methodMap:Ljava/util/HashMap;
 
-    move-object/from16 v20, v1
+    move-object/from16 v20, v2
 
     invoke-virtual/range {v19 .. v20}, Ljava/util/HashMap;->containsKey(Ljava/lang/Object;)Z
 
     move-result v19
 
-    if-eqz v19, :cond_2
+    if-eqz v19, :cond_3
 
     sget-object v19, Ltrace/MethodTrace;->methodMap:Ljava/util/HashMap;
 
-    move-object/from16 v20, v1
+    move-object/from16 v20, v2
 
     invoke-virtual/range {v19 .. v20}, Ljava/util/HashMap;->get(Ljava/lang/Object;)Ljava/lang/Object;
 
@@ -133,10 +195,10 @@
     check-cast v19, [Ljava/lang/Long;
 
     :goto_0
-    move-object/from16 v7, v19
+    move-object/from16 v8, v19
 
-    .line 18
-    move-object/from16 v19, v7
+    .line 25
+    move-object/from16 v19, v8
 
     const/16 v20, 0x0
 
@@ -148,10 +210,10 @@
 
     move-result-wide v19
 
-    move-wide/from16 v8, v19
+    move-wide/from16 v9, v19
 
-    .line 19
-    move-object/from16 v19, v7
+    .line 26
+    move-object/from16 v19, v8
 
     const/16 v20, 0x1
 
@@ -163,24 +225,24 @@
 
     move-result-wide v19
 
-    move-wide/from16 v10, v19
+    move-wide/from16 v11, v19
 
-    .line 22
+    .line 29
     sget-object v19, Ltrace/MethodTrace;->methodMap:Ljava/util/HashMap;
 
-    move-object/from16 v20, v1
+    move-object/from16 v20, v2
 
     invoke-virtual/range {v19 .. v20}, Ljava/util/HashMap;->containsKey(Ljava/lang/Object;)Z
 
     move-result v19
 
-    if-eqz v19, :cond_0
+    if-eqz v19, :cond_1
 
     invoke-static {}, Ljava/lang/System;->nanoTime()J
 
     move-result-wide v19
 
-    move-wide/from16 v21, v8
+    move-wide/from16 v21, v9
 
     sub-long v19, v19, v21
 
@@ -188,49 +250,34 @@
 
     cmp-long v19, v19, v21
 
-    if-lez v19, :cond_4
+    if-lez v19, :cond_5
 
-    .line 24
-    :cond_0
-    new-instance v19, Ljava/io/File;
-
-    move-object/from16 v30, v19
-
-    move-object/from16 v19, v30
-
-    move-object/from16 v20, v30
-
-    const-string v21, "/sdcard/trace/trace.txt"
-
-    invoke-direct/range {v20 .. v21}, Ljava/io/File;-><init>(Ljava/lang/String;)V
-
-    move-object/from16 v12, v19
-
-    .line 27
+    .line 31
+    :cond_1
     sget-object v19, Ltrace/MethodTrace;->methodMap:Ljava/util/HashMap;
 
-    move-object/from16 v20, v1
+    move-object/from16 v20, v2
 
     invoke-virtual/range {v19 .. v20}, Ljava/util/HashMap;->containsKey(Ljava/lang/Object;)Z
 
     move-result v19
 
-    if-nez v19, :cond_1
+    if-nez v19, :cond_2
 
-    .line 28
+    .line 32
     sget-object v19, Ltrace/MethodTrace;->methods:Ljava/util/ArrayList;
 
-    move-object/from16 v20, v1
+    move-object/from16 v20, v2
 
     invoke-virtual/range {v19 .. v20}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
 
     move-result v19
 
-    .line 30
-    :cond_1
+    .line 34
+    :cond_2
     sget-object v19, Ltrace/MethodTrace;->methodMap:Ljava/util/HashMap;
 
-    move-object/from16 v20, v1
+    move-object/from16 v20, v2
 
     const/16 v21, 0x2
 
@@ -286,7 +333,7 @@
 
     const/16 v23, 0x1
 
-    move-wide/from16 v24, v10
+    move-wide/from16 v24, v11
 
     const-wide/16 v26, 0x1
 
@@ -325,7 +372,7 @@
 
     move-result-object v19
 
-    .line 34
+    .line 38
     :try_start_1
     new-instance v19, Ljava/io/FileWriter;
 
@@ -335,13 +382,13 @@
 
     move-object/from16 v20, v30
 
-    move-object/from16 v21, v12
+    sget-object v21, Ltrace/MethodTrace;->filePath:Ljava/io/File;
 
     invoke-direct/range {v20 .. v21}, Ljava/io/FileWriter;-><init>(Ljava/io/File;)V
 
     move-object/from16 v13, v19
 
-    .line 35
+    .line 39
     new-instance v19, Ljava/io/BufferedWriter;
 
     move-object/from16 v30, v19
@@ -356,7 +403,7 @@
 
     move-object/from16 v14, v19
 
-    .line 38
+    .line 42
     sget-object v19, Ltrace/MethodTrace;->methods:Ljava/util/ArrayList;
 
     check-cast v19, Ljava/util/Collection;
@@ -367,7 +414,7 @@
 
     move-object/from16 v15, v19
 
-    .line 40
+    .line 44
     :goto_1
     move-object/from16 v19, v15
 
@@ -375,14 +422,14 @@
 
     move-result v19
 
-    if-nez v19, :cond_3
+    if-nez v19, :cond_4
 
-    .line 44
+    .line 48
     move-object/from16 v19, v14
 
     invoke-virtual/range {v19 .. v19}, Ljava/io/BufferedWriter;->flush()V
 
-    .line 45
+    .line 49
     move-object/from16 v19, v14
 
     invoke-virtual/range {v19 .. v19}, Ljava/io/BufferedWriter;->close()V
@@ -391,7 +438,7 @@
     .catch Ljava/lang/Exception; {:try_start_1 .. :try_end_1} :catch_0
     .catchall {:try_start_1 .. :try_end_1} :catchall_0
 
-    .line 56
+    .line 60
     :goto_2
     sget-object v19, Ltrace/MethodTrace;->fileLock:Ljava/util/concurrent/locks/ReadWriteLock;
 
@@ -403,8 +450,8 @@
 
     return-void
 
-    .line 17
-    :cond_2
+    .line 24
+    :cond_3
     const/16 v19, 0x2
 
     :try_start_2
@@ -491,14 +538,14 @@
 
     goto/16 :goto_0
 
-    .line 51
+    .line 55
     :catch_0
     move-exception v19
 
-    move-object/from16 v7, v19
+    move-object/from16 v8, v19
 
-    .line 54
-    move-object/from16 v19, v7
+    .line 58
+    move-object/from16 v19, v8
 
     :try_start_3
     invoke-virtual/range {v19 .. v19}, Ljava/lang/Exception;->printStackTrace()V
@@ -507,8 +554,8 @@
 
     goto :goto_2
 
-    .line 38
-    :cond_3
+    .line 42
+    :cond_4
     move-object/from16 v19, v15
 
     :try_start_4
@@ -520,7 +567,7 @@
 
     move-object/from16 v17, v19
 
-    .line 39
+    .line 43
     move-object/from16 v19, v14
 
     new-instance v20, Ljava/lang/StringBuffer;
@@ -655,7 +702,7 @@
 
     invoke-virtual/range {v19 .. v20}, Ljava/io/BufferedWriter;->write(Ljava/lang/String;)V
 
-    .line 40
+    .line 44
     move-object/from16 v19, v14
 
     invoke-virtual/range {v19 .. v19}, Ljava/io/BufferedWriter;->newLine()V
@@ -666,13 +713,13 @@
 
     goto/16 :goto_1
 
-    .line 45
+    .line 49
     :catch_1
     move-exception v19
 
     move-object/from16 v13, v19
 
-    .line 47
+    .line 51
     move-object/from16 v19, v13
 
     :try_start_5
@@ -680,11 +727,11 @@
 
     goto/16 :goto_2
 
-    .line 51
-    :cond_4
+    .line 55
+    :cond_5
     sget-object v19, Ltrace/MethodTrace;->methodMap:Ljava/util/HashMap;
 
-    move-object/from16 v20, v1
+    move-object/from16 v20, v2
 
     const/16 v21, 0x2
 
@@ -740,7 +787,7 @@
 
     const/16 v23, 0x1
 
-    move-wide/from16 v24, v10
+    move-wide/from16 v24, v11
 
     const-wide/16 v26, 0x1
 
@@ -781,13 +828,13 @@
 
     goto/16 :goto_2
 
-    .line 54
+    .line 58
     :catchall_0
     move-exception v19
 
-    move-object/from16 v3, v19
+    move-object/from16 v4, v19
 
-    .line 56
+    .line 60
     sget-object v19, Ltrace/MethodTrace;->fileLock:Ljava/util/concurrent/locks/ReadWriteLock;
 
     invoke-interface/range {v19 .. v19}, Ljava/util/concurrent/locks/ReadWriteLock;->writeLock()Ljava/util/concurrent/locks/Lock;
@@ -796,7 +843,7 @@
 
     invoke-interface/range {v19 .. v19}, Ljava/util/concurrent/locks/Lock;->unlock()V
 
-    move-object/from16 v19, v3
+    move-object/from16 v19, v4
 
     throw v19
 .end method
