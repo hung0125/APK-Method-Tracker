@@ -67,6 +67,7 @@ for F in smali_list:
     Path(bkupDir).mkdir(parents=True, exist_ok = True)
     copy(F, bkupDir)
     print(F)
-    inject(F)
+    if not F.endswith('MethodTrace.smali'):
+        inject(F)
 
 #TODO: path handling
