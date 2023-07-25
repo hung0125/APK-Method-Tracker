@@ -1,6 +1,6 @@
 import os.path
 from os import walk
-from os.path import dirname
+from os.path import dirname, basename
 from pathlib import Path
 from time import time
 from shutil import copy
@@ -58,16 +58,18 @@ def inject(pth):
 # base_dir: do not include ending slashes
 # what to do: configure the base directory > insert MethodTrace.smali to 'smali\trace\' (create the path manually) > run this script 
 base_dir = input('Specify decompiled base path: ')
+while base_dir[-1] == '/' or base_dir[-1] == '\\':
+    base_dir = base_dir[:-1]
 smali_list = get_smali_files(base_dir)
 keep_list = open('libkeep.txt', 'rb').read().decode('utf-8').splitlines()[1:]
 keep_list = dict(zip(keep_list, [True] * len(keep_list)))
 timeNow = int(time())
 
 for F in smali_list:
-    bkupDir = f"backup_{timeNow}/{dirname(F.replace(base_dir, ''))}"
-    Path(bkupDir).mkdir(parents=True, exist_ok = True)
-    print(F)
-    if not F.endswith('MethodTrace.smali') and F[len(base_dir)+1:] in keep_list:
+    if str(Path(F).parent.absolute())[len(base_dir)+1:] in keep_list and not F.endswith('MethodTrace.smali'):
+        print(F)
+        bkupDir = f"backup_{timeNow}/{dirname(F.replace(base_dir, ''))}"
+        Path(bkupDir).mkdir(parents=True, exist_ok = True)
         copy(F, bkupDir)
         inject(F)
 
