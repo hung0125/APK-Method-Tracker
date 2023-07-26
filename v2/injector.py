@@ -3,7 +3,8 @@ from os import walk
 from os.path import dirname, basename
 from pathlib import Path
 from time import time
-from shutil import copy
+from shutil import copy, copytree
+from turtle import back
 from urllib.parse import urlparse
 
 def get_smali_files(dir_path):
@@ -75,22 +76,60 @@ def inject(pth):
     open(pth,'wb').write('\n'.join(mod_cont).encode('utf-8'))
 
 # base_dir: the base directory of the decompiled folder
-# base_dir: do not include ending slashes
 # what to do: configure the base directory > insert MethodTrace.smali to 'smali\trace\' (create the path manually) > run this script 
-base_dir = input('Specify decompiled base path: ')
-while base_dir[-1] == '/' or base_dir[-1] == '\\':
-    base_dir = base_dir[:-1]
-smali_list = get_smali_files(base_dir)
-keep_list = open('libkeep.txt', 'rb').read().decode('utf-8').splitlines()[1:]
-keep_list = dict(zip(keep_list, [True] * len(keep_list)))
-timeNow = int(time())
 
-for F in smali_list:
-    if str(Path(F).parent.absolute())[len(base_dir)+1:] in keep_list and not F.endswith('MethodTrace.smali'):
-        print(F)
-        bkupDir = f"backup_{timeNow}/{dirname(F.replace(base_dir, ''))}"
-        Path(bkupDir).mkdir(parents=True, exist_ok = True)
-        copy(F, bkupDir)
-        inject(F)
+def inject_flow():
+    base_dir = input('Specify decompiled base path: ')
+    while base_dir[-1] == '/' or base_dir[-1] == '\\':
+        base_dir = base_dir[:-1]
+    smali_list = get_smali_files(base_dir)
+    keep_list = open('libkeep.txt', 'rb').read().decode('utf-8').splitlines()[1:]
+    keep_list = dict(zip(keep_list, [True] * len(keep_list)))
+    timeNow = int(time())
 
-#TODO: path handling
+    for F in smali_list:
+        if str(Path(F).parent.absolute())[len(base_dir)+1:] in keep_list and not F.endswith('MethodTrace.smali'):
+            print(F)
+            bkupDir = f"backup_{timeNow}/{dirname(F.replace(base_dir, ''))}"
+            Path(bkupDir).mkdir(parents=True, exist_ok = True)
+            copy(F, bkupDir)
+            inject(F)
+
+    if not os.path.exists(base_dir + '/smali/trace'):
+        os.makedirs(base_dir + '/smali/trace')
+    copy('MethodTrace.smali', base_dir + '/smali/trace/MethodTrace.smali')
+
+def restore_flow():
+    base_dir = input('Specify decompiled base path: ')
+    while base_dir[-1] == '/' or base_dir[-1] == '\\':
+        base_dir = base_dir[:-1]
+    dir_names = next(os.walk('.'))[1]
+    backup_folder = 'backup_0'
+    for D in dir_names:
+        if len(D.split('_')) == 2 and int(D.split('_')[1]) > int(backup_folder.split('_')[1]):
+            backup_folder = D
+
+    copytree(backup_folder, base_dir, dirs_exist_ok=True)
+
+    if os.path.exists(base_dir + '/smali/trace/MethodTrace.smali'):
+        os.remove(base_dir + '/smali/trace/MethodTrace.smali')
+
+    if not os.listdir(base_dir + '/smali/trace'):
+        os.rmdir(base_dir + '/smali/trace')
+
+
+while True:
+    display = '''
+Select a function:
+(1) inject
+(2) restore latest backup
+(3) insert permission (smali only)
+'''
+    print(display)
+    choice = input('> ')
+    if choice == '1':
+        inject_flow()
+    elif choice == '2':
+        restore_flow()
+
+
