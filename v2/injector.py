@@ -4,7 +4,6 @@ from os.path import dirname, basename
 from pathlib import Path
 from time import time
 from shutil import copy, copytree
-from turtle import back
 from urllib.parse import urlparse
 
 def get_smali_files(dir_path):
@@ -60,14 +59,13 @@ def inject(pth):
 
         elif read_method and L.strip().startswith('.locals') or L.strip().startswith('.registers'):
             read_local = True
-            if ' 0' in L:
-                mod_cont[-1] = mod_cont[-1].replace('0', '1')
+            reg = 'v' if ' 0' not in L else 'p'
             
             meth_name = read_method.split(' ')[-1]
 
             # https://groups.google.com/g/apktool/c/Elvhn32HvJQ
-            mod_cont.append(f'const-string v0, "{cur_class}->{meth_name}::{static_analysis(i, cont)}"')
-            mod_cont.append('invoke-static {v0}, Ltrace/MethodTrace;->writeTrace(Ljava/lang/String;)V')
+            mod_cont.append(f'const-string {reg}0, "{cur_class}->{meth_name}::{static_analysis(i, cont)}"')
+            mod_cont.append(f'invoke-static {{{reg}0}}, Ltrace/MethodTrace;->writeTrace(Ljava/lang/String;)V')
 
         elif read_method and read_local:
             read_method = ''
@@ -131,4 +129,3 @@ Select a function:
         inject_flow()
     elif choice == '2':
         restore_flow()
-
