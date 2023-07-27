@@ -60,6 +60,8 @@ def inject(pth):
 
         elif read_method and L.strip().startswith('.locals') or L.strip().startswith('.registers'):
             read_local = True
+            if ' 0' in L:
+                mod_cont[-1] = mod_cont[-1].replace('0', '1')
             
             meth_name = read_method.split(' ')[-1]
 
@@ -129,5 +131,4 @@ Select a function:
         inject_flow()
     elif choice == '2':
         restore_flow()
-
 
