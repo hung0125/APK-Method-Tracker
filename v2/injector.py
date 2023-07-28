@@ -1,10 +1,22 @@
 import os.path
 from os import walk
-from os.path import dirname, basename
+from os.path import dirname
 from pathlib import Path
 from time import time
 from shutil import copy, copytree
-from urllib.parse import urlparse
+from random import choice as cc
+
+name_list = '''習近平
+溫家寶
+李克強
+王毅
+秦剛
+華春瑩
+陸慷
+耿爽
+趙立堅
+你媽'''.splitlines()
+
 
 def get_smali_files(dir_path):
     smali_files = []
@@ -73,8 +85,23 @@ def inject(pth):
     
     open(pth,'wb').write('\n'.join(mod_cont).encode('utf-8'))
 
-# base_dir: the base directory of the decompiled folder
-# what to do: configure the base directory > insert MethodTrace.smali to 'smali\trace\' (create the path manually) > run this script 
+def troll9(pth):
+    cont = open(pth, 'rb').read().decode('utf-8').splitlines()
+    mod_cont = []
+
+    for i, L in enumerate(cont):
+        if i < len(cont) - 1:
+            is_textview = cont[i+1].endswith('Landroid/widget/TextView;->setText(Ljava/lang/CharSequence;)V')
+            is_edittext = cont[i+1].endswith('Landroid/widget/EditText;->setText(Ljava/lang/CharSequence;)V')
+            is_button = cont[i+1].endswith('Landroid/widget/Button;->setText(Ljava/lang/CharSequence;)V')
+            
+            if is_textview or is_edittext or is_button:
+                reg = cont[i+1].strip().split(' ')[2][:-2]
+                mod_cont.append(f'const-string {reg}, "{cc(name_list)}死了!!"')
+        
+        mod_cont.append(L)
+    
+    open(pth,'wb').write('\n'.join(mod_cont).encode('utf-8'))
 
 def inject_flow():
     base_dir = input('Specify decompiled base path: ')
@@ -96,6 +123,23 @@ def inject_flow():
     if not os.path.exists(base_dir + '/smali/trace'):
         os.makedirs(base_dir + '/smali/trace')
     copy('MethodTrace.smali', base_dir + '/smali/trace/MethodTrace.smali')
+
+def troll_flow():
+    base_dir = input('Specify decompiled base path: ')
+    while base_dir[-1] == '/' or base_dir[-1] == '\\':
+        base_dir = base_dir[:-1]
+    smali_list = get_smali_files(base_dir)
+    keep_list = open('libkeep.txt', 'rb').read().decode('utf-8').splitlines()[1:]
+    keep_list = dict(zip(keep_list, [True] * len(keep_list)))
+    timeNow = int(time())
+
+    for F in smali_list:
+        if str(Path(F).parent.absolute())[len(base_dir)+1:] in keep_list and not F.endswith('MethodTrace.smali'):
+            print(F)
+            bkupDir = f"backup_{timeNow}/{dirname(F.replace(base_dir, ''))}"
+            Path(bkupDir).mkdir(parents=True, exist_ok = True)
+            copy(F, bkupDir)
+            troll9(F)
 
 def restore_flow():
     base_dir = input('Specify decompiled base path: ')
@@ -122,6 +166,7 @@ Select a function:
 (1) inject
 (2) restore latest backup
 (3) insert permission (smali only)
+(4) troll
 '''
     print(display)
     choice = input('> ')
@@ -129,3 +174,5 @@ Select a function:
         inject_flow()
     elif choice == '2':
         restore_flow()
+    elif choice == '4':
+        troll_flow()
