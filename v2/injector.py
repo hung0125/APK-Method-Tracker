@@ -74,8 +74,6 @@ def inject(pth):
             reg = 'v' if ' 0' not in L else 'p'
             
             meth_name = read_method.split(' ')[-1]
-
-            # https://groups.google.com/g/apktool/c/Elvhn32HvJQ
             mod_cont.append(f'const-string {reg}0, "{cur_class}->{meth_name}::{static_analysis(i, cont)}"')
             mod_cont.append(f'invoke-static {{{reg}0}}, Ltrace/MethodTrace;->writeTrace(Ljava/lang/String;)V')
 
