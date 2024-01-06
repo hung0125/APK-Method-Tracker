@@ -10,8 +10,12 @@ public class MethodTrace {
     private static HashMap<String, Long[]> methodMap = new HashMap<>();
     private static ArrayList<String> methods = new ArrayList<>();
 	private static File filePath = new File("/sdcard/trace/trace.txt");
+    private static File dumpLock = new File("/sdcard/trace/lock"); 
 
     public static void writeTrace(String methodName) {
+        if (dumpLock.exists())
+            return;
+            
         try {
             fileLock.writeLock().lock();
 			
