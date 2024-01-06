@@ -1,4 +1,5 @@
 import os.path
+from tqdm import tqdm
 from os import walk
 from os.path import dirname
 from pathlib import Path
@@ -55,6 +56,15 @@ def static_analysis(lineIdx, code):
     
     return f'{cnt_hardcode},{cnt_boolean},{cnt_array},{cnt_setText},{cnt_url},{cnt_mathops}'
 
+def precheck_ok(lineIdx, code) -> bool:
+    for i in range(lineIdx, len(code)):
+        if code[i] == '.end method':
+            break
+        if ' p15' in code[i]:
+            return False
+        
+    return True
+
 def inject(pth):
     cont = open(pth, 'rb').read().decode('utf-8').splitlines()
     mod_cont = []
@@ -65,17 +75,25 @@ def inject(pth):
     read_local = False
     for i, L in enumerate(cont):
         mod_cont.append(L)
-
-        if L.startswith('.method ') and not ' abstract ' in L:
+        '''
+        - if there's p15 and locals = 0, ignore
+        - ensure locals >= 1
+        - always use v0
+        '''
+        if L.startswith('.method ') and not ' abstract ' in L and not ' synthetic ' in L:
             read_method = L
 
         elif read_method and L.strip().startswith('.locals') or L.strip().startswith('.registers'):
             read_local = True
-            reg = 'v' if ' 0' not in L else 'p'
+
+            if ' 0' in L:
+                if not precheck_ok(i, cont):
+                    continue
+                mod_cont[-1] = mod_cont[-1].replace(' 0', ' 1')
             
             meth_name = read_method.split(' ')[-1]
-            mod_cont.append(f'const-string {reg}0, "{cur_class}->{meth_name}::{static_analysis(i, cont)}"')
-            mod_cont.append(f'invoke-static {{{reg}0}}, Ltrace/MethodTrace;->writeTrace(Ljava/lang/String;)V')
+            mod_cont.append(f'const-string v0, "{cur_class}->{meth_name}::{static_analysis(i, cont)}"')
+            mod_cont.append(f'invoke-static {{v0}}, Ltrace/MethodTrace;->writeTrace(Ljava/lang/String;)V')
 
         elif read_method and read_local:
             read_method = ''
@@ -110,9 +128,8 @@ def inject_flow():
     keep_list = dict(zip(keep_list, [True] * len(keep_list)))
     timeNow = int(time())
 
-    for F in smali_list:
+    for F in tqdm(smali_list):
         if str(Path(F).parent.absolute())[len(base_dir)+1:] in keep_list and not F.endswith('MethodTrace.smali'):
-            print(F)
             bkupDir = f"backup_{timeNow}/{dirname(F.replace(base_dir, ''))}"
             Path(bkupDir).mkdir(parents=True, exist_ok = True)
             copy(F, bkupDir)
