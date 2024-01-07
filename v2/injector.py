@@ -1,4 +1,5 @@
 import os.path
+import re
 from tqdm import tqdm
 from os import walk
 from os.path import dirname
@@ -26,6 +27,34 @@ def get_smali_files(dir_path):
             if file.endswith(".smali"):
                 smali_files.append(os.path.join(root, file))
     return smali_files
+
+def split_param(string):
+    array = []
+    in_array = False
+    in_lib = False
+    lib_name = 'L'
+    for c in string:
+        if not in_array and c == '[':
+            in_array = True
+        elif not in_lib and c == 'L':
+            in_lib = True
+        elif c == ';':
+            if in_array:
+                lib_name = '[' + lib_name
+                in_array = False
+            array.append(lib_name)
+            lib_name = 'L'
+            in_lib = False
+        else:
+            if in_lib:
+                lib_name += c
+            elif in_array: 
+                array.append('[' + c)
+                in_array = False
+            else:
+                array.append(c)
+
+    return array
     
 def static_analysis(lineIdx, code):
     cnt_hardcode = 0
@@ -65,6 +94,25 @@ def precheck_ok(lineIdx, code) -> bool:
         
     return True
 
+def find_registers(line: str) -> list:
+    ls = []
+    comp = line.strip().split(' ')
+    if comp[0] == '#':
+        return ls
+    
+    try:
+        if comp[0] != 'move-result-object':
+            comp.pop()
+        comp.pop(0)
+    except:
+        return ls
+
+    for C in comp:
+        reg = re.sub(r'[{},./]', '', C)
+        if reg.startswith('v') and len(reg) > 1 and reg[1].isdigit():
+            ls.append(reg)
+    return ls
+
 def inject(pth):
     cont = open(pth, 'rb').read().decode('utf-8').splitlines()
     mod_cont = []
@@ -73,8 +121,15 @@ def inject(pth):
     cur_class = header[-1].replace(';', '')
     read_method = ''
     read_local = False
+    in_try_block = False
+    register_map = {}
     for i, L in enumerate(cont):
         mod_cont.append(L)
+
+        # mark down local registers
+        marked_registers = find_registers(L)
+        for M in marked_registers:
+            register_map[M] = True
         '''
         - if there's p15 and locals = 0, ignore
         - ensure locals >= 1
@@ -82,23 +137,105 @@ def inject(pth):
         '''
         if L.startswith('.method ') and not ' abstract ' in L and not ' synthetic ' in L:
             read_method = L
+            register_map = {}
 
         elif read_method and L.strip().startswith('.locals') or L.strip().startswith('.registers'):
             read_local = True
 
             if ' 0' in L:
                 if not precheck_ok(i, cont):
-                    continue
+                    continue # skip modification
                 mod_cont[-1] = mod_cont[-1].replace(' 0', ' 1')
             
             meth_name = read_method.split(' ')[-1]
             mod_cont.append(f'const-string v0, "{cur_class}->{meth_name}::{static_analysis(i, cont)}"')
             mod_cont.append(f'invoke-static {{v0}}, Ltrace/MethodTrace;->writeTrace(Ljava/lang/String;)V')
 
-        elif read_method and read_local:
+        elif read_method and L.strip().startswith(':try_start'):
+            in_try_block = True
+        elif read_method and in_try_block and L.strip().startswith(':try_end'):
+            in_try_block = False
+        elif read_method and L.strip().startswith('invoke-static') or L.strip().startswith('invoke-virtual') or L.strip().startswith('invoke-direct') or L.strip().startswith('invoke-interface'):
+            if '/range {' in L:
+                continue # skip ranged params (very difficult to process...)
+
+            # Regular expression pattern to extract the parameters within ()
+            pattern = r'\{(.*?)\}.*?\((.*?)\)'
+
+            # Extracting the parameters
+            match = re.search(pattern, L.strip())
+            if match:
+                registers = match.group(1)  # Extracted registers
+                params = match.group(2)     # Extracted parameters
+
+                # Splitting the registers and parameters
+                # invoke-virtual/invoke-direct/invoke-interface ==> start from 2nd register
+                # invoke-static ==> start from 1st register
+                registers = [reg.strip() for reg in registers.split(',')]
+                params = split_param(params)
+                is_zero_based = L.strip().startswith('invoke-static')
+                for j in range(len(params)):
+                    target_reg = None
+                    if params[j] == 'Ljava/lang/String' or params[j] == '[Ljava/lang/String':
+                        valid_cnt = 0
+                        for jj in range(0 if is_zero_based else 1, len(registers)):
+                            # Assume 'p' always registered, 'v' may not be assigned
+                            if registers[jj] in register_map or registers[jj].startswith('p'):
+                                valid_cnt += 1
+                            if valid_cnt == j+1: # matched the j+1 th valid register
+                                target_reg = registers[jj]
+                                break
+
+                    if params[j] == 'Ljava/lang/String' and target_reg != None:
+                        reg_integer = int(''.join([char for char in target_reg if char.isdigit()]))
+                        if reg_integer < 16:
+                            mod_cont.insert(-1, f'invoke-static {{{target_reg}}}, Ltrace/MethodTrace;->writeRTData(Ljava/lang/String;)V')
+                        else:
+                            mod_cont.insert(-1, f'invoke-static/range {{{target_reg} .. {target_reg}}}, Ltrace/MethodTrace;->writeRTData(Ljava/lang/String;)V')
+                    elif params[j] == '[Ljava/lang/String' and target_reg != None:
+                        reg_integer = int(''.join([char for char in target_reg if char.isdigit()]))
+                        if reg_integer < 16:
+                            mod_cont.insert(-1, f'invoke-static {{{target_reg}}}, Ltrace/MethodTrace;->writeRTArrayData([Ljava/lang/String;)V')
+                        else:
+                            mod_cont.insert(-1, f'invoke-static/range {{{target_reg} .. {target_reg}}}, Ltrace/MethodTrace;->writeRTArrayData([Ljava/lang/String;)V')
+
+        elif read_method and L.strip().startswith('const-string'):
+            register = L.strip().split(' ')[1][:-1]
+            reg_integer = int(''.join([char for char in register if char.isdigit()]))
+            if reg_integer < 16:
+                mod_cont.append(f'invoke-static {{{register}}}, Ltrace/MethodTrace;->writeRTData(Ljava/lang/String;)V')
+            else:
+                mod_cont.append(f'invoke-static/range {{{register} .. {register}}}, Ltrace/MethodTrace;->writeRTData(Ljava/lang/String;)V')
+
+        elif read_method and L.strip().startswith('move-result-object'):
+            prev_op = ''
+            
+            for ii in range(-1, -11, -1):
+                if len(mod_cont[ii].strip()) > 0:
+                    prev_op = mod_cont[ii]
+                    break
+
+            register = L.strip().split(' ')[1]
+            if in_try_block and register.startswith('p'): # one possible workaround is write dump outside try block, but risky
+                continue
+            
+            if (str) (prev_op).endswith(')Ljava/lang/String;'):
+                reg_integer = int(''.join([char for char in register if char.isdigit()]))
+                if reg_integer < 16:
+                    mod_cont.append(f'invoke-static {{{register}}}, Ltrace/MethodTrace;->writeRTData(Ljava/lang/String;)V')
+                else:
+                    mod_cont.append(f'invoke-static/range {{{register} .. {register}}}, Ltrace/MethodTrace;->writeRTData(Ljava/lang/String;)V')
+            elif (str) (prev_op).endswith(')[Ljava/lang/String;'):
+                reg_integer = int(''.join([char for char in register if char.isdigit()]))
+                if reg_integer < 16:
+                    mod_cont.append(f'invoke-static {{{register}}}, Ltrace/MethodTrace;->writeRTArrayData([Ljava/lang/String;)V')
+                else:
+                    mod_cont.append(f'invoke-static/range {{{register} .. {register}}}, Ltrace/MethodTrace;->writeRTArrayData([Ljava/lang/String;)V')
+
+        elif read_method and read_local and L == '.end method':
             read_method = ''
             read_local = False
-    
+
     open(pth,'wb').write('\n'.join(mod_cont).encode('utf-8'))
 
 def troll9(pth):

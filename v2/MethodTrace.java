@@ -8,8 +8,10 @@ import java.util.concurrent.*;
 public class MethodTrace {
     private static final ReadWriteLock fileLock = new ReentrantReadWriteLock();
     private static HashMap<String, Long[]> methodMap = new HashMap<>();
+    private static HashMap<String, Boolean> runtimeDataMap = new HashMap<>();
     private static ArrayList<String> methods = new ArrayList<>();
 	private static File filePath = new File("/sdcard/trace/trace.txt");
+    private static File rtDataPath = new File("/sdcard/trace/runtimedump.txt");
     private static File dumpLock = new File("/sdcard/trace/lock"); 
 
     public static void writeTrace(String methodName) {
@@ -63,5 +65,54 @@ public class MethodTrace {
         } finally {
             fileLock.writeLock().unlock();
         }
+    }
+
+    public static void writeRTData(String s) {
+        if (dumpLock.exists() || s == null)
+            return;
+
+        try {
+            fileLock.writeLock().lock();
+			
+			// on reset
+			if (filePath.length() == 0) {
+				runtimeDataMap = new HashMap<>();
+			}
+
+            StackTraceElement trace = new Throwable().fillInStackTrace().getStackTrace()[1];
+            String fullFormat = String.format("%s ==> %s", trace.toString(), s.substring(0, Math.min(s.length(), 100)));
+            // note that we deleted part of the string to protect efficiency
+
+            if (!runtimeDataMap.containsKey(fullFormat)) {
+                // update
+                runtimeDataMap.put(fullFormat, true);
+
+                try {
+                    // write
+                    FileWriter fileWriter = new FileWriter(rtDataPath, true);
+                    BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+
+                    // Write contents to file
+                    bufferedWriter.write(fullFormat);
+                    bufferedWriter.newLine();
+
+                    // Flush and close the writer
+                    bufferedWriter.flush();
+                    bufferedWriter.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            fileLock.writeLock().unlock();
+        }
+    }
+
+    public static void writeRTArrayData(String[] s) {
+        if (dumpLock.exists() || s == null)
+            return;
     }
 }
