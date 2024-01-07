@@ -97,7 +97,7 @@ def precheck_ok(lineIdx, code) -> bool:
 def find_registers(line: str) -> list:
     ls = []
     comp = line.strip().split(' ')
-    if comp[0] == '#':
+    if comp[0] == '#' or comp[0].startswith('invoke-'):
         return ls
     
     try:
@@ -137,7 +137,6 @@ def inject(pth):
         '''
         if L.startswith('.method ') and not ' abstract ' in L and not ' synthetic ' in L:
             read_method = L
-            register_map = {}
 
         elif read_method and L.strip().startswith('.locals') or L.strip().startswith('.registers'):
             read_local = True
@@ -235,6 +234,7 @@ def inject(pth):
         elif read_method and read_local and L == '.end method':
             read_method = ''
             read_local = False
+            register_map = {}
 
     open(pth,'wb').write('\n'.join(mod_cont).encode('utf-8'))
 
