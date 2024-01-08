@@ -1,6 +1,7 @@
 import os.path
 import re
 from tqdm import tqdm
+import traceback
 from os import walk
 from os.path import dirname
 from pathlib import Path
@@ -31,17 +32,20 @@ def get_smali_files(dir_path):
 def split_param(string):
     array = []
     in_array = False
+    dim_cnt = 0
     in_lib = False
     lib_name = 'L'
     for c in string:
-        if not in_array and c == '[':
+        if c == '[':
             in_array = True
+            dim_cnt += 1
         elif not in_lib and c == 'L':
             in_lib = True
         elif c == ';':
             if in_array:
-                lib_name = '[' + lib_name
+                lib_name = ('[' * dim_cnt) + lib_name
                 in_array = False
+                dim_cnt = 0
             array.append(lib_name)
             lib_name = 'L'
             in_lib = False
@@ -49,8 +53,9 @@ def split_param(string):
             if in_lib:
                 lib_name += c
             elif in_array: 
-                array.append('[' + c)
+                array.append(('[' * dim_cnt) + c)
                 in_array = False
+                dim_cnt = 0
             else:
                 array.append(c)
 
@@ -103,8 +108,9 @@ def inject(pth):
     read_method = ''
     read_local = False
     in_try_block = False
-    register_map = {}
+    ln = 0
     for i, L in enumerate(cont):
+        ln = i
         mod_cont.append(L)
 
         '''
