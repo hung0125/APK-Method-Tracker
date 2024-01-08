@@ -1,4 +1,6 @@
 # APK-Method-Tracker
+## Upcoming task
+- Support CharSequence (useful for UI setText)
 ## Installation
 TBC
 ## Guidelines & Tips
