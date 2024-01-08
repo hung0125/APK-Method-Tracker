@@ -80,7 +80,7 @@ public class MethodTrace {
 			}
 
             StackTraceElement trace = new Throwable().fillInStackTrace().getStackTrace()[1];
-            String fullFormat = String.format("%s ==> %s", trace.toString(), s.substring(0, Math.min(s.length(), 100)));
+            String fullFormat = String.format("%s ==> %s", trace.toString(), s.substring(0, Math.min(s.length(), 65535)));
             // note that we deleted part of the string to protect efficiency
 
             if (!runtimeDataMap.containsKey(fullFormat)) {

@@ -332,7 +332,7 @@
 
     move-result v17
 
-    const/16 v18, 0x64
+    const v18, 0xffff
 
     invoke-static/range {v17 .. v18}, Ljava/lang/Math;->min(II)I
 
