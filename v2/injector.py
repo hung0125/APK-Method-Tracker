@@ -173,17 +173,16 @@ def inject(pth):
                 registers = [reg.strip() for reg in registers.split(',')]
                 params = split_param(params)
                 is_zero_based = L.strip().startswith('invoke-static')
+                register_idx = 0 if is_zero_based else 1
                 for j in range(len(params)):
                     target_reg = None
                     if params[j] == 'Ljava/lang/String' or params[j] == '[Ljava/lang/String':
-                        valid_cnt = 0
-                        for jj in range(0 if is_zero_based else 1, len(registers)):
-                            # Assume 'p' always registered, 'v' may not be assigned
-                            if registers[jj] in register_map or registers[jj].startswith('p'):
-                                valid_cnt += 1
-                            if valid_cnt == j+1: # matched the j+1 th valid register
-                                target_reg = registers[jj]
-                                break
+                        target_reg = registers[register_idx]
+                        register_idx += 1
+                    elif params[j] == 'J' or params[j] == 'D':
+                        register_idx += 2
+                    else:
+                        register_idx += 1
 
                     if params[j] == 'Ljava/lang/String' and target_reg != None:
                         reg_integer = int(''.join([char for char in target_reg if char.isdigit()]))
