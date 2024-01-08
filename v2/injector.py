@@ -1,7 +1,6 @@
 import os.path
 import re
 from tqdm import tqdm
-import traceback
 from os import walk
 from os.path import dirname
 from pathlib import Path
@@ -108,7 +107,7 @@ def inject(pth):
     read_method = ''
     read_local = False
     in_try_block = False
-    ln = 0
+    
     for i, L in enumerate(cont):
         ln = i
         mod_cont.append(L)
