@@ -94,25 +94,6 @@ def precheck_ok(lineIdx, code) -> bool:
         
     return True
 
-def find_registers(line: str) -> list:
-    ls = []
-    comp = line.strip().split(' ')
-    if comp[0] == '#' or comp[0].startswith('invoke-'):
-        return ls
-    
-    try:
-        if comp[0] != 'move-result-object':
-            comp.pop()
-        comp.pop(0)
-    except:
-        return ls
-
-    for C in comp:
-        reg = re.sub(r'[{},./]', '', C)
-        if reg.startswith('v') and len(reg) > 1 and reg[1].isdigit():
-            ls.append(reg)
-    return ls
-
 def inject(pth):
     cont = open(pth, 'rb').read().decode('utf-8').splitlines()
     mod_cont = []
@@ -126,10 +107,6 @@ def inject(pth):
     for i, L in enumerate(cont):
         mod_cont.append(L)
 
-        # mark down local registers
-        marked_registers = find_registers(L)
-        for M in marked_registers:
-            register_map[M] = True
         '''
         - if there's p15 and locals = 0, ignore
         - ensure locals >= 1
@@ -233,7 +210,6 @@ def inject(pth):
         elif read_method and read_local and L == '.end method':
             read_method = ''
             read_local = False
-            register_map = {}
 
     open(pth,'wb').write('\n'.join(mod_cont).encode('utf-8'))
 
