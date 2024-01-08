@@ -132,9 +132,6 @@ def inject(pth):
         elif read_method and in_try_block and L.strip().startswith(':try_end'):
             in_try_block = False
         elif read_method and L.strip().startswith('invoke-static') or L.strip().startswith('invoke-virtual') or L.strip().startswith('invoke-direct') or L.strip().startswith('invoke-interface'):
-            if '/range {' in L:
-                continue # skip ranged params (very difficult to process...)
-
             # Regular expression pattern to extract the parameters within ()
             pattern = r'\{(.*?)\}.*?\((.*?)\)'
 
@@ -148,31 +145,47 @@ def inject(pth):
                 # invoke-virtual/invoke-direct/invoke-interface ==> start from 2nd register
                 # invoke-static ==> start from 1st register
                 registers = [reg.strip() for reg in registers.split(',')]
+                if ' .. ' in registers[0]:
+                    start_reg = registers[0].split(' .. ')[0]
+                    end_reg = registers[0].split(' .. ')[1]
+                    
+                    # rework on the list
+                    if start_reg == end_reg:
+                        registers = [start_reg]
+                    else:
+                        start_num = int(''.join([char for char in start_reg if char.isdigit()])) + 1
+                        prefix = start_reg[0]
+                        registers = [start_reg]
+                        while f'{prefix}{start_num}' != end_reg:
+                            registers.append(f'{prefix}{start_num}')
+                            start_num += 1
+                        registers.append(end_reg)
+                    
                 params = split_param(params)
                 is_zero_based = L.strip().startswith('invoke-static')
-                register_idx = 0 if is_zero_based else 1
+                cur_reg_idx = 0 if is_zero_based else 1
                 for j in range(len(params)):
                     target_reg = None
                     if params[j] == 'Ljava/lang/String' or params[j] == '[Ljava/lang/String':
-                        target_reg = registers[register_idx]
-                        register_idx += 1
+                        target_reg = registers[cur_reg_idx]
+                        cur_reg_idx += 1
                     elif params[j] == 'J' or params[j] == 'D':
-                        register_idx += 2
+                        cur_reg_idx += 2
                     else:
-                        register_idx += 1
+                        cur_reg_idx += 1
 
                     if params[j] == 'Ljava/lang/String' and target_reg != None:
                         reg_integer = int(''.join([char for char in target_reg if char.isdigit()]))
-                        if reg_integer < 16:
-                            mod_cont.insert(-1, f'invoke-static {{{target_reg}}}, Ltrace/MethodTrace;->writeRTData(Ljava/lang/String;)V')
-                        else:
-                            mod_cont.insert(-1, f'invoke-static/range {{{target_reg} .. {target_reg}}}, Ltrace/MethodTrace;->writeRTData(Ljava/lang/String;)V')
+                        # if reg_integer < 16:
+                        #     mod_cont.insert(-1, f'invoke-static {{{target_reg}}}, Ltrace/MethodTrace;->writeRTData(Ljava/lang/String;)V')
+                        # else:
+                        mod_cont.insert(-1, f'invoke-static/range {{{target_reg} .. {target_reg}}}, Ltrace/MethodTrace;->writeRTData(Ljava/lang/String;)V')
                     elif params[j] == '[Ljava/lang/String' and target_reg != None:
                         reg_integer = int(''.join([char for char in target_reg if char.isdigit()]))
-                        if reg_integer < 16:
-                            mod_cont.insert(-1, f'invoke-static {{{target_reg}}}, Ltrace/MethodTrace;->writeRTArrayData([Ljava/lang/String;)V')
-                        else:
-                            mod_cont.insert(-1, f'invoke-static/range {{{target_reg} .. {target_reg}}}, Ltrace/MethodTrace;->writeRTArrayData([Ljava/lang/String;)V')
+                        # if reg_integer < 16:
+                        #     mod_cont.insert(-1, f'invoke-static {{{target_reg}}}, Ltrace/MethodTrace;->writeRTArrayData([Ljava/lang/String;)V')
+                        # else:
+                        mod_cont.insert(-1, f'invoke-static/range {{{target_reg} .. {target_reg}}}, Ltrace/MethodTrace;->writeRTArrayData([Ljava/lang/String;)V')
 
         elif read_method and L.strip().startswith('const-string'):
             register = L.strip().split(' ')[1][:-1]
