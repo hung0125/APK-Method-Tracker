@@ -13,6 +13,7 @@ public class MethodTrace {
 	private static File filePath = new File("/sdcard/trace/trace.txt");
     private static File rtDataPath = new File("/sdcard/trace/runtimedump.txt");
     private static File dumpLock = new File("/sdcard/trace/lock"); 
+    private static int dataLimitLength = 65535;
 
     public static void writeTrace(String methodName) {
         if (dumpLock.exists())
@@ -71,6 +72,34 @@ public class MethodTrace {
         if (dumpLock.exists() || s == null)
             return;
 
+        StackTraceElement trace = new Throwable().fillInStackTrace().getStackTrace()[1];
+        String fullFormat = String.format("@General| %s ==>\t%s", trace.toString(), s.substring(0, Math.min(s.length(), dataLimitLength)));
+
+        writeData(fullFormat);
+    }
+
+    public static void writeRTData(String[] s) {
+        if (dumpLock.exists() || s == null)
+            return;
+
+        String out = "{" + String.join(",", s) + "}";
+        StackTraceElement trace = new Throwable().fillInStackTrace().getStackTrace()[1];
+        String fullFormat = String.format("@General[]| %s ==>\t%s", trace.toString(), out.substring(0, Math.min(out.length(), dataLimitLength)));
+
+        writeData(fullFormat);
+    }
+
+    public static void writeRTData(CharSequence cs) { // UI set text
+        if (dumpLock.exists() || cs == null)
+            return;
+        String data = cs.toString();
+        StackTraceElement trace = new Throwable().fillInStackTrace().getStackTrace()[1];
+        String fullFormat = String.format("@UIText| %s ==>\t%s", trace.toString(), data.substring(0, Math.min(data.length(), dataLimitLength)));
+
+        writeData(fullFormat);
+    }
+
+    public static void writeData(String fullFormat) {
         try {
             fileLock.writeLock().lock();
 			
@@ -78,10 +107,6 @@ public class MethodTrace {
 			if (filePath.length() == 0) {
 				runtimeDataMap = new HashMap<>();
 			}
-
-            StackTraceElement trace = new Throwable().fillInStackTrace().getStackTrace()[1];
-            String fullFormat = String.format("%s ==> %s", trace.toString(), s.substring(0, Math.min(s.length(), 65535)));
-            // note that we deleted part of the string to protect efficiency
 
             if (!runtimeDataMap.containsKey(fullFormat)) {
                 // update
@@ -109,10 +134,5 @@ public class MethodTrace {
         } finally {
             fileLock.writeLock().unlock();
         }
-    }
-
-    public static void writeRTArrayData(String[] s) {
-        if (dumpLock.exists() || s == null)
-            return;
     }
 }
