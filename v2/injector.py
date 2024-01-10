@@ -98,7 +98,7 @@ def precheck_ok(lineIdx, code) -> bool:
         
     return True
 
-def inject(pth):
+def inject(pth, log_meth = False, log_data = False):
     cont = open(pth, 'rb').read().decode('utf-8').splitlines()
     mod_cont = []
 
@@ -121,6 +121,7 @@ def inject(pth):
 
         elif read_method and L.strip().startswith('.locals') or L.strip().startswith('.registers'):
             read_local = True
+            if not log_meth: continue
 
             if ' 0' in L:
                 if not precheck_ok(i, cont):
@@ -135,7 +136,7 @@ def inject(pth):
             in_try_block = True
         elif read_method and in_try_block and L.strip().startswith(':try_end'):
             in_try_block = False
-        elif read_method and L.strip().startswith('invoke-static') or L.strip().startswith('invoke-virtual') or L.strip().startswith('invoke-direct') or L.strip().startswith('invoke-interface'):
+        elif read_method and log_data and L.strip().startswith('invoke-static') or L.strip().startswith('invoke-virtual') or L.strip().startswith('invoke-direct') or L.strip().startswith('invoke-interface'):
             # Regular expression pattern to extract the parameters within ()
             pattern = r'\{(.*?)\}(.*)?\((.*?)\)'
 
@@ -187,7 +188,7 @@ def inject(pth):
                         reg_integer = int(''.join([char for char in target_reg if char.isdigit()]))
                         mod_cont.insert(-1, f'invoke-static/range {{{target_reg} .. {target_reg}}}, Ltrace/MethodTrace;->writeRTData({params[j]};)V')
 
-        elif read_method and L.strip().startswith('const-string'):
+        elif read_method and log_data and L.strip().startswith('const-string'):
             register = L.strip().split(' ')[1][:-1]
             reg_integer = int(''.join([char for char in register if char.isdigit()]))
             if reg_integer < 16:
@@ -195,7 +196,7 @@ def inject(pth):
             else:
                 mod_cont.append(f'invoke-static/range {{{register} .. {register}}}, Ltrace/MethodTrace;->writeRTData(Ljava/lang/String;)V')
 
-        elif read_method and L.strip().startswith('move-result-object'):
+        elif read_method and log_data and L.strip().startswith('move-result-object'):
             prev_op = ''
             
             for ii in range(-1, -1000, -1):
@@ -242,7 +243,7 @@ def troll9(pth):
     
     open(pth,'wb').write('\n'.join(mod_cont).encode('utf-8'))
 
-def inject_flow():
+def inject_flow(log_meth: bool, log_data: bool):
     base_dir = input('Specify decompiled base path: ')
     while base_dir[-1] == '/' or base_dir[-1] == '\\':
         base_dir = base_dir[:-1]
@@ -256,7 +257,7 @@ def inject_flow():
             bkupDir = f"backup_{timeNow}/{dirname(F.replace(base_dir, ''))}"
             Path(bkupDir).mkdir(parents=True, exist_ok = True)
             copy(F, bkupDir)
-            inject(F)
+            inject(F, log_meth, log_data)
 
     if not os.path.exists(base_dir + '/smali/trace'):
         os.makedirs(base_dir + '/smali/trace')
@@ -302,15 +303,21 @@ while True:
     display = '''
 Select a function:
 (1) inject
-(2) restore latest backup
-(3) insert permission (smali only)
-(4) troll
+(2) inject method calls only
+(3) inject runtime data log only
+(4) restore latest backup
+(5) insert permission (smali only)
+(6) troll
 '''
     print(display)
     choice = input('> ')
     if choice == '1':
-        inject_flow()
+        inject_flow(True, True)
     elif choice == '2':
-        restore_flow()
+        inject_flow(True, False)
+    elif choice == '3':
+        inject_flow(False, True)
     elif choice == '4':
+        restore_flow()
+    elif choice == '6':
         troll_flow()
