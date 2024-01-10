@@ -249,6 +249,7 @@ def inject_flow(log_meth: bool, log_data: bool):
         base_dir = base_dir[:-1]
     smali_list = get_smali_files(base_dir)
     keep_list = open('libkeep.txt', 'rb').read().decode('utf-8').splitlines()[1:]
+    keep_list = [element.split("||")[1] for element in keep_list]
     keep_list = dict(zip(keep_list, [True] * len(keep_list)))
     timeNow = int(time())
 
