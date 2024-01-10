@@ -71,7 +71,7 @@ public class MethodTrace {
     public static void writeRTData(String s) {
         if (dumpLock.exists() || s == null)
             return;
-
+        
         StackTraceElement trace = new Throwable().fillInStackTrace().getStackTrace()[1];
         String fullFormat = String.format("@General| %s ==>\t%s", trace.toString(), s.substring(0, Math.min(s.length(), dataLimitLength)));
 
@@ -104,7 +104,7 @@ public class MethodTrace {
             fileLock.writeLock().lock();
 			
 			// on reset
-			if (filePath.length() == 0) {
+			if (rtDataPath.length() == 0) {
 				runtimeDataMap = new HashMap<>();
 			}
 

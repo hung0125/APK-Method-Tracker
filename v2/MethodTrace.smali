@@ -190,7 +190,7 @@
     invoke-interface {v9}, Ljava/util/concurrent/locks/Lock;->lock()V
 
     .line 107
-    sget-object v9, Ltrace/MethodTrace;->filePath:Ljava/io/File;
+    sget-object v9, Ltrace/MethodTrace;->rtDataPath:Ljava/io/File;
 
     invoke-virtual {v9}, Ljava/io/File;->length()J
 
