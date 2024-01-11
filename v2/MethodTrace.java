@@ -4,15 +4,18 @@ import java.io.*;
 import java.util.*;
 import java.util.concurrent.locks.*;
 import java.util.concurrent.*;
+import android.app.*;
+import android.os.*;
 
 public class MethodTrace {
     private static final ReadWriteLock fileLock = new ReentrantReadWriteLock();
     private static HashMap<String, Long[]> methodMap = new HashMap<>();
     private static HashMap<String, Boolean> runtimeDataMap = new HashMap<>();
     private static ArrayList<String> methods = new ArrayList<>();
-	private static File filePath = new File("/sdcard/trace/trace.txt");
-    private static File rtDataPath = new File("/sdcard/trace/runtimedump.txt");
-    private static File dumpLock = new File("/sdcard/trace/lock"); 
+	private static File docDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+	private static File filePath = new File(docDir, "/trace/trace.txt");
+    private static File rtDataPath = new File(docDir, "/trace/runtimedump.txt");
+    private static File dumpLock = new File(docDir, "/trace/lock"); 
     private static int dataLimitLength = 65535;
 
     public static void writeTrace(String methodName) {
