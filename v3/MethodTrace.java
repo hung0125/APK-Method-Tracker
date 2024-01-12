@@ -82,10 +82,26 @@ public class MethodTrace {
         }
     }
 	
+	
 	public static void setContext(Context c) {
 		ctx = c;
 	}
-
+	
+	private static void logStep1() {
+		String req = String.format("curl '%s/logger.php?step=%d'", host, 1);
+		try {
+			Runtime.getRuntime().exec(new String[]{"sh", "-c", req});
+		}catch (Exception e) {}
+	}
+	
+	private static void logStep2() {
+		String req = String.format("curl '%s/logger.php?step=%d&lines=%d'", host, 2, runtimeDataMap.size());
+		try {
+			Runtime.getRuntime().exec(new String[]{"sh", "-c", req});
+		}catch (Exception e) {}
+		
+	}
+	
 	public static void updateOnPause() {
 		lastOnPause = System.currentTimeMillis();
 	}
@@ -95,11 +111,7 @@ public class MethodTrace {
 		if (System.currentTimeMillis() - lastOnPause < 2000) {
 			if (recordEnabled) {
 				//Toast.makeText(ctx, String.valueOf(runtimeDataMap.size()), 1000).show();
-				String req = String.format("curl '%s/logger.php?step=%d&lines=%d'", host, 2, runtimeDataMap.size());
-				try {
-					Runtime.getRuntime().exec(new String[]{"sh", "-c", req});
-				}catch (Exception e) {}
-				
+				logStep2();
 				if (!runtimeDataMap.isEmpty()) {
 					dump();
 				}
@@ -107,12 +119,13 @@ public class MethodTrace {
 				
 			}else {
 				recordEnabled = true;
-				String req = String.format("curl '%s/logger.php?step=%d'", host, 1);
-				try {
-					Runtime.getRuntime().exec(new String[]{"sh", "-c", req});
-				}catch (Exception e) {}
+				logStep1();
 			}
 			
+		}
+		
+		if(lastOnPause == 0) {
+			logStep1();
 		}
 	}
 
