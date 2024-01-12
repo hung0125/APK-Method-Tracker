@@ -1,4 +1,4 @@
-.class public Lcom/mycompany/myapp/MethodTrace;
+.class public Ltrace/MethodTrace;
 .super Ljava/lang/Object;
 .source "MethodTrace.java"
 
@@ -71,7 +71,7 @@
 
     invoke-direct {v3}, Ljava/util/concurrent/locks/ReentrantReadWriteLock;-><init>()V
 
-    sput-object v2, Lcom/mycompany/myapp/MethodTrace;->fileLock:Ljava/util/concurrent/locks/ReadWriteLock;
+    sput-object v2, Ltrace/MethodTrace;->fileLock:Ljava/util/concurrent/locks/ReadWriteLock;
 
     new-instance v2, Ljava/util/HashMap;
 
@@ -83,7 +83,7 @@
 
     invoke-direct {v3}, Ljava/util/HashMap;-><init>()V
 
-    sput-object v2, Lcom/mycompany/myapp/MethodTrace;->methodMap:Ljava/util/HashMap;
+    sput-object v2, Ltrace/MethodTrace;->methodMap:Ljava/util/HashMap;
 
     new-instance v2, Ljava/util/ArrayList;
 
@@ -95,7 +95,7 @@
 
     invoke-direct {v3}, Ljava/util/ArrayList;-><init>()V
 
-    sput-object v2, Lcom/mycompany/myapp/MethodTrace;->methods:Ljava/util/ArrayList;
+    sput-object v2, Ltrace/MethodTrace;->methods:Ljava/util/ArrayList;
 
     sget-object v2, Landroid/os/Environment;->DIRECTORY_DOCUMENTS:Ljava/lang/String;
 
@@ -103,7 +103,7 @@
 
     move-result-object v2
 
-    sput-object v2, Lcom/mycompany/myapp/MethodTrace;->docDir:Ljava/io/File;
+    sput-object v2, Ltrace/MethodTrace;->docDir:Ljava/io/File;
 
     new-instance v2, Ljava/io/File;
 
@@ -113,13 +113,13 @@
 
     move-object v3, v6
 
-    sget-object v4, Lcom/mycompany/myapp/MethodTrace;->docDir:Ljava/io/File;
+    sget-object v4, Ltrace/MethodTrace;->docDir:Ljava/io/File;
 
     const-string v5, "/trace/trace.txt"
 
     invoke-direct {v3, v4, v5}, Ljava/io/File;-><init>(Ljava/io/File;Ljava/lang/String;)V
 
-    sput-object v2, Lcom/mycompany/myapp/MethodTrace;->filePath:Ljava/io/File;
+    sput-object v2, Ltrace/MethodTrace;->filePath:Ljava/io/File;
 
     new-instance v2, Ljava/io/File;
 
@@ -129,13 +129,13 @@
 
     move-object v3, v6
 
-    sget-object v4, Lcom/mycompany/myapp/MethodTrace;->docDir:Ljava/io/File;
+    sget-object v4, Ltrace/MethodTrace;->docDir:Ljava/io/File;
 
     const-string v5, "/trace/runtimedump.txt"
 
     invoke-direct {v3, v4, v5}, Ljava/io/File;-><init>(Ljava/io/File;Ljava/lang/String;)V
 
-    sput-object v2, Lcom/mycompany/myapp/MethodTrace;->rtDataPath:Ljava/io/File;
+    sput-object v2, Ltrace/MethodTrace;->rtDataPath:Ljava/io/File;
 
     new-instance v2, Ljava/io/File;
 
@@ -145,17 +145,17 @@
 
     move-object v3, v6
 
-    sget-object v4, Lcom/mycompany/myapp/MethodTrace;->docDir:Ljava/io/File;
+    sget-object v4, Ltrace/MethodTrace;->docDir:Ljava/io/File;
 
     const-string v5, "/trace/lock"
 
     invoke-direct {v3, v4, v5}, Ljava/io/File;-><init>(Ljava/io/File;Ljava/lang/String;)V
 
-    sput-object v2, Lcom/mycompany/myapp/MethodTrace;->dumpLock:Ljava/io/File;
+    sput-object v2, Ltrace/MethodTrace;->dumpLock:Ljava/io/File;
 
     const v2, 0xffff
 
-    sput v2, Lcom/mycompany/myapp/MethodTrace;->dataLimitLength:I
+    sput v2, Ltrace/MethodTrace;->dataLimitLength:I
 
     new-instance v2, Ljava/util/HashMap;
 
@@ -167,7 +167,7 @@
 
     invoke-direct {v3}, Ljava/util/HashMap;-><init>()V
 
-    sput-object v2, Lcom/mycompany/myapp/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
+    sput-object v2, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
 
     new-instance v2, Ljava/lang/StringBuilder;
 
@@ -179,13 +179,13 @@
 
     invoke-direct {v3}, Ljava/lang/StringBuilder;-><init>()V
 
-    sput-object v2, Lcom/mycompany/myapp/MethodTrace;->recorder:Ljava/lang/StringBuilder;
+    sput-object v2, Ltrace/MethodTrace;->recorder:Ljava/lang/StringBuilder;
 
     const/4 v2, 0x0
 
     check-cast v2, Landroid/content/Context;
 
-    sput-object v2, Lcom/mycompany/myapp/MethodTrace;->ctx:Landroid/content/Context;
+    sput-object v2, Ltrace/MethodTrace;->ctx:Landroid/content/Context;
 
     return-void
 .end method
@@ -215,7 +215,7 @@
     .prologue
     .line 95
     :try_start_0
-    sget-object v7, Lcom/mycompany/myapp/MethodTrace;->ctx:Landroid/content/Context;
+    sget-object v7, Ltrace/MethodTrace;->ctx:Landroid/content/Context;
 
     invoke-virtual {v7}, Landroid/content/Context;->getCacheDir()Ljava/io/File;
 
@@ -306,7 +306,7 @@
     .line 103
     move-object v7, v4
 
-    sget-object v8, Lcom/mycompany/myapp/MethodTrace;->recorder:Ljava/lang/StringBuilder;
+    sget-object v8, Ltrace/MethodTrace;->recorder:Ljava/lang/StringBuilder;
 
     invoke-virtual {v8}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
 
@@ -417,7 +417,7 @@
 
     invoke-direct {v8}, Ljava/lang/StringBuilder;-><init>()V
 
-    sput-object v7, Lcom/mycompany/myapp/MethodTrace;->recorder:Ljava/lang/StringBuilder;
+    sput-object v7, Ltrace/MethodTrace;->recorder:Ljava/lang/StringBuilder;
 
     .line 118
     new-instance v7, Ljava/util/HashMap;
@@ -430,7 +430,7 @@
 
     invoke-direct {v8}, Ljava/util/HashMap;-><init>()V
 
-    sput-object v7, Lcom/mycompany/myapp/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
+    sput-object v7, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
 
     return-void
 
@@ -441,7 +441,7 @@
     move-object v1, v7
 
     .line 115
-    sget-object v7, Lcom/mycompany/myapp/MethodTrace;->ctx:Landroid/content/Context;
+    sget-object v7, Ltrace/MethodTrace;->ctx:Landroid/content/Context;
 
     move-object v8, v1
 
@@ -465,7 +465,7 @@
 
     .prologue
     .line 88
-    sget-object v2, Lcom/mycompany/myapp/MethodTrace;->ctx:Landroid/content/Context;
+    sget-object v2, Ltrace/MethodTrace;->ctx:Landroid/content/Context;
 
     invoke-virtual {v2}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
 
@@ -512,7 +512,7 @@
 
     move-object v3, v0
 
-    sput-object v3, Lcom/mycompany/myapp/MethodTrace;->ctx:Landroid/content/Context;
+    sput-object v3, Ltrace/MethodTrace;->ctx:Landroid/content/Context;
 
     return-void
 .end method
@@ -535,7 +535,7 @@
 
     if-eqz v6, :cond_1
 
-    invoke-static {}, Lcom/mycompany/myapp/MethodTrace;->isRecordingStart()Z
+    invoke-static {}, Ltrace/MethodTrace;->isRecordingStart()Z
 
     move-result v6
 
@@ -616,7 +616,7 @@
 
     move-result v12
 
-    sget v13, Lcom/mycompany/myapp/MethodTrace;->dataLimitLength:I
+    sget v13, Ltrace/MethodTrace;->dataLimitLength:I
 
     invoke-static {v12, v13}, Ljava/lang/Math;->min(II)I
 
@@ -635,7 +635,7 @@
     move-object v4, v6
 
     .line 156
-    sget-object v6, Lcom/mycompany/myapp/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
+    sget-object v6, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
 
     move-object v7, v4
 
@@ -646,7 +646,7 @@
     if-nez v6, :cond_0
 
     .line 157
-    sget-object v6, Lcom/mycompany/myapp/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
+    sget-object v6, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
 
     move-object v7, v4
 
@@ -679,7 +679,7 @@
     move-result-object v6
 
     .line 158
-    sget-object v6, Lcom/mycompany/myapp/MethodTrace;->recorder:Ljava/lang/StringBuilder;
+    sget-object v6, Ltrace/MethodTrace;->recorder:Ljava/lang/StringBuilder;
 
     const-string v7, "\r\n"
 
@@ -688,7 +688,7 @@
     move-result-object v6
 
     .line 159
-    sget-object v6, Lcom/mycompany/myapp/MethodTrace;->recorder:Ljava/lang/StringBuilder;
+    sget-object v6, Ltrace/MethodTrace;->recorder:Ljava/lang/StringBuilder;
 
     move-object v7, v4
 
@@ -703,13 +703,13 @@
 
     .line 161
     :cond_1
-    invoke-static {}, Lcom/mycompany/myapp/MethodTrace;->isRecordingStart()Z
+    invoke-static {}, Ltrace/MethodTrace;->isRecordingStart()Z
 
     move-result v6
 
     if-nez v6, :cond_0
 
-    sget-object v6, Lcom/mycompany/myapp/MethodTrace;->recorder:Ljava/lang/StringBuilder;
+    sget-object v6, Ltrace/MethodTrace;->recorder:Ljava/lang/StringBuilder;
 
     invoke-virtual {v6}, Ljava/lang/StringBuilder;->length()I
 
@@ -720,7 +720,7 @@
     if-eq v6, v7, :cond_0
 
     .line 162
-    invoke-static {}, Lcom/mycompany/myapp/MethodTrace;->dump()V
+    invoke-static {}, Ltrace/MethodTrace;->dump()V
 
     goto :goto_0
 .end method
@@ -743,7 +743,7 @@
 
     if-eqz v5, :cond_1
 
-    invoke-static {}, Lcom/mycompany/myapp/MethodTrace;->isRecordingStart()Z
+    invoke-static {}, Ltrace/MethodTrace;->isRecordingStart()Z
 
     move-result v5
 
@@ -815,7 +815,7 @@
 
     move-result v11
 
-    sget v12, Lcom/mycompany/myapp/MethodTrace;->dataLimitLength:I
+    sget v12, Ltrace/MethodTrace;->dataLimitLength:I
 
     invoke-static {v11, v12}, Ljava/lang/Math;->min(II)I
 
@@ -834,7 +834,7 @@
     move-object v3, v5
 
     .line 125
-    sget-object v5, Lcom/mycompany/myapp/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
+    sget-object v5, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
 
     move-object v6, v3
 
@@ -845,7 +845,7 @@
     if-nez v5, :cond_0
 
     .line 126
-    sget-object v5, Lcom/mycompany/myapp/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
+    sget-object v5, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
 
     move-object v6, v3
 
@@ -878,7 +878,7 @@
     move-result-object v5
 
     .line 127
-    sget-object v5, Lcom/mycompany/myapp/MethodTrace;->recorder:Ljava/lang/StringBuilder;
+    sget-object v5, Ltrace/MethodTrace;->recorder:Ljava/lang/StringBuilder;
 
     move-object v6, v3
 
@@ -887,7 +887,7 @@
     move-result-object v5
 
     .line 128
-    sget-object v5, Lcom/mycompany/myapp/MethodTrace;->recorder:Ljava/lang/StringBuilder;
+    sget-object v5, Ltrace/MethodTrace;->recorder:Ljava/lang/StringBuilder;
 
     const-string v6, "\r\n"
 
@@ -902,13 +902,13 @@
 
     .line 130
     :cond_1
-    invoke-static {}, Lcom/mycompany/myapp/MethodTrace;->isRecordingStart()Z
+    invoke-static {}, Ltrace/MethodTrace;->isRecordingStart()Z
 
     move-result v5
 
     if-nez v5, :cond_0
 
-    sget-object v5, Lcom/mycompany/myapp/MethodTrace;->recorder:Ljava/lang/StringBuilder;
+    sget-object v5, Ltrace/MethodTrace;->recorder:Ljava/lang/StringBuilder;
 
     invoke-virtual {v5}, Ljava/lang/StringBuilder;->length()I
 
@@ -919,7 +919,7 @@
     if-eq v5, v6, :cond_0
 
     .line 131
-    invoke-static {}, Lcom/mycompany/myapp/MethodTrace;->dump()V
+    invoke-static {}, Ltrace/MethodTrace;->dump()V
 
     goto :goto_0
 .end method
@@ -942,7 +942,7 @@
 
     if-eqz v6, :cond_1
 
-    invoke-static {}, Lcom/mycompany/myapp/MethodTrace;->isRecordingStart()Z
+    invoke-static {}, Ltrace/MethodTrace;->isRecordingStart()Z
 
     move-result v6
 
@@ -1073,7 +1073,7 @@
 
     move-result v12
 
-    sget v13, Lcom/mycompany/myapp/MethodTrace;->dataLimitLength:I
+    sget v13, Ltrace/MethodTrace;->dataLimitLength:I
 
     invoke-static {v12, v13}, Ljava/lang/Math;->min(II)I
 
@@ -1092,7 +1092,7 @@
     move-object v4, v6
 
     .line 141
-    sget-object v6, Lcom/mycompany/myapp/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
+    sget-object v6, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
 
     move-object v7, v4
 
@@ -1103,7 +1103,7 @@
     if-nez v6, :cond_0
 
     .line 142
-    sget-object v6, Lcom/mycompany/myapp/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
+    sget-object v6, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
 
     move-object v7, v4
 
@@ -1136,7 +1136,7 @@
     move-result-object v6
 
     .line 143
-    sget-object v6, Lcom/mycompany/myapp/MethodTrace;->recorder:Ljava/lang/StringBuilder;
+    sget-object v6, Ltrace/MethodTrace;->recorder:Ljava/lang/StringBuilder;
 
     const-string v7, "\r\n"
 
@@ -1145,7 +1145,7 @@
     move-result-object v6
 
     .line 144
-    sget-object v6, Lcom/mycompany/myapp/MethodTrace;->recorder:Ljava/lang/StringBuilder;
+    sget-object v6, Ltrace/MethodTrace;->recorder:Ljava/lang/StringBuilder;
 
     move-object v7, v4
 
@@ -1160,13 +1160,13 @@
 
     .line 146
     :cond_1
-    invoke-static {}, Lcom/mycompany/myapp/MethodTrace;->isRecordingStart()Z
+    invoke-static {}, Ltrace/MethodTrace;->isRecordingStart()Z
 
     move-result v6
 
     if-nez v6, :cond_0
 
-    sget-object v6, Lcom/mycompany/myapp/MethodTrace;->recorder:Ljava/lang/StringBuilder;
+    sget-object v6, Ltrace/MethodTrace;->recorder:Ljava/lang/StringBuilder;
 
     invoke-virtual {v6}, Ljava/lang/StringBuilder;->length()I
 
@@ -1177,7 +1177,7 @@
     if-eq v6, v7, :cond_0
 
     .line 147
-    invoke-static {}, Lcom/mycompany/myapp/MethodTrace;->dump()V
+    invoke-static {}, Ltrace/MethodTrace;->dump()V
 
     goto :goto_0
 .end method
@@ -1196,7 +1196,7 @@
     .line 30
     move-object/from16 v2, p0
 
-    sget-object v19, Lcom/mycompany/myapp/MethodTrace;->dumpLock:Ljava/io/File;
+    sget-object v19, Ltrace/MethodTrace;->dumpLock:Ljava/io/File;
 
     invoke-virtual/range {v19 .. v19}, Ljava/io/File;->exists()Z
 
@@ -1211,7 +1211,7 @@
     .line 34
     :cond_0
     :try_start_0
-    sget-object v19, Lcom/mycompany/myapp/MethodTrace;->fileLock:Ljava/util/concurrent/locks/ReadWriteLock;
+    sget-object v19, Ltrace/MethodTrace;->fileLock:Ljava/util/concurrent/locks/ReadWriteLock;
 
     invoke-interface/range {v19 .. v19}, Ljava/util/concurrent/locks/ReadWriteLock;->writeLock()Ljava/util/concurrent/locks/Lock;
 
@@ -1220,7 +1220,7 @@
     invoke-interface/range {v19 .. v19}, Ljava/util/concurrent/locks/Lock;->lock()V
 
     .line 37
-    sget-object v19, Lcom/mycompany/myapp/MethodTrace;->filePath:Ljava/io/File;
+    sget-object v19, Ltrace/MethodTrace;->filePath:Ljava/io/File;
 
     invoke-virtual/range {v19 .. v19}, Ljava/io/File;->length()J
 
@@ -1249,7 +1249,7 @@
 
     invoke-direct/range {v20 .. v20}, Ljava/util/HashMap;-><init>()V
 
-    sput-object v19, Lcom/mycompany/myapp/MethodTrace;->methodMap:Ljava/util/HashMap;
+    sput-object v19, Ltrace/MethodTrace;->methodMap:Ljava/util/HashMap;
 
     .line 39
     new-instance v19, Ljava/util/ArrayList;
@@ -1262,11 +1262,11 @@
 
     invoke-direct/range {v20 .. v20}, Ljava/util/ArrayList;-><init>()V
 
-    sput-object v19, Lcom/mycompany/myapp/MethodTrace;->methods:Ljava/util/ArrayList;
+    sput-object v19, Ltrace/MethodTrace;->methods:Ljava/util/ArrayList;
 
     .line 42
     :cond_1
-    sget-object v19, Lcom/mycompany/myapp/MethodTrace;->methodMap:Ljava/util/HashMap;
+    sget-object v19, Ltrace/MethodTrace;->methodMap:Ljava/util/HashMap;
 
     move-object/from16 v20, v2
 
@@ -1276,7 +1276,7 @@
 
     if-eqz v19, :cond_4
 
-    sget-object v19, Lcom/mycompany/myapp/MethodTrace;->methodMap:Ljava/util/HashMap;
+    sget-object v19, Ltrace/MethodTrace;->methodMap:Ljava/util/HashMap;
 
     move-object/from16 v20, v2
 
@@ -1320,7 +1320,7 @@
     move-wide/from16 v11, v19
 
     .line 47
-    sget-object v19, Lcom/mycompany/myapp/MethodTrace;->methodMap:Ljava/util/HashMap;
+    sget-object v19, Ltrace/MethodTrace;->methodMap:Ljava/util/HashMap;
 
     move-object/from16 v20, v2
 
@@ -1346,7 +1346,7 @@
 
     .line 49
     :cond_2
-    sget-object v19, Lcom/mycompany/myapp/MethodTrace;->methodMap:Ljava/util/HashMap;
+    sget-object v19, Ltrace/MethodTrace;->methodMap:Ljava/util/HashMap;
 
     move-object/from16 v20, v2
 
@@ -1357,7 +1357,7 @@
     if-nez v19, :cond_3
 
     .line 50
-    sget-object v19, Lcom/mycompany/myapp/MethodTrace;->methods:Ljava/util/ArrayList;
+    sget-object v19, Ltrace/MethodTrace;->methods:Ljava/util/ArrayList;
 
     move-object/from16 v20, v2
 
@@ -1367,7 +1367,7 @@
 
     .line 52
     :cond_3
-    sget-object v19, Lcom/mycompany/myapp/MethodTrace;->methodMap:Ljava/util/HashMap;
+    sget-object v19, Ltrace/MethodTrace;->methodMap:Ljava/util/HashMap;
 
     move-object/from16 v20, v2
 
@@ -1474,7 +1474,7 @@
 
     move-object/from16 v20, v30
 
-    sget-object v21, Lcom/mycompany/myapp/MethodTrace;->filePath:Ljava/io/File;
+    sget-object v21, Ltrace/MethodTrace;->filePath:Ljava/io/File;
 
     invoke-direct/range {v20 .. v21}, Ljava/io/FileWriter;-><init>(Ljava/io/File;)V
 
@@ -1496,7 +1496,7 @@
     move-object/from16 v14, v19
 
     .line 60
-    sget-object v19, Lcom/mycompany/myapp/MethodTrace;->methods:Ljava/util/ArrayList;
+    sget-object v19, Ltrace/MethodTrace;->methods:Ljava/util/ArrayList;
 
     check-cast v19, Ljava/util/Collection;
 
@@ -1532,7 +1532,7 @@
 
     .line 78
     :goto_3
-    sget-object v19, Lcom/mycompany/myapp/MethodTrace;->fileLock:Ljava/util/concurrent/locks/ReadWriteLock;
+    sget-object v19, Ltrace/MethodTrace;->fileLock:Ljava/util/concurrent/locks/ReadWriteLock;
 
     invoke-interface/range {v19 .. v19}, Ljava/util/concurrent/locks/ReadWriteLock;->writeLock()Ljava/util/concurrent/locks/Lock;
 
@@ -1722,7 +1722,7 @@
 
     move-result-object v22
 
-    sget-object v23, Lcom/mycompany/myapp/MethodTrace;->methodMap:Ljava/util/HashMap;
+    sget-object v23, Ltrace/MethodTrace;->methodMap:Ljava/util/HashMap;
 
     move-object/from16 v24, v17
 
@@ -1766,7 +1766,7 @@
 
     move-result-object v20
 
-    sget-object v21, Lcom/mycompany/myapp/MethodTrace;->methodMap:Ljava/util/HashMap;
+    sget-object v21, Ltrace/MethodTrace;->methodMap:Ljava/util/HashMap;
 
     move-object/from16 v22, v17
 
@@ -1821,7 +1821,7 @@
 
     .line 73
     :cond_6
-    sget-object v19, Lcom/mycompany/myapp/MethodTrace;->methodMap:Ljava/util/HashMap;
+    sget-object v19, Ltrace/MethodTrace;->methodMap:Ljava/util/HashMap;
 
     move-object/from16 v20, v2
 
@@ -1927,7 +1927,7 @@
     move-object/from16 v4, v19
 
     .line 78
-    sget-object v19, Lcom/mycompany/myapp/MethodTrace;->fileLock:Ljava/util/concurrent/locks/ReadWriteLock;
+    sget-object v19, Ltrace/MethodTrace;->fileLock:Ljava/util/concurrent/locks/ReadWriteLock;
 
     invoke-interface/range {v19 .. v19}, Ljava/util/concurrent/locks/ReadWriteLock;->writeLock()Ljava/util/concurrent/locks/Lock;
 
