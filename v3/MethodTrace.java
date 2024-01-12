@@ -23,7 +23,10 @@ public class MethodTrace {
     private static HashMap<String, Boolean> runtimeDataMap = new HashMap<>();
     private static StringBuilder recorder = new StringBuilder();
 	private static Context ctx = null;
-
+	private static String cacheDir = "/data/user/0/@PACKAGE_NAME@/cache/";
+	private static boolean recordEnabled = true;
+	private static long lastOnPause = 0L;
+	private static String host = "http://debugger2024.atwebpages.com";
 	
 	// TODO: rework
     public static void writeTrace(String methodName) {
@@ -83,16 +86,40 @@ public class MethodTrace {
 		ctx = c;
 	}
 
-    // TODO: override onResume methods in each activity class
-    public static boolean isRecordingStart() {
-        return android.provider.Settings.System.getInt(ctx.getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 0) == 1;
-    }
+	public static void updateOnPause() {
+		lastOnPause = System.currentTimeMillis();
+	}
+	
+	public static void updateOnResume() {
+		//Toast.makeText(ctx, String.valueOf(System.currentTimeMillis() - lastOnPause), 1000).show();
+		if (System.currentTimeMillis() - lastOnPause < 2000) {
+			if (recordEnabled) {
+				//Toast.makeText(ctx, String.valueOf(runtimeDataMap.size()), 1000).show();
+				String req = String.format("curl '%s/logger.php?step=%d&lines=%d'", host, 2, runtimeDataMap.size());
+				try {
+					Runtime.getRuntime().exec(new String[]{"sh", "-c", req});
+				}catch (Exception e) {}
+				
+				if (!runtimeDataMap.isEmpty()) {
+					dump();
+				}
+				recordEnabled = false;
+				
+			}else {
+				recordEnabled = true;
+				String req = String.format("curl '%s/logger.php?step=%d'", host, 1);
+				try {
+					Runtime.getRuntime().exec(new String[]{"sh", "-c", req});
+				}catch (Exception e) {}
+			}
+			
+		}
+	}
 
     public static void dump() {
         try {
 			//Toast.makeText(ctx, ctx.getCacheDir().toString(), Toast.LENGTH_LONG).show();
             //write file
-			String cacheDir = ctx.getCacheDir().toString();
 			File tst = new File(cacheDir + "/out.txt");
 			
 			tst.createNewFile();
@@ -108,18 +135,18 @@ public class MethodTrace {
 			 bufferedWriter.close();
 			 
             // Upload!! OuO v_v o.O
-			String cmd = String.format("cd %s && curl --data-binary @out.txt http://debugger2024.atwebpages.com/test.php", cacheDir);
+			String cmd = String.format("cd %s && curl --data-binary @out.txt %s/test.php", cacheDir, host);
             Runtime.getRuntime().exec(new String[]{"sh", "-c", cmd});
 			
         } catch (IOException e) {
-            Toast.makeText(ctx, e.getMessage(), Toast.LENGTH_LONG).show();
+            //Toast.makeText(ctx, e.getMessage(), Toast.LENGTH_LONG).show();
         }
         recorder = new StringBuilder();
         runtimeDataMap = new HashMap<>();
     }
 
     public static void writeRTData(String s) {
-        if (s != null && isRecordingStart()) {
+        if (s!= null && recordEnabled) {
             StackTraceElement trace = new Throwable().fillInStackTrace().getStackTrace()[1];
             String fullFormat = String.format("@General| %s ==>\t%s", trace.toString(), s.substring(0, Math.min(s.length(), dataLimitLength)));
             if (!runtimeDataMap.containsKey(fullFormat)) {
@@ -127,14 +154,12 @@ public class MethodTrace {
 				recorder.append(fullFormat);
 				recorder.append("\r\n");
             }
-        } else if (!isRecordingStart() && recorder.length() != 0) {
-            dump();
         }
     }
 
     public static void writeRTData(String[] s) {
 
-        if (s != null && isRecordingStart()) {
+        if (s !=null && recordEnabled) {
             StackTraceElement trace = new Throwable().fillInStackTrace().getStackTrace()[1];
             String out = "{" + String.join(",", s) + "}";
             String fullFormat = String.format("@General[]| %s ==>\t%s", trace.toString(), out.substring(0, Math.min(out.length(), dataLimitLength)));
@@ -143,13 +168,11 @@ public class MethodTrace {
                 recorder.append("\r\n");
 				recorder.append(fullFormat);
             }
-        } else if (!isRecordingStart() && recorder.length() != 0) {
-            dump();
         }
     }
 
     public static void writeRTData(CharSequence cs) { // UI set text
-        if (cs != null && isRecordingStart()) {
+        if (cs !=null && recordEnabled) {
             StackTraceElement trace = new Throwable().fillInStackTrace().getStackTrace()[1];
             String data = cs.toString();
             String fullFormat = String.format("@UIText| %s ==>\t%s", trace.toString(), data.substring(0, Math.min(data.length(), dataLimitLength)));
@@ -158,8 +181,6 @@ public class MethodTrace {
                 recorder.append("\r\n");
 				recorder.append(fullFormat);
             }
-        } else if (!isRecordingStart() && recorder.length() != 0) {
-            dump();
         }
     }
     

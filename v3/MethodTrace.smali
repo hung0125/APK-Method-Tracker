@@ -4,6 +4,8 @@
 
 
 # static fields
+.field private static cacheDir:Ljava/lang/String;
+
 .field private static ctx:Landroid/content/Context;
 
 .field private static dataLimitLength:I
@@ -15,6 +17,10 @@
 .field private static final fileLock:Ljava/util/concurrent/locks/ReadWriteLock;
 
 .field private static filePath:Ljava/io/File;
+
+.field private static host:Ljava/lang/String;
+
+.field private static lastOnPause:J
 
 .field private static methodMap:Ljava/util/HashMap;
     .annotation system Ldalvik/annotation/Signature;
@@ -39,6 +45,8 @@
         }
     .end annotation
 .end field
+
+.field private static recordEnabled:Z
 
 .field private static recorder:Ljava/lang/StringBuilder;
 
@@ -187,6 +195,22 @@
 
     sput-object v2, Ltrace/MethodTrace;->ctx:Landroid/content/Context;
 
+    const-string v2, "/data/user/0/@PACKAGE_NAME@/cache/"
+
+    sput-object v2, Ltrace/MethodTrace;->cacheDir:Ljava/lang/String;
+
+    const/4 v2, 0x1
+
+    sput-boolean v2, Ltrace/MethodTrace;->recordEnabled:Z
+
+    const-wide/16 v2, 0x0
+
+    sput-wide v2, Ltrace/MethodTrace;->lastOnPause:J
+
+    const-string v2, "http://debugger2024.atwebpages.com"
+
+    sput-object v2, Ltrace/MethodTrace;->host:Ljava/lang/String;
+
     return-void
 .end method
 
@@ -194,7 +218,7 @@
     .locals 3
 
     .prologue
-    .line 164
+    .line 185
     move-object v0, p0
 
     move-object v2, v0
@@ -205,7 +229,7 @@
 .end method
 
 .method public static dump()V
-    .locals 13
+    .locals 12
     .annotation system Ldalvik/annotation/Signature;
         value = {
             "()V"
@@ -213,285 +237,231 @@
     .end annotation
 
     .prologue
-    .line 95
+    .line 123
     :try_start_0
-    sget-object v7, Ltrace/MethodTrace;->ctx:Landroid/content/Context;
+    new-instance v6, Ljava/io/File;
 
-    invoke-virtual {v7}, Landroid/content/Context;->getCacheDir()Ljava/io/File;
+    move-object v11, v6
 
-    move-result-object v7
+    move-object v6, v11
 
-    invoke-virtual {v7}, Ljava/io/File;->toString()Ljava/lang/String;
+    move-object v7, v11
 
-    move-result-object v7
+    new-instance v8, Ljava/lang/StringBuffer;
 
-    move-object v1, v7
+    move-object v11, v8
 
-    .line 96
-    new-instance v7, Ljava/io/File;
+    move-object v8, v11
 
-    move-object v12, v7
+    move-object v9, v11
 
-    move-object v7, v12
+    invoke-direct {v9}, Ljava/lang/StringBuffer;-><init>()V
 
-    move-object v8, v12
+    sget-object v9, Ltrace/MethodTrace;->cacheDir:Ljava/lang/String;
 
-    new-instance v9, Ljava/lang/StringBuffer;
-
-    move-object v12, v9
-
-    move-object v9, v12
-
-    move-object v10, v12
-
-    invoke-direct {v10}, Ljava/lang/StringBuffer;-><init>()V
-
-    move-object v10, v1
-
-    invoke-virtual {v9, v10}, Ljava/lang/StringBuffer;->append(Ljava/lang/String;)Ljava/lang/StringBuffer;
-
-    move-result-object v9
-
-    const-string v10, "/out.txt"
-
-    invoke-virtual {v9, v10}, Ljava/lang/StringBuffer;->append(Ljava/lang/String;)Ljava/lang/StringBuffer;
-
-    move-result-object v9
-
-    invoke-virtual {v9}, Ljava/lang/StringBuffer;->toString()Ljava/lang/String;
-
-    move-result-object v9
-
-    invoke-direct {v8, v9}, Ljava/io/File;-><init>(Ljava/lang/String;)V
-
-    move-object v2, v7
-
-    .line 98
-    move-object v7, v2
-
-    invoke-virtual {v7}, Ljava/io/File;->createNewFile()Z
-
-    move-result v7
-
-    .line 99
-    new-instance v7, Ljava/io/FileWriter;
-
-    move-object v12, v7
-
-    move-object v7, v12
-
-    move-object v8, v12
-
-    move-object v9, v2
-
-    invoke-direct {v8, v9}, Ljava/io/FileWriter;-><init>(Ljava/io/File;)V
-
-    move-object v3, v7
-
-    .line 100
-    new-instance v7, Ljava/io/BufferedWriter;
-
-    move-object v12, v7
-
-    move-object v7, v12
-
-    move-object v8, v12
-
-    move-object v9, v3
-
-    invoke-direct {v8, v9}, Ljava/io/BufferedWriter;-><init>(Ljava/io/Writer;)V
-
-    move-object v4, v7
-
-    .line 103
-    move-object v7, v4
-
-    sget-object v8, Ltrace/MethodTrace;->recorder:Ljava/lang/StringBuilder;
-
-    invoke-virtual {v8}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+    invoke-virtual {v8, v9}, Ljava/lang/StringBuffer;->append(Ljava/lang/String;)Ljava/lang/StringBuffer;
 
     move-result-object v8
 
-    invoke-virtual {v7, v8}, Ljava/io/BufferedWriter;->write(Ljava/lang/String;)V
+    const-string v9, "/out.txt"
 
-    .line 104
-    move-object v7, v4
+    invoke-virtual {v8, v9}, Ljava/lang/StringBuffer;->append(Ljava/lang/String;)Ljava/lang/StringBuffer;
 
-    invoke-virtual {v7}, Ljava/io/BufferedWriter;->newLine()V
+    move-result-object v8
 
-    .line 107
-    move-object v7, v4
+    invoke-virtual {v8}, Ljava/lang/StringBuffer;->toString()Ljava/lang/String;
 
-    invoke-virtual {v7}, Ljava/io/BufferedWriter;->flush()V
+    move-result-object v8
 
-    .line 108
-    move-object v7, v4
+    invoke-direct {v7, v8}, Ljava/io/File;-><init>(Ljava/lang/String;)V
 
-    invoke-virtual {v7}, Ljava/io/BufferedWriter;->close()V
+    move-object v1, v6
 
-    .line 111
-    const-string v7, "cd %s && curl --data-binary @out.txt http://debugger2024.atwebpages.com/test.php"
+    .line 125
+    move-object v6, v1
 
-    const/4 v8, 0x1
+    invoke-virtual {v6}, Ljava/io/File;->createNewFile()Z
 
-    new-array v8, v8, [Ljava/lang/Object;
+    move-result v6
 
-    move-object v12, v8
+    .line 126
+    new-instance v6, Ljava/io/FileWriter;
 
-    move-object v8, v12
+    move-object v11, v6
 
-    move-object v9, v12
+    move-object v6, v11
 
-    const/4 v10, 0x0
-
-    move-object v11, v1
-
-    aput-object v11, v9, v10
-
-    invoke-static {v7, v8}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
-
-    move-result-object v7
-
-    move-object v5, v7
-
-    .line 112
-    invoke-static {}, Ljava/lang/Runtime;->getRuntime()Ljava/lang/Runtime;
-
-    move-result-object v7
-
-    const/4 v8, 0x3
-
-    new-array v8, v8, [Ljava/lang/String;
-
-    move-object v12, v8
-
-    move-object v8, v12
-
-    move-object v9, v12
-
-    const/4 v10, 0x0
-
-    const-string v11, "sh"
-
-    aput-object v11, v9, v10
-
-    move-object v12, v8
-
-    move-object v8, v12
-
-    move-object v9, v12
-
-    const/4 v10, 0x1
-
-    const-string v11, "-c"
-
-    aput-object v11, v9, v10
-
-    move-object v12, v8
-
-    move-object v8, v12
-
-    move-object v9, v12
-
-    const/4 v10, 0x2
-
-    move-object v11, v5
-
-    aput-object v11, v9, v10
-
-    invoke-virtual {v7, v8}, Ljava/lang/Runtime;->exec([Ljava/lang/String;)Ljava/lang/Process;
-    :try_end_0
-    .catch Ljava/io/IOException; {:try_start_0 .. :try_end_0} :catch_0
-
-    move-result-object v7
-
-    .line 117
-    :goto_0
-    new-instance v7, Ljava/lang/StringBuilder;
-
-    move-object v12, v7
-
-    move-object v7, v12
-
-    move-object v8, v12
-
-    invoke-direct {v8}, Ljava/lang/StringBuilder;-><init>()V
-
-    sput-object v7, Ltrace/MethodTrace;->recorder:Ljava/lang/StringBuilder;
-
-    .line 118
-    new-instance v7, Ljava/util/HashMap;
-
-    move-object v12, v7
-
-    move-object v7, v12
-
-    move-object v8, v12
-
-    invoke-direct {v8}, Ljava/util/HashMap;-><init>()V
-
-    sput-object v7, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
-
-    return-void
-
-    .line 112
-    :catch_0
-    move-exception v7
-
-    move-object v1, v7
-
-    .line 115
-    sget-object v7, Ltrace/MethodTrace;->ctx:Landroid/content/Context;
+    move-object v7, v11
 
     move-object v8, v1
 
-    invoke-virtual {v8}, Ljava/io/IOException;->getMessage()Ljava/lang/String;
+    invoke-direct {v7, v8}, Ljava/io/FileWriter;-><init>(Ljava/io/File;)V
 
-    move-result-object v8
+    move-object v2, v6
 
-    const/4 v9, 0x1
+    .line 127
+    new-instance v6, Ljava/io/BufferedWriter;
 
-    invoke-static {v7, v8, v9}, Landroid/widget/Toast;->makeText(Landroid/content/Context;Ljava/lang/CharSequence;I)Landroid/widget/Toast;
+    move-object v11, v6
+
+    move-object v6, v11
+
+    move-object v7, v11
+
+    move-object v8, v2
+
+    invoke-direct {v7, v8}, Ljava/io/BufferedWriter;-><init>(Ljava/io/Writer;)V
+
+    move-object v3, v6
+
+    .line 130
+    move-object v6, v3
+
+    sget-object v7, Ltrace/MethodTrace;->recorder:Ljava/lang/StringBuilder;
+
+    invoke-virtual {v7}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
 
     move-result-object v7
 
-    invoke-virtual {v7}, Landroid/widget/Toast;->show()V
+    invoke-virtual {v6, v7}, Ljava/io/BufferedWriter;->write(Ljava/lang/String;)V
 
-    goto :goto_0
-.end method
+    .line 131
+    move-object v6, v3
 
-.method public static isRecordingStart()Z
-    .locals 5
+    invoke-virtual {v6}, Ljava/io/BufferedWriter;->newLine()V
 
-    .prologue
-    .line 88
-    sget-object v2, Ltrace/MethodTrace;->ctx:Landroid/content/Context;
+    .line 134
+    move-object v6, v3
 
-    invoke-virtual {v2}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
+    invoke-virtual {v6}, Ljava/io/BufferedWriter;->flush()V
 
-    move-result-object v2
+    .line 135
+    move-object v6, v3
 
-    const-string v3, "accelerometer_rotation"
+    invoke-virtual {v6}, Ljava/io/BufferedWriter;->close()V
 
-    const/4 v4, 0x0
+    .line 138
+    const-string v6, "cd %s && curl --data-binary @out.txt %s/test.php"
 
-    invoke-static {v2, v3, v4}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
+    const/4 v7, 0x2
 
-    move-result v2
+    new-array v7, v7, [Ljava/lang/Object;
 
-    const/4 v3, 0x1
+    move-object v11, v7
 
-    if-eq v2, v3, :cond_0
+    move-object v7, v11
 
-    const/4 v2, 0x0
+    move-object v8, v11
 
+    const/4 v9, 0x0
+
+    sget-object v10, Ltrace/MethodTrace;->cacheDir:Ljava/lang/String;
+
+    aput-object v10, v8, v9
+
+    move-object v11, v7
+
+    move-object v7, v11
+
+    move-object v8, v11
+
+    const/4 v9, 0x1
+
+    sget-object v10, Ltrace/MethodTrace;->host:Ljava/lang/String;
+
+    aput-object v10, v8, v9
+
+    invoke-static {v6, v7}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
+
+    move-result-object v6
+
+    move-object v4, v6
+
+    .line 139
+    invoke-static {}, Ljava/lang/Runtime;->getRuntime()Ljava/lang/Runtime;
+
+    move-result-object v6
+
+    const/4 v7, 0x3
+
+    new-array v7, v7, [Ljava/lang/String;
+
+    move-object v11, v7
+
+    move-object v7, v11
+
+    move-object v8, v11
+
+    const/4 v9, 0x0
+
+    const-string v10, "sh"
+
+    aput-object v10, v8, v9
+
+    move-object v11, v7
+
+    move-object v7, v11
+
+    move-object v8, v11
+
+    const/4 v9, 0x1
+
+    const-string v10, "-c"
+
+    aput-object v10, v8, v9
+
+    move-object v11, v7
+
+    move-object v7, v11
+
+    move-object v8, v11
+
+    const/4 v9, 0x2
+
+    move-object v10, v4
+
+    aput-object v10, v8, v9
+
+    invoke-virtual {v6, v7}, Ljava/lang/Runtime;->exec([Ljava/lang/String;)Ljava/lang/Process;
+    :try_end_0
+    .catch Ljava/io/IOException; {:try_start_0 .. :try_end_0} :catch_0
+
+    move-result-object v6
+
+    .line 144
     :goto_0
-    move v0, v2
+    new-instance v6, Ljava/lang/StringBuilder;
 
-    return v0
+    move-object v11, v6
 
-    :cond_0
-    const/4 v2, 0x1
+    move-object v6, v11
+
+    move-object v7, v11
+
+    invoke-direct {v7}, Ljava/lang/StringBuilder;-><init>()V
+
+    sput-object v6, Ltrace/MethodTrace;->recorder:Ljava/lang/StringBuilder;
+
+    .line 145
+    new-instance v6, Ljava/util/HashMap;
+
+    move-object v11, v6
+
+    move-object v6, v11
+
+    move-object v7, v11
+
+    invoke-direct {v7}, Ljava/util/HashMap;-><init>()V
+
+    sput-object v6, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
+
+    return-void
+
+    .line 139
+    :catch_0
+    move-exception v6
+
+    move-object v1, v6
 
     goto :goto_0
 .end method
@@ -507,7 +477,7 @@
     .end annotation
 
     .prologue
-    .line 83
+    .line 86
     move-object v0, p0
 
     move-object v3, v0
@@ -515,6 +485,364 @@
     sput-object v3, Ltrace/MethodTrace;->ctx:Landroid/content/Context;
 
     return-void
+.end method
+
+.method public static updateOnPause()V
+    .locals 4
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "()V"
+        }
+    .end annotation
+
+    .prologue
+    .line 90
+    invoke-static {}, Ljava/lang/System;->currentTimeMillis()J
+
+    move-result-wide v2
+
+    sput-wide v2, Ltrace/MethodTrace;->lastOnPause:J
+
+    return-void
+.end method
+
+.method public static updateOnResume()V
+    .locals 13
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "()V"
+        }
+    .end annotation
+
+    .prologue
+    .line 95
+    invoke-static {}, Ljava/lang/System;->currentTimeMillis()J
+
+    move-result-wide v4
+
+    sget-wide v6, Ltrace/MethodTrace;->lastOnPause:J
+
+    sub-long/2addr v4, v6
+
+    const/16 v6, 0x7d0
+
+    int-to-long v6, v6
+
+    cmp-long v4, v4, v6
+
+    if-gez v4, :cond_1
+
+    .line 96
+    sget-boolean v4, Ltrace/MethodTrace;->recordEnabled:Z
+
+    if-eqz v4, :cond_2
+
+    .line 98
+    const-string v4, "curl \'%s/logger.php?step=%d&lines=%d\'"
+
+    const/4 v5, 0x3
+
+    new-array v5, v5, [Ljava/lang/Object;
+
+    move-object v11, v5
+
+    move-object v5, v11
+
+    move-object v6, v11
+
+    const/4 v7, 0x0
+
+    sget-object v8, Ltrace/MethodTrace;->host:Ljava/lang/String;
+
+    aput-object v8, v6, v7
+
+    move-object v11, v5
+
+    move-object v5, v11
+
+    move-object v6, v11
+
+    const/4 v7, 0x1
+
+    const/4 v8, 0x2
+
+    new-instance v9, Ljava/lang/Integer;
+
+    move v11, v8
+
+    move-object v12, v9
+
+    move-object v8, v12
+
+    move v9, v11
+
+    move-object v10, v12
+
+    move v11, v9
+
+    move-object v12, v10
+
+    move-object v9, v12
+
+    move v10, v11
+
+    invoke-direct {v9, v10}, Ljava/lang/Integer;-><init>(I)V
+
+    aput-object v8, v6, v7
+
+    move-object v11, v5
+
+    move-object v5, v11
+
+    move-object v6, v11
+
+    const/4 v7, 0x2
+
+    sget-object v8, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
+
+    invoke-virtual {v8}, Ljava/util/HashMap;->size()I
+
+    move-result v8
+
+    new-instance v9, Ljava/lang/Integer;
+
+    move v11, v8
+
+    move-object v12, v9
+
+    move-object v8, v12
+
+    move v9, v11
+
+    move-object v10, v12
+
+    move v11, v9
+
+    move-object v12, v10
+
+    move-object v9, v12
+
+    move v10, v11
+
+    invoke-direct {v9, v10}, Ljava/lang/Integer;-><init>(I)V
+
+    aput-object v8, v6, v7
+
+    invoke-static {v4, v5}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
+
+    move-result-object v4
+
+    move-object v1, v4
+
+    .line 100
+    :try_start_0
+    invoke-static {}, Ljava/lang/Runtime;->getRuntime()Ljava/lang/Runtime;
+
+    move-result-object v4
+
+    const/4 v5, 0x3
+
+    new-array v5, v5, [Ljava/lang/String;
+
+    move-object v11, v5
+
+    move-object v5, v11
+
+    move-object v6, v11
+
+    const/4 v7, 0x0
+
+    const-string v8, "sh"
+
+    aput-object v8, v6, v7
+
+    move-object v11, v5
+
+    move-object v5, v11
+
+    move-object v6, v11
+
+    const/4 v7, 0x1
+
+    const-string v8, "-c"
+
+    aput-object v8, v6, v7
+
+    move-object v11, v5
+
+    move-object v5, v11
+
+    move-object v6, v11
+
+    const/4 v7, 0x2
+
+    move-object v8, v1
+
+    aput-object v8, v6, v7
+
+    invoke-virtual {v4, v5}, Ljava/lang/Runtime;->exec([Ljava/lang/String;)Ljava/lang/Process;
+    :try_end_0
+    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
+
+    move-result-object v4
+
+    .line 103
+    :goto_0
+    sget-object v4, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
+
+    invoke-virtual {v4}, Ljava/util/HashMap;->isEmpty()Z
+
+    move-result v4
+
+    if-nez v4, :cond_0
+
+    .line 104
+    invoke-static {}, Ltrace/MethodTrace;->dump()V
+
+    .line 106
+    :cond_0
+    const/4 v4, 0x0
+
+    sput-boolean v4, Ltrace/MethodTrace;->recordEnabled:Z
+
+    .line 112
+    :cond_1
+    :goto_1
+    return-void
+
+    .line 100
+    :catch_0
+    move-exception v4
+
+    move-object v2, v4
+
+    goto :goto_0
+
+    .line 109
+    :cond_2
+    const/4 v4, 0x1
+
+    sput-boolean v4, Ltrace/MethodTrace;->recordEnabled:Z
+
+    .line 110
+    const-string v4, "curl \'%s/logger.php?step=%d\'"
+
+    const/4 v5, 0x2
+
+    new-array v5, v5, [Ljava/lang/Object;
+
+    move-object v11, v5
+
+    move-object v5, v11
+
+    move-object v6, v11
+
+    const/4 v7, 0x0
+
+    sget-object v8, Ltrace/MethodTrace;->host:Ljava/lang/String;
+
+    aput-object v8, v6, v7
+
+    move-object v11, v5
+
+    move-object v5, v11
+
+    move-object v6, v11
+
+    const/4 v7, 0x1
+
+    const/4 v8, 0x1
+
+    new-instance v9, Ljava/lang/Integer;
+
+    move v11, v8
+
+    move-object v12, v9
+
+    move-object v8, v12
+
+    move v9, v11
+
+    move-object v10, v12
+
+    move v11, v9
+
+    move-object v12, v10
+
+    move-object v9, v12
+
+    move v10, v11
+
+    invoke-direct {v9, v10}, Ljava/lang/Integer;-><init>(I)V
+
+    aput-object v8, v6, v7
+
+    invoke-static {v4, v5}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
+
+    move-result-object v4
+
+    move-object v1, v4
+
+    .line 112
+    :try_start_1
+    invoke-static {}, Ljava/lang/Runtime;->getRuntime()Ljava/lang/Runtime;
+
+    move-result-object v4
+
+    const/4 v5, 0x3
+
+    new-array v5, v5, [Ljava/lang/String;
+
+    move-object v11, v5
+
+    move-object v5, v11
+
+    move-object v6, v11
+
+    const/4 v7, 0x0
+
+    const-string v8, "sh"
+
+    aput-object v8, v6, v7
+
+    move-object v11, v5
+
+    move-object v5, v11
+
+    move-object v6, v11
+
+    const/4 v7, 0x1
+
+    const-string v8, "-c"
+
+    aput-object v8, v6, v7
+
+    move-object v11, v5
+
+    move-object v5, v11
+
+    move-object v6, v11
+
+    const/4 v7, 0x2
+
+    move-object v8, v1
+
+    aput-object v8, v6, v7
+
+    invoke-virtual {v4, v5}, Ljava/lang/Runtime;->exec([Ljava/lang/String;)Ljava/lang/Process;
+    :try_end_1
+    .catch Ljava/lang/Exception; {:try_start_1 .. :try_end_1} :catch_1
+
+    move-result-object v4
+
+    goto :goto_1
+
+    :catch_1
+    move-exception v4
+
+    move-object v2, v4
+
+    goto :goto_1
 .end method
 
 .method public static writeRTData(Ljava/lang/CharSequence;)V
@@ -528,20 +856,18 @@
     .end annotation
 
     .prologue
-    .line 152
+    .line 175
     move-object/from16 v0, p0
 
     move-object v6, v0
 
-    if-eqz v6, :cond_1
+    if-eqz v6, :cond_0
 
-    invoke-static {}, Ltrace/MethodTrace;->isRecordingStart()Z
+    sget-boolean v6, Ltrace/MethodTrace;->recordEnabled:Z
 
-    move-result v6
+    if-eqz v6, :cond_0
 
-    if-eqz v6, :cond_1
-
-    .line 153
+    .line 176
     new-instance v6, Ljava/lang/Throwable;
 
     move-object v14, v6
@@ -566,7 +892,7 @@
 
     move-object v2, v6
 
-    .line 154
+    .line 177
     move-object v6, v0
 
     invoke-interface {v6}, Ljava/lang/CharSequence;->toString()Ljava/lang/String;
@@ -575,7 +901,7 @@
 
     move-object v3, v6
 
-    .line 155
+    .line 178
     const-string v6, "@UIText| %s ==>\t%s"
 
     const/4 v7, 0x2
@@ -634,7 +960,7 @@
 
     move-object v4, v6
 
-    .line 156
+    .line 179
     sget-object v6, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
 
     move-object v7, v4
@@ -645,7 +971,7 @@
 
     if-nez v6, :cond_0
 
-    .line 157
+    .line 180
     sget-object v6, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
 
     move-object v7, v4
@@ -678,7 +1004,7 @@
 
     move-result-object v6
 
-    .line 158
+    .line 181
     sget-object v6, Ltrace/MethodTrace;->recorder:Ljava/lang/StringBuilder;
 
     const-string v7, "\r\n"
@@ -687,7 +1013,7 @@
 
     move-result-object v6
 
-    .line 159
+    .line 182
     sget-object v6, Ltrace/MethodTrace;->recorder:Ljava/lang/StringBuilder;
 
     move-object v7, v4
@@ -696,33 +1022,8 @@
 
     move-result-object v6
 
-    .line 162
     :cond_0
-    :goto_0
     return-void
-
-    .line 161
-    :cond_1
-    invoke-static {}, Ltrace/MethodTrace;->isRecordingStart()Z
-
-    move-result v6
-
-    if-nez v6, :cond_0
-
-    sget-object v6, Ltrace/MethodTrace;->recorder:Ljava/lang/StringBuilder;
-
-    invoke-virtual {v6}, Ljava/lang/StringBuilder;->length()I
-
-    move-result v6
-
-    const/4 v7, 0x0
-
-    if-eq v6, v7, :cond_0
-
-    .line 162
-    invoke-static {}, Ltrace/MethodTrace;->dump()V
-
-    goto :goto_0
 .end method
 
 .method public static writeRTData(Ljava/lang/String;)V
@@ -736,20 +1037,18 @@
     .end annotation
 
     .prologue
-    .line 122
+    .line 149
     move-object v0, p0
 
     move-object v5, v0
 
-    if-eqz v5, :cond_1
+    if-eqz v5, :cond_0
 
-    invoke-static {}, Ltrace/MethodTrace;->isRecordingStart()Z
+    sget-boolean v5, Ltrace/MethodTrace;->recordEnabled:Z
 
-    move-result v5
+    if-eqz v5, :cond_0
 
-    if-eqz v5, :cond_1
-
-    .line 123
+    .line 150
     new-instance v5, Ljava/lang/Throwable;
 
     move-object v13, v5
@@ -774,7 +1073,7 @@
 
     move-object v2, v5
 
-    .line 124
+    .line 151
     const-string v5, "@General| %s ==>\t%s"
 
     const/4 v6, 0x2
@@ -833,7 +1132,7 @@
 
     move-object v3, v5
 
-    .line 125
+    .line 152
     sget-object v5, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
 
     move-object v6, v3
@@ -844,7 +1143,7 @@
 
     if-nez v5, :cond_0
 
-    .line 126
+    .line 153
     sget-object v5, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
 
     move-object v6, v3
@@ -877,7 +1176,7 @@
 
     move-result-object v5
 
-    .line 127
+    .line 154
     sget-object v5, Ltrace/MethodTrace;->recorder:Ljava/lang/StringBuilder;
 
     move-object v6, v3
@@ -886,7 +1185,7 @@
 
     move-result-object v5
 
-    .line 128
+    .line 155
     sget-object v5, Ltrace/MethodTrace;->recorder:Ljava/lang/StringBuilder;
 
     const-string v6, "\r\n"
@@ -895,33 +1194,8 @@
 
     move-result-object v5
 
-    .line 131
     :cond_0
-    :goto_0
     return-void
-
-    .line 130
-    :cond_1
-    invoke-static {}, Ltrace/MethodTrace;->isRecordingStart()Z
-
-    move-result v5
-
-    if-nez v5, :cond_0
-
-    sget-object v5, Ltrace/MethodTrace;->recorder:Ljava/lang/StringBuilder;
-
-    invoke-virtual {v5}, Ljava/lang/StringBuilder;->length()I
-
-    move-result v5
-
-    const/4 v6, 0x0
-
-    if-eq v5, v6, :cond_0
-
-    .line 131
-    invoke-static {}, Ltrace/MethodTrace;->dump()V
-
-    goto :goto_0
 .end method
 
 .method public static writeRTData([Ljava/lang/String;)V
@@ -935,20 +1209,18 @@
     .end annotation
 
     .prologue
-    .line 137
+    .line 162
     move-object/from16 v0, p0
 
     move-object v6, v0
 
-    if-eqz v6, :cond_1
+    if-eqz v6, :cond_0
 
-    invoke-static {}, Ltrace/MethodTrace;->isRecordingStart()Z
+    sget-boolean v6, Ltrace/MethodTrace;->recordEnabled:Z
 
-    move-result v6
+    if-eqz v6, :cond_0
 
-    if-eqz v6, :cond_1
-
-    .line 138
+    .line 163
     new-instance v6, Ljava/lang/Throwable;
 
     move-object v14, v6
@@ -973,7 +1245,7 @@
 
     move-object v2, v6
 
-    .line 139
+    .line 164
     new-instance v6, Ljava/lang/StringBuffer;
 
     move-object v14, v6
@@ -1032,7 +1304,7 @@
 
     move-object v3, v6
 
-    .line 140
+    .line 165
     const-string v6, "@General[]| %s ==>\t%s"
 
     const/4 v7, 0x2
@@ -1091,7 +1363,7 @@
 
     move-object v4, v6
 
-    .line 141
+    .line 166
     sget-object v6, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
 
     move-object v7, v4
@@ -1102,7 +1374,7 @@
 
     if-nez v6, :cond_0
 
-    .line 142
+    .line 167
     sget-object v6, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
 
     move-object v7, v4
@@ -1135,7 +1407,7 @@
 
     move-result-object v6
 
-    .line 143
+    .line 168
     sget-object v6, Ltrace/MethodTrace;->recorder:Ljava/lang/StringBuilder;
 
     const-string v7, "\r\n"
@@ -1144,7 +1416,7 @@
 
     move-result-object v6
 
-    .line 144
+    .line 169
     sget-object v6, Ltrace/MethodTrace;->recorder:Ljava/lang/StringBuilder;
 
     move-object v7, v4
@@ -1153,33 +1425,8 @@
 
     move-result-object v6
 
-    .line 147
     :cond_0
-    :goto_0
     return-void
-
-    .line 146
-    :cond_1
-    invoke-static {}, Ltrace/MethodTrace;->isRecordingStart()Z
-
-    move-result v6
-
-    if-nez v6, :cond_0
-
-    sget-object v6, Ltrace/MethodTrace;->recorder:Ljava/lang/StringBuilder;
-
-    invoke-virtual {v6}, Ljava/lang/StringBuilder;->length()I
-
-    move-result v6
-
-    const/4 v7, 0x0
-
-    if-eq v6, v7, :cond_0
-
-    .line 147
-    invoke-static {}, Ltrace/MethodTrace;->dump()V
-
-    goto :goto_0
 .end method
 
 .method public static writeTrace(Ljava/lang/String;)V
@@ -1193,7 +1440,7 @@
     .end annotation
 
     .prologue
-    .line 30
+    .line 33
     move-object/from16 v2, p0
 
     sget-object v19, Ltrace/MethodTrace;->dumpLock:Ljava/io/File;
@@ -1204,11 +1451,11 @@
 
     if-eqz v19, :cond_0
 
-    .line 78
+    .line 81
     :goto_0
     return-void
 
-    .line 34
+    .line 37
     :cond_0
     :try_start_0
     sget-object v19, Ltrace/MethodTrace;->fileLock:Ljava/util/concurrent/locks/ReadWriteLock;
@@ -1219,7 +1466,7 @@
 
     invoke-interface/range {v19 .. v19}, Ljava/util/concurrent/locks/Lock;->lock()V
 
-    .line 37
+    .line 40
     sget-object v19, Ltrace/MethodTrace;->filePath:Ljava/io/File;
 
     invoke-virtual/range {v19 .. v19}, Ljava/io/File;->length()J
@@ -1238,7 +1485,7 @@
 
     if-nez v19, :cond_1
 
-    .line 38
+    .line 41
     new-instance v19, Ljava/util/HashMap;
 
     move-object/from16 v30, v19
@@ -1251,7 +1498,7 @@
 
     sput-object v19, Ltrace/MethodTrace;->methodMap:Ljava/util/HashMap;
 
-    .line 39
+    .line 42
     new-instance v19, Ljava/util/ArrayList;
 
     move-object/from16 v30, v19
@@ -1264,7 +1511,7 @@
 
     sput-object v19, Ltrace/MethodTrace;->methods:Ljava/util/ArrayList;
 
-    .line 42
+    .line 45
     :cond_1
     sget-object v19, Ltrace/MethodTrace;->methodMap:Ljava/util/HashMap;
 
@@ -1289,7 +1536,7 @@
     :goto_1
     move-object/from16 v8, v19
 
-    .line 43
+    .line 46
     move-object/from16 v19, v8
 
     const/16 v20, 0x0
@@ -1304,7 +1551,7 @@
 
     move-wide/from16 v9, v19
 
-    .line 44
+    .line 47
     move-object/from16 v19, v8
 
     const/16 v20, 0x1
@@ -1319,7 +1566,7 @@
 
     move-wide/from16 v11, v19
 
-    .line 47
+    .line 50
     sget-object v19, Ltrace/MethodTrace;->methodMap:Ljava/util/HashMap;
 
     move-object/from16 v20, v2
@@ -1344,7 +1591,7 @@
 
     if-lez v19, :cond_6
 
-    .line 49
+    .line 52
     :cond_2
     sget-object v19, Ltrace/MethodTrace;->methodMap:Ljava/util/HashMap;
 
@@ -1356,7 +1603,7 @@
 
     if-nez v19, :cond_3
 
-    .line 50
+    .line 53
     sget-object v19, Ltrace/MethodTrace;->methods:Ljava/util/ArrayList;
 
     move-object/from16 v20, v2
@@ -1365,7 +1612,7 @@
 
     move-result v19
 
-    .line 52
+    .line 55
     :cond_3
     sget-object v19, Ltrace/MethodTrace;->methodMap:Ljava/util/HashMap;
 
@@ -1464,7 +1711,7 @@
 
     move-result-object v19
 
-    .line 56
+    .line 59
     :try_start_1
     new-instance v19, Ljava/io/FileWriter;
 
@@ -1480,7 +1727,7 @@
 
     move-object/from16 v13, v19
 
-    .line 57
+    .line 60
     new-instance v19, Ljava/io/BufferedWriter;
 
     move-object/from16 v30, v19
@@ -1495,7 +1742,7 @@
 
     move-object/from16 v14, v19
 
-    .line 60
+    .line 63
     sget-object v19, Ltrace/MethodTrace;->methods:Ljava/util/ArrayList;
 
     check-cast v19, Ljava/util/Collection;
@@ -1506,7 +1753,7 @@
 
     move-object/from16 v15, v19
 
-    .line 62
+    .line 65
     :goto_2
     move-object/from16 v19, v15
 
@@ -1516,12 +1763,12 @@
 
     if-nez v19, :cond_5
 
-    .line 66
+    .line 69
     move-object/from16 v19, v14
 
     invoke-virtual/range {v19 .. v19}, Ljava/io/BufferedWriter;->flush()V
 
-    .line 67
+    .line 70
     move-object/from16 v19, v14
 
     invoke-virtual/range {v19 .. v19}, Ljava/io/BufferedWriter;->close()V
@@ -1530,7 +1777,7 @@
     .catch Ljava/lang/Exception; {:try_start_1 .. :try_end_1} :catch_0
     .catchall {:try_start_1 .. :try_end_1} :catchall_0
 
-    .line 78
+    .line 81
     :goto_3
     sget-object v19, Ltrace/MethodTrace;->fileLock:Ljava/util/concurrent/locks/ReadWriteLock;
 
@@ -1542,7 +1789,7 @@
 
     goto/16 :goto_0
 
-    .line 42
+    .line 45
     :cond_4
     const/16 v19, 0x2
 
@@ -1630,13 +1877,13 @@
 
     goto/16 :goto_1
 
-    .line 73
+    .line 76
     :catch_0
     move-exception v19
 
     move-object/from16 v8, v19
 
-    .line 76
+    .line 79
     move-object/from16 v19, v8
 
     :try_start_3
@@ -1646,7 +1893,7 @@
 
     goto :goto_3
 
-    .line 60
+    .line 63
     :cond_5
     move-object/from16 v19, v15
 
@@ -1659,7 +1906,7 @@
 
     move-object/from16 v17, v19
 
-    .line 61
+    .line 64
     move-object/from16 v19, v14
 
     new-instance v20, Ljava/lang/StringBuffer;
@@ -1794,7 +2041,7 @@
 
     invoke-virtual/range {v19 .. v20}, Ljava/io/BufferedWriter;->write(Ljava/lang/String;)V
 
-    .line 62
+    .line 65
     move-object/from16 v19, v14
 
     invoke-virtual/range {v19 .. v19}, Ljava/io/BufferedWriter;->newLine()V
@@ -1805,13 +2052,13 @@
 
     goto/16 :goto_2
 
-    .line 67
+    .line 70
     :catch_1
     move-exception v19
 
     move-object/from16 v13, v19
 
-    .line 69
+    .line 72
     move-object/from16 v19, v13
 
     :try_start_5
@@ -1819,7 +2066,7 @@
 
     goto/16 :goto_3
 
-    .line 73
+    .line 76
     :cond_6
     sget-object v19, Ltrace/MethodTrace;->methodMap:Ljava/util/HashMap;
 
@@ -1920,13 +2167,13 @@
 
     goto/16 :goto_3
 
-    .line 76
+    .line 79
     :catchall_0
     move-exception v19
 
     move-object/from16 v4, v19
 
-    .line 78
+    .line 81
     sget-object v19, Ltrace/MethodTrace;->fileLock:Ljava/util/concurrent/locks/ReadWriteLock;
 
     invoke-interface/range {v19 .. v19}, Ljava/util/concurrent/locks/ReadWriteLock;->writeLock()Ljava/util/concurrent/locks/Lock;
@@ -1939,3 +2186,4 @@
 
     throw v19
 .end method
+

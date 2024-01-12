@@ -98,6 +98,13 @@ def precheck_ok(lineIdx, code) -> bool:
         
     return True
 
+def precheck_isActivity(codelines:list[str]) -> bool:
+    for L in codelines:
+        if L.startswith('.method ') and L.endswith(' onCreate(Landroid/os/Bundle;)V'):
+            return True
+    
+    return False
+
 def inject(pth, log_meth = False, log_data = False):
     cont = open(pth, 'rb').read().decode('utf-8').splitlines()
     mod_cont = []
@@ -106,6 +113,9 @@ def inject(pth, log_meth = False, log_data = False):
     cur_class = header[-1].replace(';', '')
     read_method = ''
     read_local = False
+    read_onPause = False
+    read_onResume = False
+    read_activity_class = precheck_isActivity(cont)
     in_try_block = False
     
     for i, L in enumerate(cont):
@@ -118,19 +128,37 @@ def inject(pth, log_meth = False, log_data = False):
         '''
         if L.startswith('.method ') and not ' abstract ' in L and not ' synthetic ' in L:
             read_method = L
+            if read_activity_class:
+                if L.endswith(' onPause()V'):
+                    read_onPause = True
+                elif L.endswith(' onResume()V'):
+                    read_onResume = True
 
         elif read_method and L.strip().startswith('.locals') or L.strip().startswith('.registers'):
             read_local = True
-            if not log_meth: continue
 
             if ' 0' in L:
                 if not precheck_ok(i, cont):
                     continue # skip modification
-                mod_cont[-1] = mod_cont[-1].replace(' 0', ' 1')
+                if log_meth:
+                    mod_cont[-1] = mod_cont[-1].replace(' 0', ' 1')
             
-            meth_name = read_method.split(' ')[-1]
-            mod_cont.append(f'const-string v0, "{cur_class}->{meth_name}::{static_analysis(i, cont)}"')
-            mod_cont.append(f'invoke-static {{v0}}, Ltrace/MethodTrace;->writeTrace(Ljava/lang/String;)V')
+            if read_onPause:
+                mod_cont.append('''
+.annotation system Ldalvik/annotation/Signature;
+    value = {
+        "()V"
+    }
+.end annotation''')
+                mod_cont.append(f"invoke-static {{}}, Ltrace/MethodTrace;->updateOnPause()V")
+
+            elif read_onResume:
+                mod_cont.append(f'invoke-static {{}}, Ltrace/MethodTrace;->updateOnResume()V')
+
+            if log_meth:
+                meth_name = read_method.split(' ')[-1]
+                mod_cont.append(f'const-string v0, "{cur_class}->{meth_name}::{static_analysis(i, cont)}"')
+                mod_cont.append(f'invoke-static {{v0}}, Ltrace/MethodTrace;->writeTrace(Ljava/lang/String;)V')
 
         elif read_method and L.strip().startswith(':try_start'):
             in_try_block = True
@@ -200,10 +228,13 @@ def inject(pth, log_meth = False, log_data = False):
             prev_op = ''
             
             for ii in range(-1, -1000, -1):
-                test_str = mod_cont[ii].strip()
-                if len(test_str) > 0 and test_str.startswith('invoke-'):
-                    prev_op = mod_cont[ii]
-                    break
+                try:
+                    test_str = mod_cont[ii].strip()
+                    if len(test_str) > 0 and test_str.startswith('invoke-'):
+                        prev_op = mod_cont[ii]
+                        break
+                except:
+                    continue
 
             register = L.strip().split(' ')[1]
             if in_try_block and register.startswith('p'): # one possible workaround is write dump outside try block, but risky
@@ -222,6 +253,8 @@ def inject(pth, log_meth = False, log_data = False):
         elif read_method and read_local and L == '.end method':
             read_method = ''
             read_local = False
+            read_onPause = False
+            read_onResume = False
 
     open(pth,'wb').write('\n'.join(mod_cont).encode('utf-8'))
 
@@ -244,12 +277,18 @@ def troll9(pth):
     open(pth,'wb').write('\n'.join(mod_cont).encode('utf-8'))
 
 def inject_flow(log_meth: bool, log_data: bool):
-    base_dir = input('Specify decompiled base path: ')
+    base_dir = ''
+    while len(base_dir) == 0:
+        base_dir = input('Specify decompiled base path: ')
+    package_name = ''
+    while len(package_name) == 0:
+        package_name = input('Specify the package name (e.g, com.xxx.yyy): ')
+    
     while base_dir[-1] == '/' or base_dir[-1] == '\\':
         base_dir = base_dir[:-1]
     smali_list = get_smali_files(base_dir)
     keep_list = open('libkeep.txt', 'rb').read().decode('utf-8').splitlines()[1:]
-    keep_list = [element.split("||")[1] for element in keep_list]
+    keep_list = [element.split("->")[1] for element in keep_list]
     keep_list = dict(zip(keep_list, [True] * len(keep_list)))
     timeNow = int(time())
 
@@ -263,6 +302,9 @@ def inject_flow(log_meth: bool, log_data: bool):
     if not os.path.exists(base_dir + '/smali/trace'):
         os.makedirs(base_dir + '/smali/trace')
     copy('MethodTrace.smali', base_dir + '/smali/trace/MethodTrace.smali')
+    MethodTrace = open(base_dir + '/smali/trace/MethodTrace.smali', 'rb').read().decode('utf-8')
+    MethodTrace = MethodTrace.replace('@PACKAGE_NAME@', package_name)
+    open(base_dir + '/smali/trace/MethodTrace.smali', 'wb').write(MethodTrace.encode('utf-8'))
 
 def troll_flow():
     base_dir = input('Specify decompiled base path: ')
