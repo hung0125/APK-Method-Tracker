@@ -7,7 +7,7 @@
         if ($step == 1) {
             $logMessage = "[" . date('Y-m-d H:i:s') . "]: The client started recording...\n";
         } elseif ($step == 2) {
-            $logMessage = "[" . date('Y-m-d H:i:s') . "]: The client stopped recording, uploading {$lines} lines of calls...\n";
+            $logMessage = "[" . date('Y-m-d H:i:s') . "]: The client stopped recording -> uploading {$lines} lines of calls...\n";
         }
 
         // Append the log message to the file
