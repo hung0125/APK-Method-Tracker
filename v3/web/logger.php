@@ -41,9 +41,7 @@
 
     echo $table;
 
-
-    
-
+    // Clear all files
     if (!empty($action) && $action == 'clear') {
         $folders = [glob('dump/*'), glob('merged/*')];
 
