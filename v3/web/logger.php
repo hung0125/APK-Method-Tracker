@@ -1,8 +1,13 @@
+<html>
+<h2>Downloads <button href="#" onclick="clearAll()">Clear Data</button></h2>
+<iframe width=80% height=200 style="margin-left: 8%; margin-bottom: 20px;" src='./download.php'></iframe>
+<h2>Logs</h2>
 <?php
     date_default_timezone_set('Asia/Singapore'); // Set the desired timezone (UTC+8)
 
     $step = $_GET['step'] ?? '';
     $lines = $_GET['lines'] ?? '';
+    $action = $_GET['action'] ?? '';
 
     if ($step == 1) {
         $logMessage = "[" . date('Y-m-d H:i:s') . "]: The client started recording...\n";
@@ -35,4 +40,32 @@
     $table = "<table style='border: 1px solid black;'>{$tableHeader}{$tableRows}</table>";
 
     echo $table;
+
+
+    
+
+    if (!empty($action) && $action == 'clear') {
+        $folders = [glob('dump/*'), glob('merged/*')];
+
+        // Loop through each file and delete it
+        foreach ($folders as $fd) {
+            foreach ($fd as $file) {
+                if (is_file($file)) {
+                    unlink($file);
+                }
+            }
+        }
+    }
 ?>
+
+<script>
+    function clearAll() {
+        alert("Cleared request sent.");
+        // Make an AJAX request to the PHP function
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'logger.php?action=clear', true);
+        xhr.onload = function() {};
+        xhr.send();
+    }
+</script>
+</html>
