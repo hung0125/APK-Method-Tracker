@@ -1,3 +1,3 @@
-# Directories needed:
+# Directories needed
 - dump
 - merged
