@@ -55,9 +55,16 @@ if os.path.isfile('libkeep.txt'):
 
 open('libkeep.txt', 'ab').write('# Injector.py will only inject to the smali files that are contained in any of the following paths\n'.encode('utf-8'))
 
+outstr_important = []
+outstr_general = []
 for R in roots:
     print(R)
     if R in check_activity_class:
-        open('libkeep.txt', 'ab').write(str(f'!ACTIVITY_CLASS!->{R}' + '\n').encode('utf-8'))
+        outstr_important.append(str(f'!ACTIVITY_CLASS!->{R}' + '\n').encode('utf-8'))
     else:
-        open('libkeep.txt', 'ab').write(str(f'GENERAL->{R}' + '\n').encode('utf-8'))
+        outstr_general.append(str(f'!GENERAL!->{R}' + '\n').encode('utf-8'))
+
+for L in outstr_important:
+    open('libkeep.txt', 'ab').write(L)
+for L in outstr_general:
+    open('libkeep.txt', 'ab').write(L)

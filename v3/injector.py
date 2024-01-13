@@ -98,12 +98,16 @@ def precheck_ok(lineIdx, code) -> bool:
         
     return True
 
-def precheck_isActivity(codelines:list[str]) -> bool:
+def precheck_isActivity(codelines:list[str]) -> str:
+    read_onCreate = False
     for L in codelines:
         if L.startswith('.method ') and L.endswith(' onCreate(Landroid/os/Bundle;)V'):
-            return True
-    
-    return False
+            read_onCreate = True
+        elif read_onCreate and L.strip().startswith('invoke-super') and L.endswith('>onCreate(Landroid/os/Bundle;)V'):
+            pattern = r'\{(.*?)\}, (.*)?-.*\((.*?)\)'
+            return re.search(pattern, L.strip()).group(2)
+
+    return ''
 
 def inject(pth, log_meth = False, log_data = False):
     cont = open(pth, 'rb').read().decode('utf-8').splitlines()
@@ -114,8 +118,10 @@ def inject(pth, log_meth = False, log_data = False):
     read_method = ''
     read_local = False
     read_onPause = False
+    everRead_onPause = False
     read_onResume = False
-    read_activity_class = precheck_isActivity(cont)
+    everRead_onResume = False
+    read_activity_class = precheck_isActivity(cont) # returns a super class
     in_try_block = False
     
     for i, L in enumerate(cont):
@@ -131,8 +137,10 @@ def inject(pth, log_meth = False, log_data = False):
             if read_activity_class:
                 if L.endswith(' onPause()V'):
                     read_onPause = True
+                    everRead_onPause = True
                 elif L.endswith(' onResume()V'):
                     read_onResume = True
+                    everRead_onResume = True
 
         elif read_method and L.strip().startswith('.locals') or L.strip().startswith('.registers'):
             read_local = True
@@ -162,8 +170,10 @@ def inject(pth, log_meth = False, log_data = False):
 
         elif read_method and L.strip().startswith(':try_start'):
             in_try_block = True
+
         elif read_method and in_try_block and L.strip().startswith(':try_end'):
             in_try_block = False
+        
         elif read_method and log_data and L.strip().startswith('invoke-static') or L.strip().startswith('invoke-virtual') or L.strip().startswith('invoke-direct') or L.strip().startswith('invoke-interface'):
             # Regular expression pattern to extract the parameters within ()
             pattern = r'\{(.*?)\}(.*)?\((.*?)\)'
@@ -256,6 +266,28 @@ def inject(pth, log_meth = False, log_data = False):
             read_onPause = False
             read_onResume = False
 
+    if read_activity_class:
+        if not everRead_onPause:
+            mod_cont.append(f'''.method public onPause()V
+    .locals 0
+    .annotation system Ldalvik/annotation/Signature;
+        value = {{
+            "()V"
+        }}
+    .end annotation
+    invoke-static {{}}, Ltrace/MethodTrace;->updateOnPause()V
+    invoke-super {{p0}}, {read_activity_class}->onPause()V
+    return-void
+.end method''')
+
+        if not everRead_onResume:
+            mod_cont.append(f'''.method public onResume()V
+    .locals 0
+    invoke-static {{}}, Ltrace/MethodTrace;->updateOnResume()V
+    invoke-super {{p0}}, {read_activity_class}->onResume()V
+    return-void
+.end method''')
+
     open(pth,'wb').write('\n'.join(mod_cont).encode('utf-8'))
 
 def troll9(pth):
@@ -282,7 +314,7 @@ def inject_flow(log_meth: bool, log_data: bool):
         base_dir = input('Specify decompiled base path: ')
     package_name = ''
     while len(package_name) == 0:
-        package_name = input('Specify the package name (e.g, com.xxx.yyy): ')
+        package_name = input('Specify the package name (e.g, com.xxx.yyy): ').strip()
     
     while base_dir[-1] == '/' or base_dir[-1] == '\\':
         base_dir = base_dir[:-1]

