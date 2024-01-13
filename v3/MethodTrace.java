@@ -28,21 +28,21 @@ public class MethodTrace {
 	private static long lastOnPause = 0L;
 	private static String lastTraceActivity = "";
 	private static String host = "http://debugger2024.atwebpages.com";
-	
+
 	// TODO: rework
     public static void writeTrace(String methodName) {
         if (dumpLock.exists())
             return;
-            
+
         try {
             fileLock.writeLock().lock();
-			
+
 			// on reset
 			if (filePath.length() == 0) {
 				methodMap = new HashMap<>();
 				methods = new ArrayList<>();
 			}
-			
+
             Long[] props = methodMap.containsKey(methodName) ? methodMap.get(methodName) : new Long[]{0L, 0L};
             long time = props[0];
             long occurence = props[1];
@@ -82,43 +82,44 @@ public class MethodTrace {
             fileLock.writeLock().unlock();
         }
     }
-	
-	
+
+
 	public static void setContext(Context c) {
 		ctx = c;
 	}
-	
+
 	private static void logStep1() {
 		String req = String.format("curl '%s/logger.php?step=%d'", host, 1);
 		try {
 			Runtime.getRuntime().exec(new String[]{"sh", "-c", req});
 		}catch (Exception e) {}
 	}
-	
+
 	private static void logStep2() {
 		String req = String.format("curl '%s/logger.php?step=%d&lines=%d'", host, 2, runtimeDataMap.size());
 		try {
 			Runtime.getRuntime().exec(new String[]{"sh", "-c", req});
 		}catch (Exception e) {}
-		
+
 	}
-	
+
 	private static void logStep3() {
-		
+
 	}
-	
+
 	public static void updateOnPause() {
 		StackTraceElement trace = new Throwable().fillInStackTrace().getStackTrace()[1];
 		lastTraceActivity = trace.getClassName();
 		lastOnPause = System.currentTimeMillis();
-		
+
 	}
-	
+
 	public static void updateOnResume() {
 		StackTraceElement trace = new Throwable().fillInStackTrace().getStackTrace()[1];
-		
+
 		//Toast.makeText(ctx, String.valueOf(System.currentTimeMillis() - lastOnPause), 1000).show();
-		if (System.currentTimeMillis() - lastOnPause < 2000 && trace.getClassName().equals(lastTraceActivity)) {
+		long interval = System.currentTimeMillis() - lastOnPause;
+		if (interval < 2000 && interval > 300 && trace.getClassName().equals(lastTraceActivity)) {
 			if (recordEnabled) {
 				//Toast.makeText(ctx, String.valueOf(runtimeDataMap.size()), 1000).show();
 				logStep2();
@@ -126,14 +127,14 @@ public class MethodTrace {
 					dump();
 				}
 				recordEnabled = false;
-				
+
 			}else {
 				recordEnabled = true;
 				logStep1();
 			}
-			
+
 		}
-		
+
 		if(lastOnPause == 0) {
 			logStep1();
 		}
@@ -159,7 +160,7 @@ public class MethodTrace {
         try {
             // Split to partitions
             ArrayList<String> partitions = doPartition(recorder.toString());
-            
+
             String stamp = String.valueOf(System.currentTimeMillis()); //1705140916160
 
             // write file
@@ -183,7 +184,7 @@ public class MethodTrace {
                 bufferedWriter.flush();
                 bufferedWriter.close();
             }
-            
+
             // Upload!! OuO v_v o.O
             for (String name : outNames) {
                 String cmd = String.format("cd %s && curl --data-binary @%s %s/test.php", cacheDir, name ,host);
@@ -238,5 +239,5 @@ public class MethodTrace {
             }
         }
     }
-    
+
 }

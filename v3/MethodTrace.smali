@@ -224,7 +224,7 @@
     .locals 3
 
     .prologue
-    .line 240
+    .line 241
     move-object v0, p0
 
     move-object v2, v0
@@ -249,7 +249,7 @@
     .end annotation
 
     .prologue
-    .line 143
+    .line 144
     move-object v0, p0
 
     new-instance v8, Ljava/util/ArrayList;
@@ -264,17 +264,17 @@
 
     move-object v2, v8
 
-    .line 145
+    .line 146
     const v8, 0x7d000
 
     move v3, v8
 
-    .line 146
+    .line 147
     const/4 v8, 0x0
 
     move v4, v8
 
-    .line 148
+    .line 149
     :goto_0
     move v8, v4
 
@@ -286,14 +286,14 @@
 
     if-lt v8, v9, :cond_0
 
-    .line 155
+    .line 156
     move-object v8, v2
 
     move-object v0, v8
 
     return-object v0
 
-    .line 149
+    .line 150
     :cond_0
     move v8, v4
 
@@ -313,7 +313,7 @@
 
     move v5, v8
 
-    .line 150
+    .line 151
     move-object v8, v0
 
     move v9, v4
@@ -326,7 +326,7 @@
 
     move-object v6, v8
 
-    .line 151
+    .line 152
     move-object v8, v2
 
     move-object v9, v6
@@ -335,7 +335,7 @@
 
     move-result v8
 
-    .line 152
+    .line 153
     move v8, v5
 
     move v4, v8
@@ -352,7 +352,7 @@
     .end annotation
 
     .prologue
-    .line 161
+    .line 162
     :try_start_0
     sget-object v13, Ltrace/MethodTrace;->recorder:Ljava/lang/StringBuilder;
 
@@ -366,7 +366,7 @@
 
     move-object v1, v13
 
-    .line 163
+    .line 164
     invoke-static {}, Ljava/lang/System;->currentTimeMillis()J
 
     move-result-wide v13
@@ -377,12 +377,12 @@
 
     move-object v2, v13
 
-    .line 166
+    .line 167
     const/4 v13, 0x1
 
     move v3, v13
 
-    .line 167
+    .line 168
     new-instance v13, Ljava/util/ArrayList;
 
     move-object/from16 v21, v13
@@ -395,7 +395,7 @@
 
     move-object v4, v13
 
-    .line 168
+    .line 169
     move-object v13, v1
 
     check-cast v13, Ljava/util/Collection;
@@ -406,7 +406,7 @@
 
     move-object v5, v13
 
-    .line 184
+    .line 185
     :goto_0
     move-object v13, v5
 
@@ -416,7 +416,7 @@
 
     if-nez v13, :cond_0
 
-    .line 188
+    .line 189
     move-object v13, v4
 
     check-cast v13, Ljava/util/Collection;
@@ -427,7 +427,7 @@
 
     move-object v7, v13
 
-    .line 190
+    .line 191
     :goto_1
     move-object v13, v7
 
@@ -439,7 +439,7 @@
 
     if-nez v13, :cond_1
 
-    .line 199
+    .line 200
     :goto_2
     new-instance v13, Ljava/lang/StringBuilder;
 
@@ -453,7 +453,7 @@
 
     sput-object v13, Ltrace/MethodTrace;->recorder:Ljava/lang/StringBuilder;
 
-    .line 200
+    .line 201
     new-instance v13, Ljava/util/HashMap;
 
     move-object/from16 v21, v13
@@ -468,7 +468,7 @@
 
     return-void
 
-    .line 168
+    .line 169
     :cond_0
     move-object v13, v5
 
@@ -481,7 +481,7 @@
 
     move-object v7, v13
 
-    .line 170
+    .line 171
     const-string v13, "out%d.txt"
 
     const/4 v14, 0x1
@@ -528,7 +528,7 @@
 
     move-object v8, v13
 
-    .line 171
+    .line 172
     move-object v13, v4
 
     move-object v14, v8
@@ -537,7 +537,7 @@
 
     move-result v13
 
-    .line 172
+    .line 173
     new-instance v13, Ljava/io/File;
 
     move-object/from16 v21, v13
@@ -576,14 +576,14 @@
 
     move-object v9, v13
 
-    .line 173
+    .line 174
     move-object v13, v9
 
     invoke-virtual {v13}, Ljava/io/File;->createNewFile()Z
 
     move-result v13
 
-    .line 174
+    .line 175
     new-instance v13, Ljava/io/FileWriter;
 
     move-object/from16 v21, v13
@@ -598,7 +598,7 @@
 
     move-object v10, v13
 
-    .line 175
+    .line 176
     new-instance v13, Ljava/io/BufferedWriter;
 
     move-object/from16 v21, v13
@@ -613,21 +613,21 @@
 
     move-object v11, v13
 
-    .line 178
+    .line 179
     move-object v13, v11
 
     move-object v14, v7
 
     invoke-virtual {v13, v14}, Ljava/io/BufferedWriter;->write(Ljava/lang/String;)V
 
-    .line 179
+    .line 180
     move-object v13, v11
 
     const-string v14, "\n"
 
     invoke-virtual {v13, v14}, Ljava/io/BufferedWriter;->write(Ljava/lang/String;)V
 
-    .line 180
+    .line 181
     move-object v13, v11
 
     const-string v14, "%s-%d_of_%d"
@@ -728,12 +728,12 @@
 
     invoke-virtual {v13, v14}, Ljava/io/BufferedWriter;->write(Ljava/lang/String;)V
 
-    .line 183
+    .line 184
     move-object v13, v11
 
     invoke-virtual {v13}, Ljava/io/BufferedWriter;->flush()V
 
-    .line 184
+    .line 185
     move-object v13, v11
 
     invoke-virtual {v13}, Ljava/io/BufferedWriter;->close()V
@@ -742,13 +742,13 @@
 
     goto/16 :goto_0
 
-    .line 190
+    .line 191
     :catch_0
     move-exception v13
 
     move-object v1, v13
 
-    .line 195
+    .line 196
     :try_start_2
     const-string v13, "cd %s && echo \'%s\' >> error.log"
 
@@ -790,7 +790,7 @@
 
     move-object v2, v13
 
-    .line 196
+    .line 197
     invoke-static {}, Ljava/lang/Runtime;->getRuntime()Ljava/lang/Runtime;
 
     move-result-object v13
@@ -844,7 +844,7 @@
     :goto_3
     goto/16 :goto_2
 
-    .line 188
+    .line 189
     :cond_1
     move-object v13, v7
 
@@ -857,7 +857,7 @@
 
     move-object v9, v13
 
-    .line 189
+    .line 190
     const-string v13, "cd %s && curl --data-binary @%s %s/test.php"
 
     const/4 v14, 0x3
@@ -906,7 +906,7 @@
 
     move-object v10, v13
 
-    .line 190
+    .line 191
     invoke-static {}, Ljava/lang/Runtime;->getRuntime()Ljava/lang/Runtime;
 
     move-result-object v13
@@ -959,7 +959,7 @@
 
     goto/16 :goto_1
 
-    .line 196
+    .line 197
     :catch_1
     move-exception v13
 
@@ -1354,7 +1354,7 @@
 .end method
 
 .method public static updateOnResume()V
-    .locals 8
+    .locals 10
     .annotation system Ldalvik/annotation/Signature;
         value = {
             "()V"
@@ -1363,113 +1363,128 @@
 
     .prologue
     .line 118
-    new-instance v3, Ljava/lang/Throwable;
+    new-instance v5, Ljava/lang/Throwable;
 
-    move-object v7, v3
+    move-object v9, v5
 
-    move-object v3, v7
+    move-object v5, v9
 
-    move-object v4, v7
+    move-object v6, v9
 
-    invoke-direct {v4}, Ljava/lang/Throwable;-><init>()V
+    invoke-direct {v6}, Ljava/lang/Throwable;-><init>()V
 
-    invoke-virtual {v3}, Ljava/lang/Throwable;->fillInStackTrace()Ljava/lang/Throwable;
+    invoke-virtual {v5}, Ljava/lang/Throwable;->fillInStackTrace()Ljava/lang/Throwable;
 
-    move-result-object v3
+    move-result-object v5
 
-    invoke-virtual {v3}, Ljava/lang/Throwable;->getStackTrace()[Ljava/lang/StackTraceElement;
+    invoke-virtual {v5}, Ljava/lang/Throwable;->getStackTrace()[Ljava/lang/StackTraceElement;
 
-    move-result-object v3
+    move-result-object v5
 
-    const/4 v4, 0x1
+    const/4 v6, 0x1
 
-    aget-object v3, v3, v4
+    aget-object v5, v5, v6
 
-    move-object v1, v3
+    move-object v1, v5
 
     .line 121
     invoke-static {}, Ljava/lang/System;->currentTimeMillis()J
 
-    move-result-wide v3
+    move-result-wide v5
 
-    sget-wide v5, Ltrace/MethodTrace;->lastOnPause:J
+    sget-wide v7, Ltrace/MethodTrace;->lastOnPause:J
 
-    sub-long/2addr v3, v5
+    sub-long/2addr v5, v7
 
-    const/16 v5, 0x7d0
-
-    int-to-long v5, v5
-
-    cmp-long v3, v3, v5
-
-    if-gez v3, :cond_1
-
-    move-object v3, v1
-
-    invoke-virtual {v3}, Ljava/lang/StackTraceElement;->getClassName()Ljava/lang/String;
-
-    move-result-object v3
-
-    sget-object v4, Ltrace/MethodTrace;->lastTraceActivity:Ljava/lang/String;
-
-    invoke-virtual {v3, v4}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-
-    move-result v3
-
-    if-eqz v3, :cond_1
+    move-wide v2, v5
 
     .line 122
-    sget-boolean v3, Ltrace/MethodTrace;->recordEnabled:Z
+    move-wide v5, v2
 
-    if-eqz v3, :cond_3
+    const/16 v7, 0x7d0
 
-    .line 124
-    invoke-static {}, Ltrace/MethodTrace;->logStep2()V
+    int-to-long v7, v7
+
+    cmp-long v5, v5, v7
+
+    if-gez v5, :cond_1
+
+    move-wide v5, v2
+
+    const/16 v7, 0x12c
+
+    int-to-long v7, v7
+
+    cmp-long v5, v5, v7
+
+    if-lez v5, :cond_1
+
+    move-object v5, v1
+
+    invoke-virtual {v5}, Ljava/lang/StackTraceElement;->getClassName()Ljava/lang/String;
+
+    move-result-object v5
+
+    sget-object v6, Ltrace/MethodTrace;->lastTraceActivity:Ljava/lang/String;
+
+    invoke-virtual {v5, v6}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v5
+
+    if-eqz v5, :cond_1
+
+    .line 123
+    sget-boolean v5, Ltrace/MethodTrace;->recordEnabled:Z
+
+    if-eqz v5, :cond_3
 
     .line 125
-    sget-object v3, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
-
-    invoke-virtual {v3}, Ljava/util/HashMap;->isEmpty()Z
-
-    move-result v3
-
-    if-nez v3, :cond_0
+    invoke-static {}, Ltrace/MethodTrace;->logStep2()V
 
     .line 126
+    sget-object v5, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
+
+    invoke-virtual {v5}, Ljava/util/HashMap;->isEmpty()Z
+
+    move-result v5
+
+    if-nez v5, :cond_0
+
+    .line 127
     invoke-static {}, Ltrace/MethodTrace;->dump()V
 
-    .line 128
+    .line 129
     :cond_0
-    const/4 v3, 0x0
-
-    sput-boolean v3, Ltrace/MethodTrace;->recordEnabled:Z
-
-    .line 137
-    :cond_1
-    :goto_0
-    sget-wide v3, Ltrace/MethodTrace;->lastOnPause:J
-
     const/4 v5, 0x0
 
-    int-to-long v5, v5
-
-    cmp-long v3, v3, v5
-
-    if-nez v3, :cond_2
+    sput-boolean v5, Ltrace/MethodTrace;->recordEnabled:Z
 
     .line 138
+    :cond_1
+    :goto_0
+    sget-wide v5, Ltrace/MethodTrace;->lastOnPause:J
+
+    const/4 v7, 0x0
+
+    int-to-long v7, v7
+
+    cmp-long v5, v5, v7
+
+    if-nez v5, :cond_2
+
+    .line 139
     invoke-static {}, Ltrace/MethodTrace;->logStep1()V
 
     :cond_2
     return-void
 
-    .line 131
-    :cond_3
-    const/4 v3, 0x1
-
-    sput-boolean v3, Ltrace/MethodTrace;->recordEnabled:Z
-
     .line 132
+    :cond_3
+    const/4 v5, 0x1
+
+    sput-boolean v5, Ltrace/MethodTrace;->recordEnabled:Z
+
+    .line 133
     invoke-static {}, Ltrace/MethodTrace;->logStep1()V
 
     goto :goto_0
@@ -1486,7 +1501,7 @@
     .end annotation
 
     .prologue
-    .line 230
+    .line 231
     move-object/from16 v0, p0
 
     move-object v6, v0
@@ -1497,7 +1512,7 @@
 
     if-eqz v6, :cond_0
 
-    .line 231
+    .line 232
     new-instance v6, Ljava/lang/Throwable;
 
     move-object v14, v6
@@ -1522,7 +1537,7 @@
 
     move-object v2, v6
 
-    .line 232
+    .line 233
     move-object v6, v0
 
     invoke-interface {v6}, Ljava/lang/CharSequence;->toString()Ljava/lang/String;
@@ -1531,7 +1546,7 @@
 
     move-object v3, v6
 
-    .line 233
+    .line 234
     const-string v6, "@UIText| %s ==>\t%s"
 
     const/4 v7, 0x2
@@ -1590,7 +1605,7 @@
 
     move-object v4, v6
 
-    .line 234
+    .line 235
     sget-object v6, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
 
     move-object v7, v4
@@ -1601,7 +1616,7 @@
 
     if-nez v6, :cond_0
 
-    .line 235
+    .line 236
     sget-object v6, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
 
     move-object v7, v4
@@ -1634,7 +1649,7 @@
 
     move-result-object v6
 
-    .line 236
+    .line 237
     sget-object v6, Ltrace/MethodTrace;->recorder:Ljava/lang/StringBuilder;
 
     const-string v7, "\n"
@@ -1643,7 +1658,7 @@
 
     move-result-object v6
 
-    .line 237
+    .line 238
     sget-object v6, Ltrace/MethodTrace;->recorder:Ljava/lang/StringBuilder;
 
     move-object v7, v4
@@ -1667,7 +1682,7 @@
     .end annotation
 
     .prologue
-    .line 204
+    .line 205
     move-object v0, p0
 
     move-object v5, v0
@@ -1678,7 +1693,7 @@
 
     if-eqz v5, :cond_0
 
-    .line 205
+    .line 206
     new-instance v5, Ljava/lang/Throwable;
 
     move-object v13, v5
@@ -1703,7 +1718,7 @@
 
     move-object v2, v5
 
-    .line 206
+    .line 207
     const-string v5, "@General| %s ==>\t%s"
 
     const/4 v6, 0x2
@@ -1762,7 +1777,7 @@
 
     move-object v3, v5
 
-    .line 207
+    .line 208
     sget-object v5, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
 
     move-object v6, v3
@@ -1773,7 +1788,7 @@
 
     if-nez v5, :cond_0
 
-    .line 208
+    .line 209
     sget-object v5, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
 
     move-object v6, v3
@@ -1806,7 +1821,7 @@
 
     move-result-object v5
 
-    .line 209
+    .line 210
     sget-object v5, Ltrace/MethodTrace;->recorder:Ljava/lang/StringBuilder;
 
     move-object v6, v3
@@ -1815,7 +1830,7 @@
 
     move-result-object v5
 
-    .line 210
+    .line 211
     sget-object v5, Ltrace/MethodTrace;->recorder:Ljava/lang/StringBuilder;
 
     const-string v6, "\n"
@@ -1839,7 +1854,7 @@
     .end annotation
 
     .prologue
-    .line 217
+    .line 218
     move-object/from16 v0, p0
 
     move-object v6, v0
@@ -1850,7 +1865,7 @@
 
     if-eqz v6, :cond_0
 
-    .line 218
+    .line 219
     new-instance v6, Ljava/lang/Throwable;
 
     move-object v14, v6
@@ -1875,7 +1890,7 @@
 
     move-object v2, v6
 
-    .line 219
+    .line 220
     new-instance v6, Ljava/lang/StringBuffer;
 
     move-object v14, v6
@@ -1934,7 +1949,7 @@
 
     move-object v3, v6
 
-    .line 220
+    .line 221
     const-string v6, "@General[]| %s ==>\t%s"
 
     const/4 v7, 0x2
@@ -1993,7 +2008,7 @@
 
     move-object v4, v6
 
-    .line 221
+    .line 222
     sget-object v6, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
 
     move-object v7, v4
@@ -2004,7 +2019,7 @@
 
     if-nez v6, :cond_0
 
-    .line 222
+    .line 223
     sget-object v6, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
 
     move-object v7, v4
@@ -2037,7 +2052,7 @@
 
     move-result-object v6
 
-    .line 223
+    .line 224
     sget-object v6, Ltrace/MethodTrace;->recorder:Ljava/lang/StringBuilder;
 
     const-string v7, "\n"
@@ -2046,7 +2061,7 @@
 
     move-result-object v6
 
-    .line 224
+    .line 225
     sget-object v6, Ltrace/MethodTrace;->recorder:Ljava/lang/StringBuilder;
 
     move-object v7, v4
