@@ -1,0 +1,3 @@
+Directories needed:
+- dump
+- merged
