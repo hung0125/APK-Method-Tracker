@@ -290,24 +290,6 @@ def inject(pth, log_meth = False, log_data = False):
 
     open(pth,'wb').write('\n'.join(mod_cont).encode('utf-8'))
 
-def troll9(pth):
-    cont = open(pth, 'rb').read().decode('utf-8').splitlines()
-    mod_cont = []
-
-    for i, L in enumerate(cont):
-        if i < len(cont) - 1:
-            is_textview = cont[i+1].endswith('Landroid/widget/TextView;->setText(Ljava/lang/CharSequence;)V')
-            is_edittext = cont[i+1].endswith('Landroid/widget/EditText;->setText(Ljava/lang/CharSequence;)V')
-            is_button = cont[i+1].endswith('Landroid/widget/Button;->setText(Ljava/lang/CharSequence;)V')
-            
-            if is_textview or is_edittext or is_button:
-                reg = cont[i+1].strip().split(' ')[2][:-2]
-                mod_cont.append(f'const-string {reg}, "{cc(name_list)}死了!!"')
-        
-        mod_cont.append(L)
-    
-    open(pth,'wb').write('\n'.join(mod_cont).encode('utf-8'))
-
 def inject_flow(log_meth: bool, log_data: bool):
     base_dir = ''
     while len(base_dir) == 0:
@@ -315,6 +297,7 @@ def inject_flow(log_meth: bool, log_data: bool):
     package_name = ''
     while len(package_name) == 0:
         package_name = input('Specify the package name (e.g, com.xxx.yyy): ').strip()
+    chunk_limit = input('If target app usually generates non-alphabet characters, type "y" (default=english): ').lower()
     
     while base_dir[-1] == '/' or base_dir[-1] == '\\':
         base_dir = base_dir[:-1]
@@ -335,25 +318,9 @@ def inject_flow(log_meth: bool, log_data: bool):
         os.makedirs(base_dir + '/smali/trace')
     copy('MethodTrace.smali', base_dir + '/smali/trace/MethodTrace.smali')
     MethodTrace = open(base_dir + '/smali/trace/MethodTrace.smali', 'rb').read().decode('utf-8')
-    MethodTrace = MethodTrace.replace('@PACKAGE_NAME@', package_name)
+    # LENGTH_LIMIT_PER_CHUNK: x3d090 -> 2500000 chars * expected ~4 bytes; x7d000 = 512000 chars * expected ~2 bytes; total <= 1MB
+    MethodTrace = MethodTrace.replace('@PACKAGE_NAME@', package_name).replace('@LENGTH_LIMIT_PER_CHUNK@', '3d090' if chunk_limit == 'y' else '7d000')
     open(base_dir + '/smali/trace/MethodTrace.smali', 'wb').write(MethodTrace.encode('utf-8'))
-
-def troll_flow():
-    base_dir = input('Specify decompiled base path: ')
-    while base_dir[-1] == '/' or base_dir[-1] == '\\':
-        base_dir = base_dir[:-1]
-    smali_list = get_smali_files(base_dir)
-    keep_list = open('libkeep.txt', 'rb').read().decode('utf-8').splitlines()[1:]
-    keep_list = dict(zip(keep_list, [True] * len(keep_list)))
-    timeNow = int(time())
-
-    for F in smali_list:
-        if str(Path(F).parent.absolute())[len(base_dir)+1:] in keep_list and not F.endswith('MethodTrace.smali'):
-            print(F)
-            bkupDir = f"backup_{timeNow}/{dirname(F.replace(base_dir, ''))}"
-            Path(bkupDir).mkdir(parents=True, exist_ok = True)
-            copy(F, bkupDir)
-            troll9(F)
 
 def restore_flow():
     base_dir = input('Specify decompiled base path: ')
@@ -377,12 +344,10 @@ def restore_flow():
 while True:
     display = '''
 Select a function:
-(1) inject
-(2) inject method calls only
+(1) inject (don't use this)
+(2) inject method calls only (unlikely to be developed, not useful)
 (3) inject runtime data log only
 (4) restore latest backup
-(5) insert permission (smali only)
-(6) troll
 '''
     print(display)
     choice = input('> ')
@@ -394,5 +359,3 @@ Select a function:
         inject_flow(False, True)
     elif choice == '4':
         restore_flow()
-    elif choice == '6':
-        troll_flow()
