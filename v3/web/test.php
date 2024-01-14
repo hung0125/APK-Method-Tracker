@@ -6,7 +6,7 @@
 		file_put_contents("log.txt", $logMessage,  FILE_APPEND | LOCK_EX);
 		
 		$data = file_get_contents("php://input"); 
-		$stamp = end(explode("\n", $data));
+		$stamp = end(preg_split("/\r\n|\n|\r/", $data));
 		file_put_contents("dump/" . $stamp . ".txt", rtrim(substr($data, 0, (strlen($stamp) + 1) * -1)));
 
 		$logMessage = "[" . date('Y-m-d H:i:s') . "]: Server saved recording: " . $stamp . "\n";
