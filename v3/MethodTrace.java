@@ -146,7 +146,7 @@ public class MethodTrace {
     public static ArrayList<String> doPartition(String input) {
         ArrayList<String> partitions = new ArrayList<>();
 
-        int maxSize = 500 * 1024; // max char count
+        int maxSize = 250 * 1000; // max char count
         int startIndex = 0;
 
         while (startIndex < input.length()) {
