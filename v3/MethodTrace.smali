@@ -265,7 +265,7 @@
     move-object v2, v8
 
     .line 149
-    const v8, 0x7d000
+    const v8, 0x3d090
 
     move v3, v8
 
