@@ -11,7 +11,7 @@
     }
     
     function mergeFiles($files) {
-        $finalFile = "merged/" . explode("-", end($files))[0] . '.txt';
+        $finalFile = "merged/" . explode("-", end($files))[0] . '.log';
         // Delete existing
         unlink($finalFile);
 
@@ -77,7 +77,7 @@
         xhr.onload = function() {
             if (xhr.status === 200 && (xhr.response.match(/SUCCESS/g) || []).length == 2) {
                 // Handle the response from the PHP function, if needed
-                window.open("./merged/" + filename.split("-")[0] + ".txt", "_blank");
+                window.open("./merged/" + filename.split("-")[0] + ".log", "_blank");
             } else {
                 alert("Sorry. Could not merge files.");
             }
