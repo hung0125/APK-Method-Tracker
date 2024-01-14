@@ -265,7 +265,7 @@
     move-object v2, v8
 
     .line 149
-    const v8, 0x3d090
+    const v8, 0x@LENGTH_LIMIT_PER_CHUNK@
 
     move v3, v8
 
