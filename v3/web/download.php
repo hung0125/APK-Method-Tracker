@@ -11,6 +11,10 @@
     }
     
     function mergeFiles($files) {
+        $finalFile = "merged/" . explode("-", end($files))[0] . '.txt';
+        // Delete existing
+        unlink($finalFile);
+
         // Create an empty string to store merged contents
         $mergedContents = '';
     
@@ -20,9 +24,9 @@
             $mergedContents .= $fileContents;
         }
 
-        file_put_contents("merged/" . explode("-", end($files))[0] . '.txt', $mergedContents, LOCK_EX);
+        file_put_contents($finalFile, $mergedContents, LOCK_EX);
         
-        if (file_exists("merged/" . explode("-", end($files))[0]) . '.txt')
+        if (file_exists($finalFile))
             echo 'SUCCESS';
     }
 
@@ -58,7 +62,7 @@
                 }
             }
         }
-
+        ksort($dls);
         mergeFiles($dls);
     }
 ?>
