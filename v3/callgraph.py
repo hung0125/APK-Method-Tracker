@@ -52,12 +52,12 @@ def get_smali_files(dir_path, root_class):
                     root_path = smali_path
                     root_discovery = get_relations(content_lines=cont)
 
-
+    root_discovery = root_discovery.intersection(classname_map.keys())
     return {'fpaths': fpaths, 'bpaths': bpaths, 'pathdict': classname_map, 'root': root_path, 'discovery': root_discovery}
 
 pth = input('Input decomplied base directory: ')
 inp = input('Input launcher activity: xxx.yyy.zzz: ')
-root_class = f'L{inp.replace('.', '/')};'
+root_class = f'L{inp.replace(".", "/")};'
 init_results = get_smali_files(pth, root_class)
 
 if not init_results['root']:
@@ -80,8 +80,10 @@ while len(discovery) > 0:
         if CLASS in class_map and not CLASS in visited: # class can open && not visited
             visited.add(CLASS)
             new_classes = get_relations(smali_path=class_map[CLASS])
-            cur_discovery = cur_discovery.union(new_classes)
-
+            for CANDIDATE in new_classes:
+                if CANDIDATE in class_map and not CANDIDATE in visited:
+                    cur_discovery.add(CANDIDATE)
+    
     if len(cur_discovery) > 0:
         set_list.append(cur_discovery)
     discovery = cur_discovery
@@ -90,3 +92,7 @@ while len(discovery) > 0:
 for LS in set_list:
     open('callgraph.txt', 'ab').write(str(','.join(LS) + '\n').encode('utf-8'))
     # print(LS)
+    
+for L in class_map:
+    if L.startswith('Ljava'):
+        print(L)
