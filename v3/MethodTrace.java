@@ -21,7 +21,8 @@ public class MethodTrace {
     private static int dataLimitLength = 65535;
     // V2.0
     private static HashMap<String, Boolean> runtimeDataMap = new HashMap<>();
-    private static StringBuilder recorder = new StringBuilder();
+    private static int chunkLimitLength = 250 * 1000;
+    private static ArrayList<String[]> recorderLine = new ArrayList<>();
     private static Context ctx = null;
     private static String cacheDir = "/data/user/0/@PACKAGE_NAME@/cache/";
     private static boolean recordEnabled = true;
@@ -143,33 +144,44 @@ public class MethodTrace {
         }
     }
 
-    public static ArrayList<String> doPartition(String input) {
-        ArrayList<String> partitions = new ArrayList<>();
-
-        int maxSize = 250 * 1000; // max char count
-        int startIndex = 0;
-
-        while (startIndex < input.length()) {
-            int endIndex = Math.min(startIndex + maxSize, input.length());
-            String partition = input.substring(startIndex, endIndex);
-            partitions.add(partition);
-            startIndex = endIndex;
-        }
-
-        return partitions;
-    }
-
     public static void dump() {
         try {
             // Split to partitions
-            ArrayList<String> partitions = doPartition(recorder.toString());
+            ArrayList<StringBuilder> partitions = new ArrayList<>();
+            partitions.add(new StringBuilder());
+            int curChunkSize = 0;
+            for (int i = 0; i < recorderLine.size(); i++) {
+                String[] props = recorderLine.get(i); // 0:label, 1:class, 2:method, 3:file (or null), 4:line, 5:text
+                // Group same consecutive outputs in same method
+                for (int j = i + 1; j < recorderLine.size(); j++) {
+                    String[] nextProps = recorderLine.get(j);
+                    if (nextProps[1].equals(props[1]) && nextProps[2].equals(props[2]) && nextProps[5].equals(props[5])) {
+                        if (props[4] != nextProps[4])
+                            props[4] = props[4] + "->" + nextProps[4];
+                        
+                        i = j + 1;
+                    } else {
+                        break;
+                    }
+                }
+                String fullFormat = String.format("%s| %s.%s(%s:%s) ==> %s", props[0], props[1], props[2], props[3] == null? "?" : props[3], props[4], props[5]);
+                int newChunkSize = curChunkSize + fullFormat.length();
+                if (newChunkSize > chunkLimitLength) {
+                    partitions.add(new StringBuilder());
+                    curChunkSize = fullFormat.length();
+                } else {
+                    curChunkSize += fullFormat.length();
+                }
+                partitions.get(partitions.size()-1).append(fullFormat);
+                partitions.get(partitions.size()-1).append(System.lineSeparator());
+            }
 
             String stamp = String.valueOf(System.currentTimeMillis()); // 1705140916160
 
             // write file
             int upCount = 1;
             ArrayList<String> outNames = new ArrayList<>();
-            for (String p : partitions) {
+            for (StringBuilder p : partitions) {
                 // prepare
                 String outName = String.format("out%d.txt", upCount);
                 outNames.add(outName);
@@ -179,7 +191,7 @@ public class MethodTrace {
                 BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
                 // Write contents to file
-                bufferedWriter.write(p);
+                bufferedWriter.write(p.toString());
                 bufferedWriter.write(System.lineSeparator());
                 bufferedWriter.write(String.format("%s-%d_of_%d", stamp, upCount++, partitions.size()));
 
@@ -201,19 +213,25 @@ public class MethodTrace {
             } catch (Exception ee) {
             }
         }
-        recorder = new StringBuilder();
+        recorderLine = new ArrayList<>();
         runtimeDataMap = new HashMap<>();
+    }
+
+    private static String[] constructLine(boolean isUi, boolean isArray, String text) {
+        StackTraceElement trace = new Throwable().fillInStackTrace().getStackTrace()[2];
+        return new String[] {isUi ? "@UIText" : (isArray ? "@General[]" : "@General"),
+            trace.getClassName(), trace.getMethodName(), trace.getFileName(), String.valueOf(trace.getLineNumber()), 
+            text.substring(0, Math.min(text.length(), dataLimitLength))};
     }
 
     public static void writeRTData(String s) {
         if (s != null && recordEnabled) {
-            StackTraceElement trace = new Throwable().fillInStackTrace().getStackTrace()[1];
-            String fullFormat = String.format("@General| %s ==>\t%s", trace.toString(),
-                    s.substring(0, Math.min(s.length(), dataLimitLength)));
-            if (!runtimeDataMap.containsKey(fullFormat)) {
-                runtimeDataMap.put(fullFormat, true);
-                recorder.append(fullFormat);
-                recorder.append(System.lineSeparator());
+            String[] line = constructLine(false, false, s);
+            String checkStr = String.join(",", line);
+
+            if (!runtimeDataMap.containsKey(checkStr)) {
+                runtimeDataMap.put(checkStr, true);
+                recorderLine.add(line);
             }
         }
     }
@@ -221,28 +239,24 @@ public class MethodTrace {
     public static void writeRTData(String[] s) {
 
         if (s != null && recordEnabled) {
-            StackTraceElement trace = new Throwable().fillInStackTrace().getStackTrace()[1];
-            String out = "{" + String.join(",", s) + "}";
-            String fullFormat = String.format("@General[]| %s ==>\t%s", trace.toString(),
-                    out.substring(0, Math.min(out.length(), dataLimitLength)));
-            if (!runtimeDataMap.containsKey(fullFormat)) {
-                runtimeDataMap.put(fullFormat, true);
-                recorder.append(fullFormat);
-                recorder.append(System.lineSeparator());
+            String[] line = constructLine(false, true, "new String[]{" + String.join(",", s) + "}");
+            String checkStr = String.join(",", line);
+
+            if (!runtimeDataMap.containsKey(checkStr)) {
+                runtimeDataMap.put(checkStr, true);
+                recorderLine.add(line);
             }
         }
     }
 
     public static void writeRTData(CharSequence cs) { // UI set text
         if (cs != null && recordEnabled) {
-            StackTraceElement trace = new Throwable().fillInStackTrace().getStackTrace()[1];
-            String data = cs.toString();
-            String fullFormat = String.format("@UIText| %s ==>\t%s", trace.toString(),
-                    data.substring(0, Math.min(data.length(), dataLimitLength)));
-            if (!runtimeDataMap.containsKey(fullFormat)) {
-                runtimeDataMap.put(fullFormat, true);
-                recorder.append(fullFormat);
-                recorder.append(System.lineSeparator());
+            String[] line = constructLine(true, false, cs.toString());
+            String checkStr = String.join(",", line);
+
+            if (!runtimeDataMap.containsKey(checkStr)) {
+                runtimeDataMap.put(checkStr, true);
+                recorderLine.add(line);
             }
         }
     }
