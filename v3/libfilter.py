@@ -3,6 +3,16 @@ import os.path
 import re
 from tqdm import tqdm
 
+basic_class_filters = [
+    'androidx\\',
+    'android\\support\\',
+    'com\\google\\',
+    'com\\android\\',
+    'com\\fasterxml\\',
+    'io\\reactivex\\',
+    'kotlin\\'
+]
+
 def find_uitext_calls(smali):
     cont = open(smali, 'rb').read().decode('utf-8').splitlines()
     cnt = 0
@@ -44,7 +54,7 @@ def get_smali_files(dir_path):
                 
     return [sorted_path, is_activity]
 
-base = input('input decompiled base path: ')
+base = input('Input decompiled base path: ')
 
 result = get_smali_files(base)
 roots = result[0]
@@ -59,6 +69,15 @@ outstr_important = []
 outstr_general = []
 for R in roots:
     print(R)
+    
+    subpath = re.sub(r'^[^\\]+\\', '', R)
+    in_basic_filter = False
+    for F in basic_class_filters:
+        if subpath.startswith(F):
+            in_basic_filter = True
+            break
+    if in_basic_filter: continue
+
     if R in check_activity_class:
         outstr_important.append(str(f'!ACTIVITY_CLASS!->{R}' + '\n').encode('utf-8'))
     else:
