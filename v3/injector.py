@@ -5,7 +5,7 @@ from os import walk
 from os.path import dirname
 from pathlib import Path
 from time import time
-from shutil import copy, copytree
+from shutil import copy, copytree, rmtree
 from random import choice as cc
 
 name_list = '''習近平
@@ -341,6 +341,15 @@ def restore_flow():
         os.rmdir(base_dir + '/smali/trace')
 
 
+def clear_backup():
+    current_directory = os.getcwd()
+
+    for item in os.listdir(current_directory):
+        item_path = os.path.join(current_directory, item)
+        if os.path.isdir(item_path) and item.startswith("backup_"):
+            print(f"Deleting folder: {item_path}")
+            rmtree(item_path)
+
 while True:
     display = '''
 Select a function:
@@ -348,6 +357,7 @@ Select a function:
 (2) inject method calls only (unlikely to be developed, not useful)
 (3) inject runtime data log only
 (4) restore latest backup
+(5) clear recent backup
 '''
     print(display)
     choice = input('> ')
@@ -359,3 +369,5 @@ Select a function:
         inject_flow(False, True)
     elif choice == '4':
         restore_flow()
+    elif choice == '5':
+        clear_backup()
