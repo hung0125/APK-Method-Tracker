@@ -239,7 +239,7 @@
     .locals 3
 
     .prologue
-    .line 261
+    .line 267
     move-object v0, p0
 
     move-object v2, v0
@@ -253,7 +253,7 @@
     .locals 16
 
     .prologue
-    .line 220
+    .line 226
     move/from16 v0, p0
 
     move/from16 v1, p1
@@ -284,7 +284,7 @@
 
     move-object v4, v6
 
-    .line 221
+    .line 227
     const/4 v6, 0x6
 
     new-array v6, v6, [Ljava/lang/String;
@@ -424,7 +424,7 @@
 .end method
 
 .method public static dump()V
-    .locals 26
+    .locals 28
     .annotation system Ldalvik/annotation/Signature;
         value = {
             "()V"
@@ -432,1145 +432,1166 @@
     .end annotation
 
     .prologue
-    .line 150
-    :try_start_0
-    new-instance v15, Ljava/util/ArrayList;
-
-    move-object/from16 v24, v15
-
-    move-object/from16 v15, v24
-
-    move-object/from16 v16, v24
-
-    invoke-direct/range {v16 .. v16}, Ljava/util/ArrayList;-><init>()V
-
-    move-object v2, v15
-
-    .line 151
-    move-object v15, v2
-
-    new-instance v16, Ljava/lang/StringBuilder;
-
-    move-object/from16 v24, v16
-
-    move-object/from16 v16, v24
-
-    move-object/from16 v17, v24
-
-    invoke-direct/range {v17 .. v17}, Ljava/lang/StringBuilder;-><init>()V
-
-    invoke-virtual/range {v15 .. v16}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
-
-    move-result v15
-
     .line 152
-    const/4 v15, 0x0
+    :try_start_0
+    new-instance v17, Ljava/util/ArrayList;
 
-    move v3, v15
+    move-object/from16 v26, v17
+
+    move-object/from16 v17, v26
+
+    move-object/from16 v18, v26
+
+    invoke-direct/range {v18 .. v18}, Ljava/util/ArrayList;-><init>()V
+
+    move-object/from16 v3, v17
 
     .line 153
-    const/4 v15, 0x0
+    move-object/from16 v17, v3
 
-    move v4, v15
+    new-instance v18, Ljava/lang/StringBuilder;
 
-    :goto_0
-    move v15, v4
+    move-object/from16 v26, v18
 
-    sget-object v16, Ltrace/MethodTrace;->recorderLine:Ljava/util/ArrayList;
+    move-object/from16 v18, v26
 
-    invoke-virtual/range {v16 .. v16}, Ljava/util/ArrayList;->size()I
+    move-object/from16 v19, v26
 
-    move-result v16
+    invoke-direct/range {v19 .. v19}, Ljava/lang/StringBuilder;-><init>()V
 
-    move/from16 v0, v16
+    invoke-virtual/range {v17 .. v18}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
 
-    if-lt v15, v0, :cond_0
-
-    .line 178
-    invoke-static {}, Ljava/lang/System;->currentTimeMillis()J
-
-    move-result-wide v15
-
-    invoke-static/range {v15 .. v16}, Ljava/lang/String;->valueOf(J)Ljava/lang/String;
-
-    move-result-object v15
-
-    move-object v4, v15
-
-    .line 181
-    const/4 v15, 0x1
-
-    move v5, v15
-
-    .line 182
-    new-instance v15, Ljava/util/ArrayList;
-
-    move-object/from16 v24, v15
-
-    move-object/from16 v15, v24
-
-    move-object/from16 v16, v24
-
-    invoke-direct/range {v16 .. v16}, Ljava/util/ArrayList;-><init>()V
-
-    move-object v6, v15
-
-    .line 183
-    move-object v15, v2
-
-    check-cast v15, Ljava/util/Collection;
-
-    invoke-interface {v15}, Ljava/util/Collection;->iterator()Ljava/util/Iterator;
-
-    move-result-object v15
-
-    move-object v7, v15
-
-    .line 199
-    :goto_1
-    move-object v15, v7
-
-    invoke-interface {v15}, Ljava/util/Iterator;->hasNext()Z
-
-    move-result v15
-
-    if-nez v15, :cond_6
-
-    .line 203
-    move-object v15, v6
-
-    check-cast v15, Ljava/util/Collection;
-
-    invoke-interface {v15}, Ljava/util/Collection;->iterator()Ljava/util/Iterator;
-
-    move-result-object v15
-
-    move-object v9, v15
-
-    .line 205
-    :goto_2
-    move-object v15, v9
-
-    invoke-interface {v15}, Ljava/util/Iterator;->hasNext()Z
-    :try_end_0
-    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
-
-    move-result v15
-
-    if-nez v15, :cond_7
-
-    .line 215
-    :goto_3
-    new-instance v15, Ljava/util/ArrayList;
-
-    move-object/from16 v24, v15
-
-    move-object/from16 v15, v24
-
-    move-object/from16 v16, v24
-
-    invoke-direct/range {v16 .. v16}, Ljava/util/ArrayList;-><init>()V
-
-    sput-object v15, Ltrace/MethodTrace;->recorderLine:Ljava/util/ArrayList;
-
-    .line 216
-    new-instance v15, Ljava/util/HashMap;
-
-    move-object/from16 v24, v15
-
-    move-object/from16 v15, v24
-
-    move-object/from16 v16, v24
-
-    invoke-direct/range {v16 .. v16}, Ljava/util/HashMap;-><init>()V
-
-    sput-object v15, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
-
-    return-void
+    move-result v17
 
     .line 154
-    :cond_0
-    :try_start_1
-    sget-object v15, Ltrace/MethodTrace;->recorderLine:Ljava/util/ArrayList;
+    const/16 v17, 0x0
 
-    move/from16 v16, v4
+    move/from16 v4, v17
 
-    invoke-virtual/range {v15 .. v16}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
+    .line 155
+    const/16 v17, 0x0
 
-    move-result-object v15
-
-    check-cast v15, [Ljava/lang/String;
-
-    move-object v5, v15
+    move/from16 v5, v17
 
     .line 156
-    move v15, v4
+    const/16 v17, 0x0
 
-    const/16 v16, 0x1
+    move/from16 v6, v17
 
-    add-int/lit8 v15, v15, 0x1
+    :goto_0
+    move/from16 v17, v6
 
-    move v6, v15
+    sget-object v18, Ltrace/MethodTrace;->recorderLine:Ljava/util/ArrayList;
 
-    :goto_4
-    move v15, v6
+    invoke-virtual/range {v18 .. v18}, Ljava/util/ArrayList;->size()I
 
-    sget-object v16, Ltrace/MethodTrace;->recorderLine:Ljava/util/ArrayList;
+    move-result v18
 
-    invoke-virtual/range {v16 .. v16}, Ljava/util/ArrayList;->size()I
+    move/from16 v0, v17
 
-    move-result v16
+    move/from16 v1, v18
 
-    move/from16 v0, v16
+    if-lt v0, v1, :cond_0
 
-    if-lt v15, v0, :cond_1
+    .line 182
+    move/from16 v17, v5
 
-    .line 166
-    :goto_5
-    const-string v15, "%s| %s.%s(%s:%s) ==> %s"
+    invoke-static/range {v17 .. v17}, Ltrace/MethodTrace;->logStep2(I)V
 
-    const/16 v16, 0x6
+    .line 184
+    invoke-static {}, Ljava/lang/System;->currentTimeMillis()J
 
-    move/from16 v0, v16
+    move-result-wide v17
 
-    new-array v0, v0, [Ljava/lang/Object;
-
-    move-object/from16 v16, v0
-
-    move-object/from16 v24, v16
-
-    move-object/from16 v16, v24
-
-    move-object/from16 v17, v24
-
-    const/16 v18, 0x0
-
-    move-object/from16 v19, v5
-
-    const/16 v20, 0x0
-
-    aget-object v19, v19, v20
-
-    aput-object v19, v17, v18
-
-    move-object/from16 v24, v16
-
-    move-object/from16 v16, v24
-
-    move-object/from16 v17, v24
-
-    const/16 v18, 0x1
-
-    move-object/from16 v19, v5
-
-    const/16 v20, 0x1
-
-    aget-object v19, v19, v20
-
-    aput-object v19, v17, v18
-
-    move-object/from16 v24, v16
-
-    move-object/from16 v16, v24
-
-    move-object/from16 v17, v24
-
-    const/16 v18, 0x2
-
-    move-object/from16 v19, v5
-
-    const/16 v20, 0x2
-
-    aget-object v19, v19, v20
-
-    aput-object v19, v17, v18
-
-    move-object/from16 v24, v16
-
-    move-object/from16 v16, v24
-
-    move-object/from16 v17, v24
-
-    const/16 v18, 0x3
-
-    move-object/from16 v19, v5
-
-    const/16 v20, 0x3
-
-    aget-object v19, v19, v20
-
-    if-nez v19, :cond_4
-
-    const-string v19, "?"
-
-    :goto_6
-    aput-object v19, v17, v18
-
-    move-object/from16 v24, v16
-
-    move-object/from16 v16, v24
-
-    move-object/from16 v17, v24
-
-    const/16 v18, 0x4
-
-    move-object/from16 v19, v5
-
-    const/16 v20, 0x4
-
-    aget-object v19, v19, v20
-
-    aput-object v19, v17, v18
-
-    move-object/from16 v24, v16
-
-    move-object/from16 v16, v24
-
-    move-object/from16 v17, v24
-
-    const/16 v18, 0x5
-
-    move-object/from16 v19, v5
-
-    const/16 v20, 0x5
-
-    aget-object v19, v19, v20
-
-    aput-object v19, v17, v18
-
-    invoke-static/range {v15 .. v16}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
-
-    move-result-object v15
-
-    move-object v6, v15
-
-    .line 167
-    move v15, v3
-
-    move-object/from16 v16, v6
-
-    invoke-virtual/range {v16 .. v16}, Ljava/lang/String;->length()I
-
-    move-result v16
-
-    add-int v15, v15, v16
-
-    move v7, v15
-
-    .line 168
-    move v15, v7
-
-    sget v16, Ltrace/MethodTrace;->chunkLimitLength:I
-
-    move/from16 v0, v16
-
-    if-le v15, v0, :cond_5
-
-    .line 169
-    move-object v15, v2
-
-    new-instance v16, Ljava/lang/StringBuilder;
-
-    move-object/from16 v24, v16
-
-    move-object/from16 v16, v24
-
-    move-object/from16 v17, v24
-
-    invoke-direct/range {v17 .. v17}, Ljava/lang/StringBuilder;-><init>()V
-
-    invoke-virtual/range {v15 .. v16}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
-
-    move-result v15
-
-    .line 170
-    move-object v15, v6
-
-    invoke-virtual {v15}, Ljava/lang/String;->length()I
-
-    move-result v15
-
-    move v3, v15
-
-    .line 174
-    :goto_7
-    move-object v15, v2
-
-    move-object/from16 v16, v2
-
-    invoke-virtual/range {v16 .. v16}, Ljava/util/ArrayList;->size()I
-
-    move-result v16
-
-    const/16 v17, 0x1
-
-    add-int/lit8 v16, v16, -0x1
-
-    invoke-virtual/range {v15 .. v16}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
-
-    move-result-object v15
-
-    check-cast v15, Ljava/lang/StringBuilder;
-
-    move-object/from16 v16, v6
-
-    invoke-virtual/range {v15 .. v16}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v15
-
-    .line 175
-    move-object v15, v2
-
-    move-object/from16 v16, v2
-
-    invoke-virtual/range {v16 .. v16}, Ljava/util/ArrayList;->size()I
-
-    move-result v16
-
-    const/16 v17, 0x1
-
-    add-int/lit8 v16, v16, -0x1
-
-    invoke-virtual/range {v15 .. v16}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
-
-    move-result-object v15
-
-    check-cast v15, Ljava/lang/StringBuilder;
-
-    invoke-static {}, Ljava/lang/System;->lineSeparator()Ljava/lang/String;
-
-    move-result-object v16
-
-    invoke-virtual/range {v15 .. v16}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v15
-
-    .line 153
-    add-int/lit8 v4, v4, 0x1
-
-    goto/16 :goto_0
-
-    .line 157
-    :cond_1
-    sget-object v15, Ltrace/MethodTrace;->recorderLine:Ljava/util/ArrayList;
-
-    move/from16 v16, v6
-
-    invoke-virtual/range {v15 .. v16}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
-
-    move-result-object v15
-
-    check-cast v15, [Ljava/lang/String;
-
-    move-object v7, v15
-
-    .line 158
-    move-object v15, v7
-
-    const/16 v16, 0x1
-
-    aget-object v15, v15, v16
-
-    move-object/from16 v16, v5
-
-    const/16 v17, 0x1
-
-    aget-object v16, v16, v17
-
-    invoke-virtual/range {v15 .. v16}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-
-    move-result v15
-
-    if-eqz v15, :cond_3
-
-    move-object v15, v7
-
-    const/16 v16, 0x2
-
-    aget-object v15, v15, v16
-
-    move-object/from16 v16, v5
-
-    const/16 v17, 0x2
-
-    aget-object v16, v16, v17
-
-    invoke-virtual/range {v15 .. v16}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-
-    move-result v15
-
-    if-eqz v15, :cond_3
-
-    move-object v15, v7
-
-    const/16 v16, 0x5
-
-    aget-object v15, v15, v16
-
-    move-object/from16 v16, v5
-
-    const/16 v17, 0x5
-
-    aget-object v16, v16, v17
-
-    invoke-virtual/range {v15 .. v16}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-
-    move-result v15
-
-    if-eqz v15, :cond_3
-
-    .line 159
-    move-object v15, v5
-
-    const/16 v16, 0x4
-
-    aget-object v15, v15, v16
-
-    move-object/from16 v16, v7
-
-    const/16 v17, 0x4
-
-    aget-object v16, v16, v17
-
-    move-object/from16 v0, v16
-
-    if-eq v15, v0, :cond_2
-
-    .line 160
-    move-object v15, v5
-
-    const/16 v16, 0x4
-
-    new-instance v17, Ljava/lang/StringBuffer;
-
-    move-object/from16 v24, v17
-
-    move-object/from16 v17, v24
-
-    move-object/from16 v18, v24
-
-    invoke-direct/range {v18 .. v18}, Ljava/lang/StringBuffer;-><init>()V
-
-    new-instance v18, Ljava/lang/StringBuffer;
-
-    move-object/from16 v24, v18
-
-    move-object/from16 v18, v24
-
-    move-object/from16 v19, v24
-
-    invoke-direct/range {v19 .. v19}, Ljava/lang/StringBuffer;-><init>()V
-
-    move-object/from16 v19, v5
-
-    const/16 v20, 0x4
-
-    aget-object v19, v19, v20
-
-    invoke-virtual/range {v18 .. v19}, Ljava/lang/StringBuffer;->append(Ljava/lang/String;)Ljava/lang/StringBuffer;
-
-    move-result-object v18
-
-    const-string v19, "->"
-
-    invoke-virtual/range {v18 .. v19}, Ljava/lang/StringBuffer;->append(Ljava/lang/String;)Ljava/lang/StringBuffer;
-
-    move-result-object v18
-
-    invoke-virtual/range {v18 .. v18}, Ljava/lang/StringBuffer;->toString()Ljava/lang/String;
-
-    move-result-object v18
-
-    invoke-virtual/range {v17 .. v18}, Ljava/lang/StringBuffer;->append(Ljava/lang/String;)Ljava/lang/StringBuffer;
+    invoke-static/range {v17 .. v18}, Ljava/lang/String;->valueOf(J)Ljava/lang/String;
 
     move-result-object v17
 
+    move-object/from16 v6, v17
+
+    .line 187
+    const/16 v17, 0x1
+
+    move/from16 v7, v17
+
+    .line 188
+    new-instance v17, Ljava/util/ArrayList;
+
+    move-object/from16 v26, v17
+
+    move-object/from16 v17, v26
+
+    move-object/from16 v18, v26
+
+    invoke-direct/range {v18 .. v18}, Ljava/util/ArrayList;-><init>()V
+
+    move-object/from16 v8, v17
+
+    .line 189
+    move-object/from16 v17, v3
+
+    check-cast v17, Ljava/util/Collection;
+
+    invoke-interface/range {v17 .. v17}, Ljava/util/Collection;->iterator()Ljava/util/Iterator;
+
+    move-result-object v17
+
+    move-object/from16 v9, v17
+
+    .line 205
+    :goto_1
+    move-object/from16 v17, v9
+
+    invoke-interface/range {v17 .. v17}, Ljava/util/Iterator;->hasNext()Z
+
+    move-result v17
+
+    if-nez v17, :cond_6
+
+    .line 209
+    move-object/from16 v17, v8
+
+    check-cast v17, Ljava/util/Collection;
+
+    invoke-interface/range {v17 .. v17}, Ljava/util/Collection;->iterator()Ljava/util/Iterator;
+
+    move-result-object v17
+
+    move-object/from16 v11, v17
+
+    .line 211
+    :goto_2
+    move-object/from16 v17, v11
+
+    invoke-interface/range {v17 .. v17}, Ljava/util/Iterator;->hasNext()Z
+    :try_end_0
+    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
+
+    move-result v17
+
+    if-nez v17, :cond_7
+
+    .line 221
+    :goto_3
+    new-instance v17, Ljava/util/ArrayList;
+
+    move-object/from16 v26, v17
+
+    move-object/from16 v17, v26
+
+    move-object/from16 v18, v26
+
+    invoke-direct/range {v18 .. v18}, Ljava/util/ArrayList;-><init>()V
+
+    sput-object v17, Ltrace/MethodTrace;->recorderLine:Ljava/util/ArrayList;
+
+    .line 222
+    new-instance v17, Ljava/util/HashMap;
+
+    move-object/from16 v26, v17
+
+    move-object/from16 v17, v26
+
+    move-object/from16 v18, v26
+
+    invoke-direct/range {v18 .. v18}, Ljava/util/HashMap;-><init>()V
+
+    sput-object v17, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
+
+    return-void
+
+    .line 157
+    :cond_0
+    :try_start_1
+    sget-object v17, Ltrace/MethodTrace;->recorderLine:Ljava/util/ArrayList;
+
+    move/from16 v18, v6
+
+    invoke-virtual/range {v17 .. v18}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
+
+    move-result-object v17
+
+    check-cast v17, [Ljava/lang/String;
+
+    move-object/from16 v7, v17
+
+    .line 158
+    add-int/lit8 v5, v5, 0x1
+
+    .line 160
+    move/from16 v17, v6
+
+    const/16 v18, 0x1
+
+    add-int/lit8 v17, v17, 0x1
+
+    move/from16 v8, v17
+
+    :goto_4
+    move/from16 v17, v8
+
+    sget-object v18, Ltrace/MethodTrace;->recorderLine:Ljava/util/ArrayList;
+
+    invoke-virtual/range {v18 .. v18}, Ljava/util/ArrayList;->size()I
+
+    move-result v18
+
+    move/from16 v0, v17
+
+    move/from16 v1, v18
+
+    if-lt v0, v1, :cond_1
+
+    .line 170
+    :goto_5
+    const-string v17, "%s| %s.%s(%s:%s) ==> %s"
+
+    const/16 v18, 0x6
+
+    move/from16 v0, v18
+
+    new-array v0, v0, [Ljava/lang/Object;
+
+    move-object/from16 v18, v0
+
+    move-object/from16 v26, v18
+
+    move-object/from16 v18, v26
+
+    move-object/from16 v19, v26
+
+    const/16 v20, 0x0
+
+    move-object/from16 v21, v7
+
+    const/16 v22, 0x0
+
+    aget-object v21, v21, v22
+
+    aput-object v21, v19, v20
+
+    move-object/from16 v26, v18
+
+    move-object/from16 v18, v26
+
+    move-object/from16 v19, v26
+
+    const/16 v20, 0x1
+
+    move-object/from16 v21, v7
+
+    const/16 v22, 0x1
+
+    aget-object v21, v21, v22
+
+    aput-object v21, v19, v20
+
+    move-object/from16 v26, v18
+
+    move-object/from16 v18, v26
+
+    move-object/from16 v19, v26
+
+    const/16 v20, 0x2
+
+    move-object/from16 v21, v7
+
+    const/16 v22, 0x2
+
+    aget-object v21, v21, v22
+
+    aput-object v21, v19, v20
+
+    move-object/from16 v26, v18
+
+    move-object/from16 v18, v26
+
+    move-object/from16 v19, v26
+
+    const/16 v20, 0x3
+
+    move-object/from16 v21, v7
+
+    const/16 v22, 0x3
+
+    aget-object v21, v21, v22
+
+    if-nez v21, :cond_4
+
+    const-string v21, "?"
+
+    :goto_6
+    aput-object v21, v19, v20
+
+    move-object/from16 v26, v18
+
+    move-object/from16 v18, v26
+
+    move-object/from16 v19, v26
+
+    const/16 v20, 0x4
+
+    move-object/from16 v21, v7
+
+    const/16 v22, 0x4
+
+    aget-object v21, v21, v22
+
+    aput-object v21, v19, v20
+
+    move-object/from16 v26, v18
+
+    move-object/from16 v18, v26
+
+    move-object/from16 v19, v26
+
+    const/16 v20, 0x5
+
+    move-object/from16 v21, v7
+
+    const/16 v22, 0x5
+
+    aget-object v21, v21, v22
+
+    aput-object v21, v19, v20
+
+    invoke-static/range {v17 .. v18}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
+
+    move-result-object v17
+
+    move-object/from16 v8, v17
+
+    .line 171
+    move/from16 v17, v4
+
+    move-object/from16 v18, v8
+
+    invoke-virtual/range {v18 .. v18}, Ljava/lang/String;->length()I
+
+    move-result v18
+
+    add-int v17, v17, v18
+
+    move/from16 v9, v17
+
+    .line 172
+    move/from16 v17, v9
+
+    sget v18, Ltrace/MethodTrace;->chunkLimitLength:I
+
+    move/from16 v0, v17
+
+    move/from16 v1, v18
+
+    if-le v0, v1, :cond_5
+
+    .line 173
+    move-object/from16 v17, v3
+
+    new-instance v18, Ljava/lang/StringBuilder;
+
+    move-object/from16 v26, v18
+
+    move-object/from16 v18, v26
+
+    move-object/from16 v19, v26
+
+    invoke-direct/range {v19 .. v19}, Ljava/lang/StringBuilder;-><init>()V
+
+    invoke-virtual/range {v17 .. v18}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    move-result v17
+
+    .line 174
+    move-object/from16 v17, v8
+
+    invoke-virtual/range {v17 .. v17}, Ljava/lang/String;->length()I
+
+    move-result v17
+
+    move/from16 v4, v17
+
+    .line 178
+    :goto_7
+    move-object/from16 v17, v3
+
+    move-object/from16 v18, v3
+
+    invoke-virtual/range {v18 .. v18}, Ljava/util/ArrayList;->size()I
+
+    move-result v18
+
+    const/16 v19, 0x1
+
+    add-int/lit8 v18, v18, -0x1
+
+    invoke-virtual/range {v17 .. v18}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
+
+    move-result-object v17
+
+    check-cast v17, Ljava/lang/StringBuilder;
+
+    move-object/from16 v18, v8
+
+    invoke-virtual/range {v17 .. v18}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v17
+
+    .line 179
+    move-object/from16 v17, v3
+
+    move-object/from16 v18, v3
+
+    invoke-virtual/range {v18 .. v18}, Ljava/util/ArrayList;->size()I
+
+    move-result v18
+
+    const/16 v19, 0x1
+
+    add-int/lit8 v18, v18, -0x1
+
+    invoke-virtual/range {v17 .. v18}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
+
+    move-result-object v17
+
+    check-cast v17, Ljava/lang/StringBuilder;
+
+    invoke-static {}, Ljava/lang/System;->lineSeparator()Ljava/lang/String;
+
+    move-result-object v18
+
+    invoke-virtual/range {v17 .. v18}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    move-result-object v17
+
+    .line 156
+    add-int/lit8 v6, v6, 0x1
+
+    goto/16 :goto_0
+
+    .line 161
+    :cond_1
+    sget-object v17, Ltrace/MethodTrace;->recorderLine:Ljava/util/ArrayList;
+
+    move/from16 v18, v8
+
+    invoke-virtual/range {v17 .. v18}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
+
+    move-result-object v17
+
+    check-cast v17, [Ljava/lang/String;
+
+    move-object/from16 v9, v17
+
+    .line 162
+    move-object/from16 v17, v9
+
+    const/16 v18, 0x1
+
+    aget-object v17, v17, v18
+
     move-object/from16 v18, v7
+
+    const/16 v19, 0x1
+
+    aget-object v18, v18, v19
+
+    invoke-virtual/range {v17 .. v18}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v17
+
+    if-eqz v17, :cond_3
+
+    move-object/from16 v17, v9
+
+    const/16 v18, 0x2
+
+    aget-object v17, v17, v18
+
+    move-object/from16 v18, v7
+
+    const/16 v19, 0x2
+
+    aget-object v18, v18, v19
+
+    invoke-virtual/range {v17 .. v18}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v17
+
+    if-eqz v17, :cond_3
+
+    move-object/from16 v17, v9
+
+    const/16 v18, 0x5
+
+    aget-object v17, v17, v18
+
+    move-object/from16 v18, v7
+
+    const/16 v19, 0x5
+
+    aget-object v18, v18, v19
+
+    invoke-virtual/range {v17 .. v18}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+    move-result v17
+
+    if-eqz v17, :cond_3
+
+    .line 163
+    move-object/from16 v17, v7
+
+    const/16 v18, 0x4
+
+    aget-object v17, v17, v18
+
+    move-object/from16 v18, v9
 
     const/16 v19, 0x4
 
     aget-object v18, v18, v19
 
-    invoke-virtual/range {v17 .. v18}, Ljava/lang/StringBuffer;->append(Ljava/lang/String;)Ljava/lang/StringBuffer;
+    move-object/from16 v0, v17
 
-    move-result-object v17
+    move-object/from16 v1, v18
 
-    invoke-virtual/range {v17 .. v17}, Ljava/lang/StringBuffer;->toString()Ljava/lang/String;
+    if-eq v0, v1, :cond_2
 
-    move-result-object v17
+    .line 164
+    move-object/from16 v17, v7
 
-    aput-object v17, v15, v16
+    const/16 v18, 0x4
 
-    .line 161
-    :cond_2
-    move v15, v6
+    new-instance v19, Ljava/lang/StringBuffer;
 
-    const/16 v16, 0x1
+    move-object/from16 v26, v19
 
-    add-int/lit8 v15, v15, 0x1
+    move-object/from16 v19, v26
 
-    move v4, v15
+    move-object/from16 v20, v26
 
-    .line 156
-    add-int/lit8 v6, v6, 0x1
+    invoke-direct/range {v20 .. v20}, Ljava/lang/StringBuffer;-><init>()V
 
-    goto/16 :goto_4
+    new-instance v20, Ljava/lang/StringBuffer;
 
-    .line 163
-    :cond_3
-    goto/16 :goto_5
+    move-object/from16 v26, v20
 
-    .line 166
-    :cond_4
-    move-object/from16 v19, v5
+    move-object/from16 v20, v26
 
-    const/16 v20, 0x3
+    move-object/from16 v21, v26
 
-    aget-object v19, v19, v20
+    invoke-direct/range {v21 .. v21}, Ljava/lang/StringBuffer;-><init>()V
 
-    goto/16 :goto_6
+    move-object/from16 v21, v7
 
-    .line 172
-    :cond_5
-    move v15, v3
+    const/16 v22, 0x4
 
-    move-object/from16 v16, v6
+    aget-object v21, v21, v22
 
-    invoke-virtual/range {v16 .. v16}, Ljava/lang/String;->length()I
+    invoke-virtual/range {v20 .. v21}, Ljava/lang/StringBuffer;->append(Ljava/lang/String;)Ljava/lang/StringBuffer;
 
-    move-result v16
+    move-result-object v20
 
-    add-int v15, v15, v16
+    const-string v21, "->"
 
-    move v3, v15
+    invoke-virtual/range {v20 .. v21}, Ljava/lang/StringBuffer;->append(Ljava/lang/String;)Ljava/lang/StringBuffer;
 
-    goto/16 :goto_7
+    move-result-object v20
 
-    .line 183
-    :cond_6
-    move-object v15, v7
+    invoke-virtual/range {v20 .. v20}, Ljava/lang/StringBuffer;->toString()Ljava/lang/String;
 
-    invoke-interface {v15}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+    move-result-object v20
 
-    move-result-object v15
+    invoke-virtual/range {v19 .. v20}, Ljava/lang/StringBuffer;->append(Ljava/lang/String;)Ljava/lang/StringBuffer;
 
-    check-cast v15, Ljava/lang/StringBuilder;
+    move-result-object v19
 
-    move-object v9, v15
+    move-object/from16 v20, v9
 
-    .line 185
-    const-string v15, "out%d.txt"
+    const/16 v21, 0x4
 
-    const/16 v16, 0x1
+    aget-object v20, v20, v21
 
-    move/from16 v0, v16
+    invoke-virtual/range {v19 .. v20}, Ljava/lang/StringBuffer;->append(Ljava/lang/String;)Ljava/lang/StringBuffer;
 
-    new-array v0, v0, [Ljava/lang/Object;
+    move-result-object v19
 
-    move-object/from16 v16, v0
-
-    move-object/from16 v24, v16
-
-    move-object/from16 v16, v24
-
-    move-object/from16 v17, v24
-
-    const/16 v18, 0x0
-
-    move/from16 v19, v5
-
-    new-instance v20, Ljava/lang/Integer;
-
-    move/from16 v24, v19
-
-    move-object/from16 v25, v20
-
-    move-object/from16 v19, v25
-
-    move/from16 v20, v24
-
-    move-object/from16 v21, v25
-
-    move/from16 v24, v20
-
-    move-object/from16 v25, v21
-
-    move-object/from16 v20, v25
-
-    move/from16 v21, v24
-
-    invoke-direct/range {v20 .. v21}, Ljava/lang/Integer;-><init>(I)V
-
-    aput-object v19, v17, v18
-
-    invoke-static/range {v15 .. v16}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
-
-    move-result-object v15
-
-    move-object v10, v15
-
-    .line 186
-    move-object v15, v6
-
-    move-object/from16 v16, v10
-
-    invoke-virtual/range {v15 .. v16}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
-
-    move-result v15
-
-    .line 187
-    new-instance v15, Ljava/io/File;
-
-    move-object/from16 v24, v15
-
-    move-object/from16 v15, v24
-
-    move-object/from16 v16, v24
-
-    new-instance v17, Ljava/lang/StringBuffer;
-
-    move-object/from16 v24, v17
-
-    move-object/from16 v17, v24
-
-    move-object/from16 v18, v24
-
-    invoke-direct/range {v18 .. v18}, Ljava/lang/StringBuffer;-><init>()V
-
-    sget-object v18, Ltrace/MethodTrace;->cacheDir:Ljava/lang/String;
-
-    invoke-virtual/range {v17 .. v18}, Ljava/lang/StringBuffer;->append(Ljava/lang/String;)Ljava/lang/StringBuffer;
-
-    move-result-object v17
-
-    move-object/from16 v18, v10
-
-    invoke-virtual/range {v17 .. v18}, Ljava/lang/StringBuffer;->append(Ljava/lang/String;)Ljava/lang/StringBuffer;
-
-    move-result-object v17
-
-    invoke-virtual/range {v17 .. v17}, Ljava/lang/StringBuffer;->toString()Ljava/lang/String;
-
-    move-result-object v17
-
-    invoke-direct/range {v16 .. v17}, Ljava/io/File;-><init>(Ljava/lang/String;)V
-
-    move-object v11, v15
-
-    .line 188
-    move-object v15, v11
-
-    invoke-virtual {v15}, Ljava/io/File;->createNewFile()Z
-
-    move-result v15
-
-    .line 189
-    new-instance v15, Ljava/io/FileWriter;
-
-    move-object/from16 v24, v15
-
-    move-object/from16 v15, v24
-
-    move-object/from16 v16, v24
-
-    move-object/from16 v17, v11
-
-    invoke-direct/range {v16 .. v17}, Ljava/io/FileWriter;-><init>(Ljava/io/File;)V
-
-    move-object v12, v15
-
-    .line 190
-    new-instance v15, Ljava/io/BufferedWriter;
-
-    move-object/from16 v24, v15
-
-    move-object/from16 v15, v24
-
-    move-object/from16 v16, v24
-
-    move-object/from16 v17, v12
-
-    invoke-direct/range {v16 .. v17}, Ljava/io/BufferedWriter;-><init>(Ljava/io/Writer;)V
-
-    move-object v13, v15
-
-    .line 193
-    move-object v15, v13
-
-    move-object/from16 v16, v9
-
-    invoke-virtual/range {v16 .. v16}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-
-    move-result-object v16
-
-    invoke-virtual/range {v15 .. v16}, Ljava/io/BufferedWriter;->write(Ljava/lang/String;)V
-
-    .line 194
-    move-object v15, v13
-
-    invoke-static {}, Ljava/lang/System;->lineSeparator()Ljava/lang/String;
-
-    move-result-object v16
-
-    invoke-virtual/range {v15 .. v16}, Ljava/io/BufferedWriter;->write(Ljava/lang/String;)V
-
-    .line 195
-    move-object v15, v13
-
-    const-string v16, "%s-%d_of_%d"
-
-    const/16 v17, 0x3
-
-    move/from16 v0, v17
-
-    new-array v0, v0, [Ljava/lang/Object;
-
-    move-object/from16 v17, v0
-
-    move-object/from16 v24, v17
-
-    move-object/from16 v17, v24
-
-    move-object/from16 v18, v24
-
-    const/16 v19, 0x0
-
-    move-object/from16 v20, v4
-
-    aput-object v20, v18, v19
-
-    move-object/from16 v24, v17
-
-    move-object/from16 v17, v24
-
-    move-object/from16 v18, v24
-
-    const/16 v19, 0x1
-
-    move/from16 v20, v5
-
-    add-int/lit8 v5, v5, 0x1
-
-    new-instance v21, Ljava/lang/Integer;
-
-    move/from16 v24, v20
-
-    move-object/from16 v25, v21
-
-    move-object/from16 v20, v25
-
-    move/from16 v21, v24
-
-    move-object/from16 v22, v25
-
-    move/from16 v24, v21
-
-    move-object/from16 v25, v22
-
-    move-object/from16 v21, v25
-
-    move/from16 v22, v24
-
-    invoke-direct/range {v21 .. v22}, Ljava/lang/Integer;-><init>(I)V
-
-    aput-object v20, v18, v19
-
-    move-object/from16 v24, v17
-
-    move-object/from16 v17, v24
-
-    move-object/from16 v18, v24
-
-    const/16 v19, 0x2
-
-    move-object/from16 v20, v2
-
-    invoke-virtual/range {v20 .. v20}, Ljava/util/ArrayList;->size()I
-
-    move-result v20
-
-    new-instance v21, Ljava/lang/Integer;
-
-    move/from16 v24, v20
-
-    move-object/from16 v25, v21
-
-    move-object/from16 v20, v25
-
-    move/from16 v21, v24
-
-    move-object/from16 v22, v25
-
-    move/from16 v24, v21
-
-    move-object/from16 v25, v22
-
-    move-object/from16 v21, v25
-
-    move/from16 v22, v24
-
-    invoke-direct/range {v21 .. v22}, Ljava/lang/Integer;-><init>(I)V
-
-    aput-object v20, v18, v19
-
-    invoke-static/range {v16 .. v17}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
-
-    move-result-object v16
-
-    invoke-virtual/range {v15 .. v16}, Ljava/io/BufferedWriter;->write(Ljava/lang/String;)V
-
-    .line 198
-    move-object v15, v13
-
-    invoke-virtual {v15}, Ljava/io/BufferedWriter;->flush()V
-
-    .line 199
-    move-object v15, v13
-
-    invoke-virtual {v15}, Ljava/io/BufferedWriter;->close()V
-    :try_end_1
-    .catch Ljava/lang/Exception; {:try_start_1 .. :try_end_1} :catch_0
-
-    goto/16 :goto_1
-
-    .line 205
-    :catch_0
-    move-exception v15
-
-    move-object v2, v15
-
-    .line 210
-    :try_start_2
-    const-string v15, "cd %s && echo \'%s\' >> error.log"
-
-    const/16 v16, 0x2
-
-    move/from16 v0, v16
-
-    new-array v0, v0, [Ljava/lang/Object;
-
-    move-object/from16 v16, v0
-
-    move-object/from16 v24, v16
-
-    move-object/from16 v16, v24
-
-    move-object/from16 v17, v24
-
-    const/16 v18, 0x0
-
-    sget-object v19, Ltrace/MethodTrace;->cacheDir:Ljava/lang/String;
-
-    aput-object v19, v17, v18
-
-    move-object/from16 v24, v16
-
-    move-object/from16 v16, v24
-
-    move-object/from16 v17, v24
-
-    const/16 v18, 0x1
-
-    move-object/from16 v19, v2
-
-    invoke-virtual/range {v19 .. v19}, Ljava/lang/Exception;->getMessage()Ljava/lang/String;
+    invoke-virtual/range {v19 .. v19}, Ljava/lang/StringBuffer;->toString()Ljava/lang/String;
 
     move-result-object v19
 
     aput-object v19, v17, v18
 
-    invoke-static/range {v15 .. v16}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
-
-    move-result-object v15
-
-    move-object v3, v15
-
-    .line 211
-    invoke-static {}, Ljava/lang/Runtime;->getRuntime()Ljava/lang/Runtime;
-
-    move-result-object v15
-
-    const/16 v16, 0x3
-
-    move/from16 v0, v16
-
-    new-array v0, v0, [Ljava/lang/String;
-
-    move-object/from16 v16, v0
-
-    move-object/from16 v24, v16
-
-    move-object/from16 v16, v24
-
-    move-object/from16 v17, v24
-
-    const/16 v18, 0x0
-
-    const-string v19, "sh"
-
-    aput-object v19, v17, v18
-
-    move-object/from16 v24, v16
-
-    move-object/from16 v16, v24
-
-    move-object/from16 v17, v24
+    .line 165
+    :cond_2
+    move/from16 v17, v8
 
     const/16 v18, 0x1
 
-    const-string v19, "-c"
+    add-int/lit8 v17, v17, 0x1
 
-    aput-object v19, v17, v18
+    move/from16 v6, v17
 
-    move-object/from16 v24, v16
+    .line 160
+    add-int/lit8 v8, v8, 0x1
 
-    move-object/from16 v16, v24
+    goto/16 :goto_4
 
-    move-object/from16 v17, v24
+    .line 167
+    :cond_3
+    goto/16 :goto_5
+
+    .line 170
+    :cond_4
+    move-object/from16 v21, v7
+
+    const/16 v22, 0x3
+
+    aget-object v21, v21, v22
+
+    goto/16 :goto_6
+
+    .line 176
+    :cond_5
+    move/from16 v17, v4
+
+    move-object/from16 v18, v8
+
+    invoke-virtual/range {v18 .. v18}, Ljava/lang/String;->length()I
+
+    move-result v18
+
+    add-int v17, v17, v18
+
+    move/from16 v4, v17
+
+    goto/16 :goto_7
+
+    .line 189
+    :cond_6
+    move-object/from16 v17, v9
+
+    invoke-interface/range {v17 .. v17}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+
+    move-result-object v17
+
+    check-cast v17, Ljava/lang/StringBuilder;
+
+    move-object/from16 v11, v17
+
+    .line 191
+    const-string v17, "out%d.txt"
+
+    const/16 v18, 0x1
+
+    move/from16 v0, v18
+
+    new-array v0, v0, [Ljava/lang/Object;
+
+    move-object/from16 v18, v0
+
+    move-object/from16 v26, v18
+
+    move-object/from16 v18, v26
+
+    move-object/from16 v19, v26
+
+    const/16 v20, 0x0
+
+    move/from16 v21, v7
+
+    new-instance v22, Ljava/lang/Integer;
+
+    move/from16 v26, v21
+
+    move-object/from16 v27, v22
+
+    move-object/from16 v21, v27
+
+    move/from16 v22, v26
+
+    move-object/from16 v23, v27
+
+    move/from16 v26, v22
+
+    move-object/from16 v27, v23
+
+    move-object/from16 v22, v27
+
+    move/from16 v23, v26
+
+    invoke-direct/range {v22 .. v23}, Ljava/lang/Integer;-><init>(I)V
+
+    aput-object v21, v19, v20
+
+    invoke-static/range {v17 .. v18}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
+
+    move-result-object v17
+
+    move-object/from16 v12, v17
+
+    .line 192
+    move-object/from16 v17, v8
+
+    move-object/from16 v18, v12
+
+    invoke-virtual/range {v17 .. v18}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    move-result v17
+
+    .line 193
+    new-instance v17, Ljava/io/File;
+
+    move-object/from16 v26, v17
+
+    move-object/from16 v17, v26
+
+    move-object/from16 v18, v26
+
+    new-instance v19, Ljava/lang/StringBuffer;
+
+    move-object/from16 v26, v19
+
+    move-object/from16 v19, v26
+
+    move-object/from16 v20, v26
+
+    invoke-direct/range {v20 .. v20}, Ljava/lang/StringBuffer;-><init>()V
+
+    sget-object v20, Ltrace/MethodTrace;->cacheDir:Ljava/lang/String;
+
+    invoke-virtual/range {v19 .. v20}, Ljava/lang/StringBuffer;->append(Ljava/lang/String;)Ljava/lang/StringBuffer;
+
+    move-result-object v19
+
+    move-object/from16 v20, v12
+
+    invoke-virtual/range {v19 .. v20}, Ljava/lang/StringBuffer;->append(Ljava/lang/String;)Ljava/lang/StringBuffer;
+
+    move-result-object v19
+
+    invoke-virtual/range {v19 .. v19}, Ljava/lang/StringBuffer;->toString()Ljava/lang/String;
+
+    move-result-object v19
+
+    invoke-direct/range {v18 .. v19}, Ljava/io/File;-><init>(Ljava/lang/String;)V
+
+    move-object/from16 v13, v17
+
+    .line 194
+    move-object/from16 v17, v13
+
+    invoke-virtual/range {v17 .. v17}, Ljava/io/File;->createNewFile()Z
+
+    move-result v17
+
+    .line 195
+    new-instance v17, Ljava/io/FileWriter;
+
+    move-object/from16 v26, v17
+
+    move-object/from16 v17, v26
+
+    move-object/from16 v18, v26
+
+    move-object/from16 v19, v13
+
+    invoke-direct/range {v18 .. v19}, Ljava/io/FileWriter;-><init>(Ljava/io/File;)V
+
+    move-object/from16 v14, v17
+
+    .line 196
+    new-instance v17, Ljava/io/BufferedWriter;
+
+    move-object/from16 v26, v17
+
+    move-object/from16 v17, v26
+
+    move-object/from16 v18, v26
+
+    move-object/from16 v19, v14
+
+    invoke-direct/range {v18 .. v19}, Ljava/io/BufferedWriter;-><init>(Ljava/io/Writer;)V
+
+    move-object/from16 v15, v17
+
+    .line 199
+    move-object/from16 v17, v15
+
+    move-object/from16 v18, v11
+
+    invoke-virtual/range {v18 .. v18}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+
+    move-result-object v18
+
+    invoke-virtual/range {v17 .. v18}, Ljava/io/BufferedWriter;->write(Ljava/lang/String;)V
+
+    .line 200
+    move-object/from16 v17, v15
+
+    invoke-static {}, Ljava/lang/System;->lineSeparator()Ljava/lang/String;
+
+    move-result-object v18
+
+    invoke-virtual/range {v17 .. v18}, Ljava/io/BufferedWriter;->write(Ljava/lang/String;)V
+
+    .line 201
+    move-object/from16 v17, v15
+
+    const-string v18, "%s-%d_of_%d"
+
+    const/16 v19, 0x3
+
+    move/from16 v0, v19
+
+    new-array v0, v0, [Ljava/lang/Object;
+
+    move-object/from16 v19, v0
+
+    move-object/from16 v26, v19
+
+    move-object/from16 v19, v26
+
+    move-object/from16 v20, v26
+
+    const/16 v21, 0x0
+
+    move-object/from16 v22, v6
+
+    aput-object v22, v20, v21
+
+    move-object/from16 v26, v19
+
+    move-object/from16 v19, v26
+
+    move-object/from16 v20, v26
+
+    const/16 v21, 0x1
+
+    move/from16 v22, v7
+
+    add-int/lit8 v7, v7, 0x1
+
+    new-instance v23, Ljava/lang/Integer;
+
+    move/from16 v26, v22
+
+    move-object/from16 v27, v23
+
+    move-object/from16 v22, v27
+
+    move/from16 v23, v26
+
+    move-object/from16 v24, v27
+
+    move/from16 v26, v23
+
+    move-object/from16 v27, v24
+
+    move-object/from16 v23, v27
+
+    move/from16 v24, v26
+
+    invoke-direct/range {v23 .. v24}, Ljava/lang/Integer;-><init>(I)V
+
+    aput-object v22, v20, v21
+
+    move-object/from16 v26, v19
+
+    move-object/from16 v19, v26
+
+    move-object/from16 v20, v26
+
+    const/16 v21, 0x2
+
+    move-object/from16 v22, v3
+
+    invoke-virtual/range {v22 .. v22}, Ljava/util/ArrayList;->size()I
+
+    move-result v22
+
+    new-instance v23, Ljava/lang/Integer;
+
+    move/from16 v26, v22
+
+    move-object/from16 v27, v23
+
+    move-object/from16 v22, v27
+
+    move/from16 v23, v26
+
+    move-object/from16 v24, v27
+
+    move/from16 v26, v23
+
+    move-object/from16 v27, v24
+
+    move-object/from16 v23, v27
+
+    move/from16 v24, v26
+
+    invoke-direct/range {v23 .. v24}, Ljava/lang/Integer;-><init>(I)V
+
+    aput-object v22, v20, v21
+
+    invoke-static/range {v18 .. v19}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
+
+    move-result-object v18
+
+    invoke-virtual/range {v17 .. v18}, Ljava/io/BufferedWriter;->write(Ljava/lang/String;)V
+
+    .line 204
+    move-object/from16 v17, v15
+
+    invoke-virtual/range {v17 .. v17}, Ljava/io/BufferedWriter;->flush()V
+
+    .line 205
+    move-object/from16 v17, v15
+
+    invoke-virtual/range {v17 .. v17}, Ljava/io/BufferedWriter;->close()V
+    :try_end_1
+    .catch Ljava/lang/Exception; {:try_start_1 .. :try_end_1} :catch_0
+
+    goto/16 :goto_1
+
+    .line 211
+    :catch_0
+    move-exception v17
+
+    move-object/from16 v3, v17
+
+    .line 216
+    :try_start_2
+    const-string v17, "cd %s && echo \'%s\' >> error.log"
 
     const/16 v18, 0x2
 
-    move-object/from16 v19, v3
+    move/from16 v0, v18
 
-    aput-object v19, v17, v18
+    new-array v0, v0, [Ljava/lang/Object;
 
-    invoke-virtual/range {v15 .. v16}, Ljava/lang/Runtime;->exec([Ljava/lang/String;)Ljava/lang/Process;
+    move-object/from16 v18, v0
+
+    move-object/from16 v26, v18
+
+    move-object/from16 v18, v26
+
+    move-object/from16 v19, v26
+
+    const/16 v20, 0x0
+
+    sget-object v21, Ltrace/MethodTrace;->cacheDir:Ljava/lang/String;
+
+    aput-object v21, v19, v20
+
+    move-object/from16 v26, v18
+
+    move-object/from16 v18, v26
+
+    move-object/from16 v19, v26
+
+    const/16 v20, 0x1
+
+    move-object/from16 v21, v3
+
+    invoke-virtual/range {v21 .. v21}, Ljava/lang/Exception;->getMessage()Ljava/lang/String;
+
+    move-result-object v21
+
+    aput-object v21, v19, v20
+
+    invoke-static/range {v17 .. v18}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
+
+    move-result-object v17
+
+    move-object/from16 v4, v17
+
+    .line 217
+    invoke-static {}, Ljava/lang/Runtime;->getRuntime()Ljava/lang/Runtime;
+
+    move-result-object v17
+
+    const/16 v18, 0x3
+
+    move/from16 v0, v18
+
+    new-array v0, v0, [Ljava/lang/String;
+
+    move-object/from16 v18, v0
+
+    move-object/from16 v26, v18
+
+    move-object/from16 v18, v26
+
+    move-object/from16 v19, v26
+
+    const/16 v20, 0x0
+
+    const-string v21, "sh"
+
+    aput-object v21, v19, v20
+
+    move-object/from16 v26, v18
+
+    move-object/from16 v18, v26
+
+    move-object/from16 v19, v26
+
+    const/16 v20, 0x1
+
+    const-string v21, "-c"
+
+    aput-object v21, v19, v20
+
+    move-object/from16 v26, v18
+
+    move-object/from16 v18, v26
+
+    move-object/from16 v19, v26
+
+    const/16 v20, 0x2
+
+    move-object/from16 v21, v4
+
+    aput-object v21, v19, v20
+
+    invoke-virtual/range {v17 .. v18}, Ljava/lang/Runtime;->exec([Ljava/lang/String;)Ljava/lang/Process;
     :try_end_2
     .catch Ljava/lang/Exception; {:try_start_2 .. :try_end_2} :catch_1
 
-    move-result-object v15
+    move-result-object v17
 
     :goto_8
     goto/16 :goto_3
 
-    .line 203
+    .line 209
     :cond_7
-    move-object v15, v9
+    move-object/from16 v17, v11
 
     :try_start_3
-    invoke-interface {v15}, Ljava/util/Iterator;->next()Ljava/lang/Object;
+    invoke-interface/range {v17 .. v17}, Ljava/util/Iterator;->next()Ljava/lang/Object;
 
-    move-result-object v15
+    move-result-object v17
 
-    check-cast v15, Ljava/lang/String;
+    check-cast v17, Ljava/lang/String;
 
-    move-object v11, v15
+    move-object/from16 v13, v17
 
-    .line 204
-    const-string v15, "cd %s && curl --data-binary @%s %s/test.php"
+    .line 210
+    const-string v17, "cd %s && curl --data-binary @%s %s/test.php"
 
-    const/16 v16, 0x3
+    const/16 v18, 0x3
 
-    move/from16 v0, v16
+    move/from16 v0, v18
 
     new-array v0, v0, [Ljava/lang/Object;
 
-    move-object/from16 v16, v0
+    move-object/from16 v18, v0
 
-    move-object/from16 v24, v16
+    move-object/from16 v26, v18
 
-    move-object/from16 v16, v24
+    move-object/from16 v18, v26
 
-    move-object/from16 v17, v24
+    move-object/from16 v19, v26
 
-    const/16 v18, 0x0
+    const/16 v20, 0x0
 
-    sget-object v19, Ltrace/MethodTrace;->cacheDir:Ljava/lang/String;
+    sget-object v21, Ltrace/MethodTrace;->cacheDir:Ljava/lang/String;
 
-    aput-object v19, v17, v18
+    aput-object v21, v19, v20
 
-    move-object/from16 v24, v16
+    move-object/from16 v26, v18
 
-    move-object/from16 v16, v24
+    move-object/from16 v18, v26
 
-    move-object/from16 v17, v24
+    move-object/from16 v19, v26
 
-    const/16 v18, 0x1
+    const/16 v20, 0x1
 
-    move-object/from16 v19, v11
+    move-object/from16 v21, v13
 
-    aput-object v19, v17, v18
+    aput-object v21, v19, v20
 
-    move-object/from16 v24, v16
+    move-object/from16 v26, v18
 
-    move-object/from16 v16, v24
+    move-object/from16 v18, v26
 
-    move-object/from16 v17, v24
+    move-object/from16 v19, v26
 
-    const/16 v18, 0x2
+    const/16 v20, 0x2
 
-    sget-object v19, Ltrace/MethodTrace;->host:Ljava/lang/String;
+    sget-object v21, Ltrace/MethodTrace;->host:Ljava/lang/String;
 
-    aput-object v19, v17, v18
+    aput-object v21, v19, v20
 
-    invoke-static/range {v15 .. v16}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
+    invoke-static/range {v17 .. v18}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
 
-    move-result-object v15
+    move-result-object v17
 
-    move-object v12, v15
+    move-object/from16 v14, v17
 
-    .line 205
+    .line 211
     invoke-static {}, Ljava/lang/Runtime;->getRuntime()Ljava/lang/Runtime;
 
-    move-result-object v15
+    move-result-object v17
 
-    const/16 v16, 0x3
+    const/16 v18, 0x3
 
-    move/from16 v0, v16
+    move/from16 v0, v18
 
     new-array v0, v0, [Ljava/lang/String;
 
-    move-object/from16 v16, v0
+    move-object/from16 v18, v0
 
-    move-object/from16 v24, v16
+    move-object/from16 v26, v18
 
-    move-object/from16 v16, v24
+    move-object/from16 v18, v26
 
-    move-object/from16 v17, v24
+    move-object/from16 v19, v26
 
-    const/16 v18, 0x0
+    const/16 v20, 0x0
 
-    const-string v19, "sh"
+    const-string v21, "sh"
 
-    aput-object v19, v17, v18
+    aput-object v21, v19, v20
 
-    move-object/from16 v24, v16
+    move-object/from16 v26, v18
 
-    move-object/from16 v16, v24
+    move-object/from16 v18, v26
 
-    move-object/from16 v17, v24
+    move-object/from16 v19, v26
 
-    const/16 v18, 0x1
+    const/16 v20, 0x1
 
-    const-string v19, "-c"
+    const-string v21, "-c"
 
-    aput-object v19, v17, v18
+    aput-object v21, v19, v20
 
-    move-object/from16 v24, v16
+    move-object/from16 v26, v18
 
-    move-object/from16 v16, v24
+    move-object/from16 v18, v26
 
-    move-object/from16 v17, v24
+    move-object/from16 v19, v26
 
-    const/16 v18, 0x2
+    const/16 v20, 0x2
 
-    move-object/from16 v19, v12
+    move-object/from16 v21, v14
 
-    aput-object v19, v17, v18
+    aput-object v21, v19, v20
 
-    invoke-virtual/range {v15 .. v16}, Ljava/lang/Runtime;->exec([Ljava/lang/String;)Ljava/lang/Process;
+    invoke-virtual/range {v17 .. v18}, Ljava/lang/Runtime;->exec([Ljava/lang/String;)Ljava/lang/Process;
     :try_end_3
     .catch Ljava/lang/Exception; {:try_start_3 .. :try_end_3} :catch_0
 
-    move-result-object v15
+    move-result-object v17
 
     goto/16 :goto_2
 
-    .line 211
+    .line 217
     :catch_1
-    move-exception v15
+    move-exception v17
 
-    move-object v3, v15
+    move-object/from16 v4, v17
 
     goto :goto_8
 .end method
@@ -1706,171 +1727,169 @@
     goto :goto_0
 .end method
 
-.method private static logStep2()V
-    .locals 13
+.method private static logStep2(I)V
+    .locals 14
     .annotation system Ldalvik/annotation/Signature;
         value = {
-            "()V"
+            "(I)V"
         }
     .end annotation
 
     .prologue
     .line 101
-    const-string v4, "curl \'%s/logger.php?step=%d&lines=%d\'"
+    move v0, p0
 
-    const/4 v5, 0x3
+    const-string v5, "curl \'%s/logger.php?step=%d&lines=%d\'"
 
-    new-array v5, v5, [Ljava/lang/Object;
+    const/4 v6, 0x3
 
-    move-object v11, v5
+    new-array v6, v6, [Ljava/lang/Object;
 
-    move-object v5, v11
+    move-object v12, v6
 
-    move-object v6, v11
+    move-object v6, v12
 
-    const/4 v7, 0x0
+    move-object v7, v12
 
-    sget-object v8, Ltrace/MethodTrace;->host:Ljava/lang/String;
+    const/4 v8, 0x0
 
-    aput-object v8, v6, v7
+    sget-object v9, Ltrace/MethodTrace;->host:Ljava/lang/String;
 
-    move-object v11, v5
+    aput-object v9, v7, v8
 
-    move-object v5, v11
+    move-object v12, v6
 
-    move-object v6, v11
+    move-object v6, v12
 
-    const/4 v7, 0x1
+    move-object v7, v12
+
+    const/4 v8, 0x1
+
+    const/4 v9, 0x2
+
+    new-instance v10, Ljava/lang/Integer;
+
+    move v12, v9
+
+    move-object v13, v10
+
+    move-object v9, v13
+
+    move v10, v12
+
+    move-object v11, v13
+
+    move v12, v10
+
+    move-object v13, v11
+
+    move-object v10, v13
+
+    move v11, v12
+
+    invoke-direct {v10, v11}, Ljava/lang/Integer;-><init>(I)V
+
+    aput-object v9, v7, v8
+
+    move-object v12, v6
+
+    move-object v6, v12
+
+    move-object v7, v12
 
     const/4 v8, 0x2
 
-    new-instance v9, Ljava/lang/Integer;
+    move v9, v0
 
-    move v11, v8
+    new-instance v10, Ljava/lang/Integer;
 
-    move-object v12, v9
+    move v12, v9
 
-    move-object v8, v12
+    move-object v13, v10
 
-    move v9, v11
+    move-object v9, v13
 
-    move-object v10, v12
+    move v10, v12
 
-    move v11, v9
+    move-object v11, v13
 
-    move-object v12, v10
+    move v12, v10
 
-    move-object v9, v12
+    move-object v13, v11
 
-    move v10, v11
+    move-object v10, v13
 
-    invoke-direct {v9, v10}, Ljava/lang/Integer;-><init>(I)V
+    move v11, v12
 
-    aput-object v8, v6, v7
+    invoke-direct {v10, v11}, Ljava/lang/Integer;-><init>(I)V
 
-    move-object v11, v5
+    aput-object v9, v7, v8
 
-    move-object v5, v11
+    invoke-static {v5, v6}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
 
-    move-object v6, v11
+    move-result-object v5
 
-    const/4 v7, 0x2
-
-    sget-object v8, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
-
-    invoke-virtual {v8}, Ljava/util/HashMap;->size()I
-
-    move-result v8
-
-    new-instance v9, Ljava/lang/Integer;
-
-    move v11, v8
-
-    move-object v12, v9
-
-    move-object v8, v12
-
-    move v9, v11
-
-    move-object v10, v12
-
-    move v11, v9
-
-    move-object v12, v10
-
-    move-object v9, v12
-
-    move v10, v11
-
-    invoke-direct {v9, v10}, Ljava/lang/Integer;-><init>(I)V
-
-    aput-object v8, v6, v7
-
-    invoke-static {v4, v5}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
-
-    move-result-object v4
-
-    move-object v1, v4
+    move-object v2, v5
 
     .line 103
     :try_start_0
     invoke-static {}, Ljava/lang/Runtime;->getRuntime()Ljava/lang/Runtime;
 
-    move-result-object v4
+    move-result-object v5
 
-    const/4 v5, 0x3
+    const/4 v6, 0x3
 
-    new-array v5, v5, [Ljava/lang/String;
+    new-array v6, v6, [Ljava/lang/String;
 
-    move-object v11, v5
+    move-object v12, v6
 
-    move-object v5, v11
+    move-object v6, v12
 
-    move-object v6, v11
+    move-object v7, v12
 
-    const/4 v7, 0x0
+    const/4 v8, 0x0
 
-    const-string v8, "sh"
+    const-string v9, "sh"
 
-    aput-object v8, v6, v7
+    aput-object v9, v7, v8
 
-    move-object v11, v5
+    move-object v12, v6
 
-    move-object v5, v11
+    move-object v6, v12
 
-    move-object v6, v11
+    move-object v7, v12
 
-    const/4 v7, 0x1
+    const/4 v8, 0x1
 
-    const-string v8, "-c"
+    const-string v9, "-c"
 
-    aput-object v8, v6, v7
+    aput-object v9, v7, v8
 
-    move-object v11, v5
+    move-object v12, v6
 
-    move-object v5, v11
+    move-object v6, v12
 
-    move-object v6, v11
+    move-object v7, v12
 
-    const/4 v7, 0x2
+    const/4 v8, 0x2
 
-    move-object v8, v1
+    move-object v9, v2
 
-    aput-object v8, v6, v7
+    aput-object v9, v7, v8
 
-    invoke-virtual {v4, v5}, Ljava/lang/Runtime;->exec([Ljava/lang/String;)Ljava/lang/Process;
+    invoke-virtual {v5, v6}, Ljava/lang/Runtime;->exec([Ljava/lang/String;)Ljava/lang/Process;
     :try_end_0
     .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
 
-    move-result-object v4
+    move-result-object v5
 
     :goto_0
     return-void
 
     :catch_0
-    move-exception v4
+    move-exception v5
 
-    move-object v2, v4
+    move-object v3, v5
 
     goto :goto_0
 .end method
@@ -2014,7 +2033,7 @@
 
     cmp-long v5, v5, v7
 
-    if-gez v5, :cond_1
+    if-gez v5, :cond_0
 
     move-wide v5, v2
 
@@ -2024,7 +2043,7 @@
 
     cmp-long v5, v5, v7
 
-    if-lez v5, :cond_1
+    if-lez v5, :cond_0
 
     move-object v5, v1
 
@@ -2038,15 +2057,12 @@
 
     move-result v5
 
-    if-eqz v5, :cond_1
+    if-eqz v5, :cond_0
 
     .line 127
     sget-boolean v5, Ltrace/MethodTrace;->recordEnabled:Z
 
     if-eqz v5, :cond_3
-
-    .line 129
-    invoke-static {}, Ltrace/MethodTrace;->logStep2()V
 
     .line 130
     sget-object v5, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
@@ -2055,20 +2071,20 @@
 
     move-result v5
 
-    if-nez v5, :cond_0
+    if-nez v5, :cond_2
 
     .line 131
     invoke-static {}, Ltrace/MethodTrace;->dump()V
 
-    .line 133
-    :cond_0
+    .line 135
+    :goto_0
     const/4 v5, 0x0
 
     sput-boolean v5, Ltrace/MethodTrace;->recordEnabled:Z
 
-    .line 142
-    :cond_1
-    :goto_0
+    .line 144
+    :cond_0
+    :goto_1
     sget-wide v5, Ltrace/MethodTrace;->lastOnPause:J
 
     const/4 v7, 0x0
@@ -2077,24 +2093,32 @@
 
     cmp-long v5, v5, v7
 
-    if-nez v5, :cond_2
+    if-nez v5, :cond_1
 
-    .line 143
+    .line 145
     invoke-static {}, Ltrace/MethodTrace;->logStep1()V
 
-    :cond_2
+    :cond_1
     return-void
 
-    .line 136
+    .line 133
+    :cond_2
+    const/4 v5, 0x0
+
+    invoke-static {v5}, Ltrace/MethodTrace;->logStep2(I)V
+
+    goto :goto_0
+
+    .line 138
     :cond_3
     const/4 v5, 0x1
 
     sput-boolean v5, Ltrace/MethodTrace;->recordEnabled:Z
 
-    .line 137
+    .line 139
     invoke-static {}, Ltrace/MethodTrace;->logStep1()V
 
-    goto :goto_0
+    goto :goto_1
 .end method
 
 .method public static writeRTData(Ljava/lang/CharSequence;)V
@@ -2108,7 +2132,7 @@
     .end annotation
 
     .prologue
-    .line 252
+    .line 258
     move-object v0, p0
 
     move-object v5, v0
@@ -2119,7 +2143,7 @@
 
     if-eqz v5, :cond_0
 
-    .line 253
+    .line 259
     const/4 v5, 0x1
 
     const/4 v6, 0x0
@@ -2136,7 +2160,7 @@
 
     move-object v2, v5
 
-    .line 254
+    .line 260
     const-string v5, ","
 
     move-object v6, v2
@@ -2147,7 +2171,7 @@
 
     move-object v3, v5
 
-    .line 256
+    .line 262
     sget-object v5, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
 
     move-object v6, v3
@@ -2158,7 +2182,7 @@
 
     if-nez v5, :cond_0
 
-    .line 257
+    .line 263
     sget-object v5, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
 
     move-object v6, v3
@@ -2191,7 +2215,7 @@
 
     move-result-object v5
 
-    .line 258
+    .line 264
     sget-object v5, Ltrace/MethodTrace;->recorderLine:Ljava/util/ArrayList;
 
     move-object v6, v2
@@ -2215,7 +2239,7 @@
     .end annotation
 
     .prologue
-    .line 227
+    .line 233
     move-object v0, p0
 
     move-object v5, v0
@@ -2226,7 +2250,7 @@
 
     if-eqz v5, :cond_0
 
-    .line 228
+    .line 234
     const/4 v5, 0x0
 
     const/4 v6, 0x0
@@ -2239,7 +2263,7 @@
 
     move-object v2, v5
 
-    .line 229
+    .line 235
     const-string v5, ","
 
     move-object v6, v2
@@ -2250,7 +2274,7 @@
 
     move-object v3, v5
 
-    .line 231
+    .line 237
     sget-object v5, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
 
     move-object v6, v3
@@ -2261,7 +2285,7 @@
 
     if-nez v5, :cond_0
 
-    .line 232
+    .line 238
     sget-object v5, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
 
     move-object v6, v3
@@ -2294,7 +2318,7 @@
 
     move-result-object v5
 
-    .line 233
+    .line 239
     sget-object v5, Ltrace/MethodTrace;->recorderLine:Ljava/util/ArrayList;
 
     move-object v6, v2
@@ -2318,7 +2342,7 @@
     .end annotation
 
     .prologue
-    .line 240
+    .line 246
     move-object v0, p0
 
     move-object v5, v0
@@ -2329,7 +2353,7 @@
 
     if-eqz v5, :cond_0
 
-    .line 241
+    .line 247
     const/4 v5, 0x0
 
     const/4 v6, 0x1
@@ -2396,7 +2420,7 @@
 
     move-object v2, v5
 
-    .line 242
+    .line 248
     const-string v5, ","
 
     move-object v6, v2
@@ -2407,7 +2431,7 @@
 
     move-object v3, v5
 
-    .line 244
+    .line 250
     sget-object v5, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
 
     move-object v6, v3
@@ -2418,7 +2442,7 @@
 
     if-nez v5, :cond_0
 
-    .line 245
+    .line 251
     sget-object v5, Ltrace/MethodTrace;->runtimeDataMap:Ljava/util/HashMap;
 
     move-object v6, v3
@@ -2451,7 +2475,7 @@
 
     move-result-object v5
 
-    .line 246
+    .line 252
     sget-object v5, Ltrace/MethodTrace;->recorderLine:Ljava/util/ArrayList;
 
     move-object v6, v2

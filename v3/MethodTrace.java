@@ -64,7 +64,7 @@ public class MethodTrace {
                     // Write contents to file
                     for (String method : methods) {
                         bufferedWriter.write(method + "::" + String.valueOf(methodMap.get(method)[0]) + "::"
-                                + String.valueOf(methodMap.get(method)[1]));
+											 + String.valueOf(methodMap.get(method)[1]));
                         bufferedWriter.newLine();
                     }
 
@@ -97,8 +97,8 @@ public class MethodTrace {
         }
     }
 
-    private static void logStep2() {
-        String req = String.format("curl '%s/logger.php?step=%d&lines=%d'", host, 2, runtimeDataMap.size());
+    private static void logStep2(int lines) {
+        String req = String.format("curl '%s/logger.php?step=%d&lines=%d'", host, 2, lines);
         try {
             Runtime.getRuntime().exec(new String[] { "sh", "-c", req });
         } catch (Exception e) {
@@ -126,10 +126,12 @@ public class MethodTrace {
         if (interval < 2000 && interval > 300 && trace.getClassName().equals(lastTraceActivity)) {
             if (recordEnabled) {
                 // Toast.makeText(ctx, String.valueOf(runtimeDataMap.size()), 1000).show();
-                logStep2();
+                
                 if (!runtimeDataMap.isEmpty()) {
                     dump();
-                }
+                } else {
+					logStep2(0);
+				}
                 recordEnabled = false;
 
             } else {
@@ -150,15 +152,16 @@ public class MethodTrace {
             ArrayList<StringBuilder> partitions = new ArrayList<>();
             partitions.add(new StringBuilder());
             int curChunkSize = 0;
+			int compressedCnt = 0;
             for (int i = 0; i < recorderLine.size(); i++) {
                 String[] props = recorderLine.get(i); // 0:label, 1:class, 2:method, 3:file (or null), 4:line, 5:text
+				compressedCnt++;
                 // Group same consecutive outputs in same method
                 for (int j = i + 1; j < recorderLine.size(); j++) {
                     String[] nextProps = recorderLine.get(j);
                     if (nextProps[1].equals(props[1]) && nextProps[2].equals(props[2]) && nextProps[5].equals(props[5])) {
                         if (props[4] != nextProps[4])
                             props[4] = props[4] + "->" + nextProps[4];
-                        
                         i = j + 1;
                     } else {
                         break;
@@ -175,6 +178,8 @@ public class MethodTrace {
                 partitions.get(partitions.size()-1).append(fullFormat);
                 partitions.get(partitions.size()-1).append(System.lineSeparator());
             }
+			
+			logStep2(compressedCnt);
 
             String stamp = String.valueOf(System.currentTimeMillis()); // 1705140916160
 
