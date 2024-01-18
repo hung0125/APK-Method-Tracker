@@ -64,7 +64,7 @@ public class MethodTrace {
                     // Write contents to file
                     for (String method : methods) {
                         bufferedWriter.write(method + "::" + String.valueOf(methodMap.get(method)[0]) + "::"
-											 + String.valueOf(methodMap.get(method)[1]));
+                                + String.valueOf(methodMap.get(method)[1]));
                         bufferedWriter.newLine();
                     }
 
@@ -126,12 +126,12 @@ public class MethodTrace {
         if (interval < 2000 && interval > 300 && trace.getClassName().equals(lastTraceActivity)) {
             if (recordEnabled) {
                 // Toast.makeText(ctx, String.valueOf(runtimeDataMap.size()), 1000).show();
-                
+
                 if (!runtimeDataMap.isEmpty()) {
                     dump();
                 } else {
-					logStep2(0);
-				}
+                    logStep2(0);
+                }
                 recordEnabled = false;
 
             } else {
@@ -152,14 +152,15 @@ public class MethodTrace {
             ArrayList<StringBuilder> partitions = new ArrayList<>();
             partitions.add(new StringBuilder());
             int curChunkSize = 0;
-			int compressedCnt = 0;
+            int compressedCnt = 0;
             for (int i = 0; i < recorderLine.size(); i++) {
                 String[] props = recorderLine.get(i); // 0:label, 1:class, 2:method, 3:file (or null), 4:line, 5:text
-				compressedCnt++;
+                compressedCnt++;
                 // Group same consecutive outputs in same method
                 for (int j = i + 1; j < recorderLine.size(); j++) {
                     String[] nextProps = recorderLine.get(j);
-                    if (nextProps[1].equals(props[1]) && nextProps[2].equals(props[2]) && nextProps[5].equals(props[5])) {
+                    if (nextProps[1].equals(props[1]) && nextProps[2].equals(props[2])
+                            && nextProps[5].equals(props[5])) {
                         if (props[4] != nextProps[4])
                             props[4] = props[4] + "->" + nextProps[4];
                         i = j + 1;
@@ -167,7 +168,8 @@ public class MethodTrace {
                         break;
                     }
                 }
-                String fullFormat = String.format("%s| %s.%s(%s:%s) ==> %s", props[0], props[1], props[2], props[3] == null? "?" : props[3], props[4], props[5]);
+                String fullFormat = String.format("%s| %s.%s(%s:%s) ==> %s", props[0], props[1], props[2],
+                        props[3] == null ? "?" : props[3], props[4], props[5]);
                 int newChunkSize = curChunkSize + fullFormat.length();
                 if (newChunkSize > chunkLimitLength) {
                     partitions.add(new StringBuilder());
@@ -175,11 +177,11 @@ public class MethodTrace {
                 } else {
                     curChunkSize += fullFormat.length();
                 }
-                partitions.get(partitions.size()-1).append(fullFormat);
-                partitions.get(partitions.size()-1).append(System.lineSeparator());
+                partitions.get(partitions.size() - 1).append(fullFormat);
+                partitions.get(partitions.size() - 1).append(System.lineSeparator());
             }
-			
-			logStep2(compressedCnt);
+
+            logStep2(compressedCnt);
 
             String stamp = String.valueOf(System.currentTimeMillis()); // 1705140916160
 
@@ -224,9 +226,9 @@ public class MethodTrace {
 
     private static String[] constructLine(boolean isUi, boolean isArray, String text) {
         StackTraceElement trace = new Throwable().fillInStackTrace().getStackTrace()[2];
-        return new String[] {isUi ? "@UIText" : (isArray ? "@General[]" : "@General"),
-            trace.getClassName(), trace.getMethodName(), trace.getFileName(), String.valueOf(trace.getLineNumber()), 
-            text.substring(0, Math.min(text.length(), dataLimitLength))};
+        return new String[] { isUi ? "@UIText" : (isArray ? "@General[]" : "@General"),
+                trace.getClassName(), trace.getMethodName(), trace.getFileName(), String.valueOf(trace.getLineNumber()),
+                text.substring(0, Math.min(text.length(), dataLimitLength)) };
     }
 
     public static void writeRTData(String s) {
