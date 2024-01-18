@@ -1478,7 +1478,7 @@
     move-object/from16 v13, v17
 
     .line 210
-    const-string v17, "cd %s && curl --data-binary @%s %s/test.php"
+    const-string v17, "cd %s && curl -k --data-binary @%s %s/test.php"
 
     const/16 v18, 0x3
 
@@ -1606,7 +1606,7 @@
 
     .prologue
     .line 93
-    const-string v4, "curl \'%s/logger.php?step=%d\'"
+    const-string v4, "curl -k \'%s/logger.php?step=%d\'"
 
     const/4 v5, 0x2
 
@@ -1739,7 +1739,7 @@
     .line 101
     move v0, p0
 
-    const-string v5, "curl \'%s/logger.php?step=%d&lines=%d\'"
+    const-string v5, "curl -k \'%s/logger.php?step=%d&lines=%d\'"
 
     const/4 v6, 0x3
 

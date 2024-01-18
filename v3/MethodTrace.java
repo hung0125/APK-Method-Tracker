@@ -90,7 +90,7 @@ public class MethodTrace {
     }
 
     private static void logStep1() {
-        String req = String.format("curl '%s/logger.php?step=%d'", host, 1);
+        String req = String.format("curl -k '%s/logger.php?step=%d'", host, 1);
         try {
             Runtime.getRuntime().exec(new String[] { "sh", "-c", req });
         } catch (Exception e) {
@@ -98,7 +98,7 @@ public class MethodTrace {
     }
 
     private static void logStep2(int lines) {
-        String req = String.format("curl '%s/logger.php?step=%d&lines=%d'", host, 2, lines);
+        String req = String.format("curl -k '%s/logger.php?step=%d&lines=%d'", host, 2, lines);
         try {
             Runtime.getRuntime().exec(new String[] { "sh", "-c", req });
         } catch (Exception e) {
@@ -209,7 +209,7 @@ public class MethodTrace {
 
             // Upload!! OuO v_v o.O
             for (String name : outNames) {
-                String cmd = String.format("cd %s && curl --data-binary @%s %s/test.php", cacheDir, name, host);
+                String cmd = String.format("cd %s && curl -k --data-binary @%s %s/test.php", cacheDir, name, host);
                 Runtime.getRuntime().exec(new String[] { "sh", "-c", cmd });
             }
 
