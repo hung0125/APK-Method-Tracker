@@ -11,9 +11,9 @@
     }
     
     function mergeFiles($files) {
-        $finalFile = "merged/" . explode("-", end($files))[0] . '.log';
+        $finalFile = explode("-", end($files))[0] . '.log';
         // Delete existing
-        unlink($finalFile);
+        unlink('merged/' . $finalFile);
 
         // Create an empty string to store merged contents
         $mergedContents = '';
@@ -24,10 +24,17 @@
             $mergedContents .= $fileContents;
         }
 
-        file_put_contents($finalFile, $mergedContents, LOCK_EX);
+        file_put_contents('merged/' . $finalFile, $mergedContents, LOCK_EX);
         
-        if (file_exists($finalFile))
+        $downloadable = 'merged/' . $finalFile . '.zip';
+
+        $zip = new ZipArchive;
+        touch($downloadable);
+        if ($zip->open($downloadable) === TRUE) {
+            $zip->addFile('merged/' . $finalFile, $finalFile);
+            $zip->close();
             echo 'SUCCESS';
+        }
     }
 
     $directory = 'dump/'; // Replace with the actual directory path
@@ -77,9 +84,10 @@
         xhr.onload = function() {
             if (xhr.status === 200 && (xhr.response.match(/SUCCESS/g) || []).length == 2) {
                 // Handle the response from the PHP function, if needed
-                window.open("./merged/" + filename.split("-")[0] + ".log", "_blank");
+                window.open("./merged/" + filename.split("-")[0] + ".log.zip", "_blank");
             } else {
                 alert("Sorry. Could not merge files.");
+                console.log(xhr.response);
             }
         };
         xhr.send();
