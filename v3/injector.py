@@ -109,7 +109,7 @@ def precheck_isActivity(codelines:list[str]) -> str:
 
     return ''
 
-def inject(pth, log_meth = False, log_data = False):
+def inject(pth, log_meth = False, log_data = False, passive_injection = ''):
     cont = open(pth, 'rb').read().decode('utf-8').splitlines()
     mod_cont = []
 
@@ -209,13 +209,18 @@ def inject(pth, log_meth = False, log_data = False):
                 params = split_param(params)
                 is_zero_based = L.strip().startswith('invoke-static')
                 cur_reg_idx = 0 if is_zero_based else 1
+                injects = []
+                valid_statement = True
                 for j in range(len(params)):
                     target_reg = None
-                    if params[j] in acc_types:
-                        if params[j] == acc_types[2] and (not invoke.startswith(', Landroid/widget/') or not invoke.endswith(';->setText')): # only accept UI set text
-                            cur_reg_idx += 1
-                            continue
-                        target_reg = registers[cur_reg_idx]
+                    # for CharSequence, only accept android UI set text
+                    if params[j] == acc_types[0] or params[j] == acc_types[1] or (params[j] == acc_types[2] and invoke.startswith(', Landroid/widget/') and invoke.endswith(';->setText')):
+                        try:
+                            target_reg = registers[cur_reg_idx]
+                        except:
+                            valid_statement = False
+                            print(f'Skipped one statement in: {pth}')
+                            break
                         cur_reg_idx += 1
                     elif params[j] in ['J', 'D']:
                         cur_reg_idx += 2
@@ -224,7 +229,12 @@ def inject(pth, log_meth = False, log_data = False):
 
                     if target_reg != None:
                         reg_integer = int(''.join([char for char in target_reg if char.isdigit()]))
-                        mod_cont.insert(-1, f'invoke-static/range {{{target_reg} .. {target_reg}}}, Ltrace/MethodTrace;->writeRTData({params[j]};)V')
+                        injects.append(f'invoke-static/range {{{target_reg} .. {target_reg}}}, Ltrace/MethodTrace;->writeRTData({params[j]};)V')
+                
+                if valid_statement:
+                    for LN in injects:
+                        mod_cont.insert(-1, LN)
+
 
         elif read_method and log_data and L.strip().startswith('const-string'):
             register = L.strip().split(' ')[1][:-1]
@@ -266,7 +276,7 @@ def inject(pth, log_meth = False, log_data = False):
             read_onPause = False
             read_onResume = False
 
-    if read_activity_class:
+    if read_activity_class and not passive_injection:
         if not everRead_onPause:
             mod_cont.append(f'''.method public onPause()V
     .locals 0
@@ -297,7 +307,9 @@ def inject_flow(log_meth: bool, log_data: bool):
     package_name = ''
     while len(package_name) == 0:
         package_name = input('Specify the package name (e.g, com.xxx.yyy): ').strip()
-    chunk_limit = input('If target app usually generates non-alphabet characters, type "y" (default=english): ').lower()
+    chunk_limit = input('If target app usually generates non-alphabet characters, type "y" (default=mainly alphabet): ').lower()
+    
+    passive_injection = input('Disable onResume/onPause listener injections (try when app crashes)? (y = yes; default = no): ').lower()
     
     while base_dir[-1] == '/' or base_dir[-1] == '\\':
         base_dir = base_dir[:-1]
@@ -312,7 +324,7 @@ def inject_flow(log_meth: bool, log_data: bool):
             bkupDir = f"backup_{timeNow}/{dirname(F.replace(base_dir, ''))}"
             Path(bkupDir).mkdir(parents=True, exist_ok = True)
             copy(F, bkupDir)
-            inject(F, log_meth, log_data)
+            inject(F, log_meth, log_data, passive_injection)
 
     if not os.path.exists(base_dir + '/smali/trace'):
         os.makedirs(base_dir + '/smali/trace')
