@@ -254,13 +254,13 @@ def inject(pth, log_meth = False, log_data = False, passive_injection = ''):
                         prev_op = mod_cont[ii]
                         break
                 except:
-                    continue
+                    break
 
             register = L.strip().split(' ')[1]
-            if in_try_block and register.startswith('p'): # one possible workaround is write dump outside try block, but risky
+            if in_try_block: # one possible workaround is write dump outside try block, but risky
                 continue
             
-            if (str) (prev_op).endswith(')Ljava/lang/String;'):
+            if (str) (prev_op).endswith('Ljava/lang/String;'):
                 reg_integer = int(''.join([char for char in register if char.isdigit()]))
                 argtype = 'Ljava/lang/String;'
                 if (str) (prev_op)[-20:-18] == ')[':
