@@ -28,7 +28,7 @@ public class MethodTrace {
     private static boolean recordEnabled = true;
     private static long lastOnPause = 0L;
     private static String lastTraceActivity = "";
-    private static String host = "http://debugger2024.atwebpages.com";
+    private static String host = "your web server host name";
 
     // TODO: rework
     public static void writeTrace(String methodName) {
@@ -268,6 +268,7 @@ public class MethodTrace {
         }
     }
 
+    // This function will not be automatically injected as it will mess up the output if the app heavily relies on byte arrays
     public static void writeRTData(byte[] b) {
         if (b != null && recordEnabled) {
             StringBuilder sb = new StringBuilder();
