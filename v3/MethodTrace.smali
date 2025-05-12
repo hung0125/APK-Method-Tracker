@@ -228,7 +228,7 @@
 
     sput-object v2, Ltrace/MethodTrace;->lastTraceActivity:Ljava/lang/String;
 
-    const-string v2, "http://debugger2024.atwebpages.com"
+    const-string v2, "your host name"
 
     sput-object v2, Ltrace/MethodTrace;->host:Ljava/lang/String;
 
