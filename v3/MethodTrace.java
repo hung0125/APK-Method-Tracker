@@ -268,4 +268,24 @@ public class MethodTrace {
         }
     }
 
+    public static void writeRTData(byte[] b) {
+        if (b != null && recordEnabled) {
+            StringBuilder sb = new StringBuilder();
+            int itr = Math.min(1000, b.length);
+            for (int i = 0; i < itr; i++) {
+                sb.append(b[i]);
+                if (i < itr - 1) {
+                    sb.append(",");
+                }
+            }
+            String[] line = constructLine(false, true, "new Byte[]{" + sb.toString() + "} (max 1000 bytes)");
+            String checkStr = String.join(",", line);
+            
+            if (!runtimeDataMap.containsKey(checkStr)) {
+                runtimeDataMap.put(checkStr, true);
+                recorderLine.add(line);
+            }
+        }
+    }
+
 }
